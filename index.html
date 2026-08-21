@@ -1,0 +1,1153 @@
+<!--
+  ╔══════════════════════════════════════════════════════════════╗
+  ║  Another Breath — v5.0-final                                 ║
+  ║  Build date: August 21, 2026                                 ║
+  ║  Status: Ready pending donation link                         ║
+  ╚══════════════════════════════════════════════════════════════╝
+
+  CHANGELOG (v5.0-final vs v4.1-production):
+
+  1. Redundancy removed: Merged .pledge and .mission boxes on the
+     landing screen (s1) into a single .pledge element. The
+     .mission element and its translations have been removed from
+     all three languages (en / fa / ar).
+
+  2. Donation URL safeguard: DOMContentLoaded now emits a
+     console.warn if CONFIG.DONATION_URL still contains the
+     placeholder "your-charity-page". Build is explicitly marked
+     "Ready pending donation link" rather than "Ready".
+
+  3. AudioContext leak fix: BreathEngine.destroy() now removes the
+     current ctx from audioContextRegistry before closing it,
+     preventing unbounded array growth when init/destroy are
+     called repeatedly without resetAll().
+
+  4. Honest QA reporting: The fabricated "14/14 — 100%" test
+     matrix has been removed. Replaced with an in-app Manual QA
+     Checklist (accessible via the footer) containing empty
+     checkboxes for the operator to tick after real-device
+     verification.
+
+  5. Version bumped to v5.0-final.
+-->
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="generator" content="Another Breath v5.0-final">
+<title>Another Breath</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#080c14;--surface:rgba(255,255,255,.03);--border:rgba(255,255,255,.08);
+  --t1:#eef2f7;--t2:rgba(238,242,247,.72);--t3:rgba(238,242,247,.45);
+  --accent:#7ec8e3;--glow:rgba(126,200,227,.35);--gold:#e8c87a;--err:#ff8a8a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--t1);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+html[lang="fa"] body,html[lang="ar"] body{font-family:'Vazirmatn',system-ui,sans-serif}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg::before{content:'';position:absolute;top:-60%;left:-60%;width:220%;height:220%;background:radial-gradient(ellipse at 25% 35%,rgba(126,200,227,.08) 0%,transparent 55%),radial-gradient(ellipse at 75% 65%,rgba(200,160,255,.05) 0%,transparent 55%);animation:drift 30s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate(3%,2%) rotate(1.5deg)}}
+.particle{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.5) 0%,rgba(255,255,255,0) 70%);animation:floatBreath linear infinite;pointer-events:none}
+@keyframes floatBreath{0%{transform:translateY(100vh) translateX(0) scale(0);opacity:0}10%{opacity:.7;transform:translateY(88vh) translateX(var(--drift-x,20px)) scale(1)}50%{opacity:.5;transform:translateY(40vh) translateX(calc(var(--drift-x,20px)*-.5)) scale(1.3)}90%{opacity:.2}100%{transform:translateY(-10vh) translateX(calc(var(--drift-x,20px)*-1)) scale(.4);opacity:0}}
+.wind-lines{position:absolute;inset:0;pointer-events:none;overflow:hidden;opacity:.3}
+.wind-line{position:absolute;height:1px;background:linear-gradient(90deg,transparent,rgba(126,200,227,.15),transparent);animation:windSway 8s ease-in-out infinite;width:200px}
+@keyframes windSway{0%,100%{transform:translateX(-100px) scaleX(.8);opacity:.2}50%{transform:translateX(calc(100vw + 100px)) scaleX(1.2);opacity:.6}}
+.ambient-ring{position:absolute;border-radius:50%;border:1px solid rgba(126,200,227,.04);animation:ringPulse 6s ease-in-out infinite;pointer-events:none}
+@keyframes ringPulse{0%,100%{transform:scale(.9);opacity:.2}50%{transform:scale(1.1);opacity:.6}}
+.ambient-ring:nth-child(1){width:300px;height:300px;top:10%;left:-10%;animation-delay:0s}
+.ambient-ring:nth-child(2){width:500px;height:500px;bottom:-20%;right:-20%;animation-delay:2s}
+.ambient-ring:nth-child(3){width:200px;height:200px;top:50%;left:50%;transform:translate(-50%,-50%);animation-delay:4s}
+
+.display{font-family:'Cormorant Garamond','Vazirmatn',serif;font-size:clamp(2.2rem,7vw,3.2rem);font-weight:300;letter-spacing:.04em;line-height:1.15;margin-bottom:12px;animation:titleBreath 5s ease-in-out infinite;text-shadow:0 0 30px var(--glow),0 0 60px rgba(126,200,227,.1)}
+html[lang="fa"] .display,html[lang="ar"] .display{font-family:'Vazirmatn',serif;font-weight:400;letter-spacing:0}
+@keyframes titleBreath{0%,100%{opacity:.85;letter-spacing:.04em;text-shadow:0 0 30px var(--glow);transform:scale(1)}50%{opacity:1;letter-spacing:.08em;text-shadow:0 0 50px var(--glow),0 0 100px rgba(126,200,227,.15);transform:scale(1.02)}}
+.btn{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:50px;cursor:pointer;font-family:inherit;font-weight:500;font-size:.92rem;padding:14px 36px;transition:all .35s ease;outline:none;position:relative;overflow:hidden}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.btn-p{background:var(--accent);color:var(--bg);animation:btnBreath 4s ease-in-out infinite}
+@keyframes btnBreath{0%,100%{transform:scale(1);box-shadow:0 0 20px var(--glow)}50%{transform:scale(1.04);box-shadow:0 0 40px var(--glow),0 0 80px rgba(126,200,227,.15)}}
+.btn-p:hover{transform:scale(1.06)!important;box-shadow:0 6px 40px var(--glow)!important}
+.btn-p::before{content:'';position:absolute;inset:-4px;border-radius:54px;background:radial-gradient(circle,var(--glow) 0%,transparent 70%);opacity:0;transition:opacity .6s ease;z-index:-1;animation:btnGlowPulse 3s ease-in-out infinite}
+@keyframes btnGlowPulse{0%,100%{opacity:.3;transform:scale(.95)}50%{opacity:.7;transform:scale(1.05)}}
+.btn-p:hover::before{opacity:1}
+.btn-g{background:var(--surface);color:var(--t2);border:1px solid var(--border)}
+.btn-g:hover{border-color:var(--accent);color:var(--t1)}
+.btn-gold{background:var(--gold);color:var(--bg);animation:btnBreath 5s ease-in-out infinite}
+.btn-gold:hover{transform:scale(1.05);box-shadow:0 6px 28px rgba(232,200,122,.3)}
+.btn-ghost{background:transparent;color:var(--t3);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:var(--t2);color:var(--t1)}
+
+.ring-wrapper{position:relative;margin:0 auto 20px;width:170px;height:170px}
+.ring{position:absolute;inset:0;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid var(--accent);z-index:2}
+.ring .dot{width:50px;height:50px;border-radius:50%;background:radial-gradient(circle,var(--glow),transparent 70%);transition:all 3.2s cubic-bezier(.4,0,.2,1)}
+.ring.in .dot{width:130px;height:130px}
+.ring.out .dot{width:45px;height:45px}
+.wave-ring{position:absolute;border-radius:50%;border:1px solid rgba(126,200,227,.15);animation:waveExpand 3.2s ease-in-out infinite;pointer-events:none}
+.wave-ring:nth-child(1){inset:-8px;animation-delay:0s}
+.wave-ring:nth-child(2){inset:-18px;animation-delay:.5s}
+.wave-ring:nth-child(3){inset:-28px;animation-delay:1s}
+@keyframes waveExpand{0%,100%{transform:scale(.92);opacity:.2}50%{transform:scale(1.08);opacity:.6}}
+.wind-arc{position:absolute;border-radius:50%;width:190px;height:190px;top:-10px;left:-10px;pointer-events:none;opacity:.3}
+.wind-arc::before{content:'';position:absolute;inset:0;border-radius:50%;border:1px dashed rgba(126,200,227,.08);animation:spinSlow 12s linear infinite}
+@keyframes spinSlow{to{transform:rotate(360deg)}}
+.phase{font-size:.85rem;color:var(--t2);letter-spacing:.06em;margin-bottom:12px;animation:phaseBreath 2s ease-in-out infinite}
+@keyframes phaseBreath{0%,100%{opacity:.6;transform:scale(.98)}50%{opacity:1;transform:scale(1.02)}}
+.bar{width:200px;height:4px;border-radius:2px;background:var(--border);margin:18px auto 0;overflow:hidden;position:relative}
+.bar .fill{height:100%;width:0%;border-radius:2px;background:var(--accent);transition:width .25s linear}
+.bar .fill-wave{position:absolute;top:-4px;left:0;width:200%;height:12px;background:radial-gradient(ellipse at 30% 50%,rgba(126,200,227,.3) 0%,transparent 60%);animation:waveSlide 2s linear infinite;opacity:.5;pointer-events:none;display:none}
+.bar.breathing .fill-wave{display:block}
+@keyframes waveSlide{0%{transform:translateX(-30%) scaleX(.8)}50%{transform:translateX(0) scaleX(1.2)}100%{transform:translateX(30%) scaleX(.8)}}
+.screen{position:relative;z-index:1;width:100%;max-width:420px;min-height:100vh;min-height:100dvh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center}
+.screen.active{display:flex}
+.tagline{font-size:.95rem;color:var(--t2);line-height:1.7;margin-bottom:32px;max-width:320px;animation:taglineBreath 6s ease-in-out infinite}
+@keyframes taglineBreath{0%,100%{opacity:.7;transform:translateY(0)}50%{opacity:1;transform:translateY(-2px)}}
+.small{font-size:.78rem;color:var(--t3);line-height:1.6}
+.pledge{background:rgba(126,200,227,.05);border:1px solid rgba(126,200,227,.15);border-radius:14px;padding:16px 20px;font-size:.85rem;color:var(--t2);line-height:1.7;margin-bottom:28px;max-width:340px;text-align:center}
+.pledge strong{color:var(--accent);font-weight:600;display:block;margin-bottom:6px;font-size:.95rem}
+
+.streak{background:rgba(126,200,227,.1);border:1px solid rgba(126,200,227,.3);border-radius:20px;padding:6px 14px;font-size:.8rem;color:var(--accent);margin-bottom:20px;display:none;align-items:center;gap:6px}
+.streak.show{display:inline-flex}
+.streak .flame{font-size:1rem;animation:flicker .5s ease-in-out infinite alternate}
+@keyframes flicker{0%{transform:scale(.9);opacity:.7}100%{transform:scale(1.1);opacity:1}}
+.art-frame{border-radius:50%;overflow:hidden;margin:20px 0;box-shadow:0 0 60px var(--glow),0 0 120px rgba(200,160,255,.12)}
+.art-frame canvas{display:block;border-radius:50%;max-width:100%;height:auto}
+.sig{font-size:.8rem;color:var(--t3);letter-spacing:.12em;font-weight:500;margin-top:6px}
+.sig span{color:var(--accent);font-weight:600}
+.feats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;margin:16px 0}
+.feat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 6px}
+.feat .v{font-size:1rem;font-weight:600;color:var(--accent)}
+.feat .l{font-size:.62rem;color:var(--t3);margin-top:3px}
+.overlay{position:fixed;inset:0;z-index:2000;background:rgba(8,12,20,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;flex-direction:column;gap:18px}
+.overlay.active{display:flex}
+.overlay p{font-family:'Cormorant Garamond','Vazirmatn',serif;font-size:1.5rem;font-weight:300;color:var(--t2);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+.spin{width:44px;height:44px;border-radius:50%;border:2px solid var(--border);border-top-color:var(--accent);animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.lang{position:fixed;top:16px;right:16px;z-index:99;display:flex;gap:8px;align-items:center}
+html[dir="rtl"] .lang{right:auto;left:16px}
+.lang select{background:var(--surface);color:var(--t2);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:.8rem;font-family:inherit;cursor:pointer;outline:none;appearance:none;-webkit-appearance:none}
+.lang select:focus-visible{outline:2px solid var(--accent)}
+.nav-link{background:transparent;border:none;color:var(--t3);padding:6px 12px;font-size:.75rem;cursor:pointer;font-family:inherit;transition:color .3s ease;border-radius:12px}
+.nav-link:hover{color:var(--t1);background:var(--surface)}
+
+.onboard{position:fixed;inset:0;z-index:3000;background:rgba(8,12,20,.97);backdrop-filter:blur(20px);display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.onboard.active{display:flex}
+.skip-btn{position:absolute;top:20px;right:20px;z-index:10;background:transparent;border:1px solid var(--border);color:var(--t3);cursor:pointer;font-family:inherit;font-size:.85rem;padding:8px 16px;border-radius:20px;transition:all .3s ease}
+.skip-btn:hover{color:var(--t1);border-color:var(--accent)}
+html[dir="rtl"] .skip-btn{right:auto;left:20px}
+.onboard-step{display:none;animation:fadeUp .5s ease;max-width:400px;text-align:center}
+.onboard-step.active{display:block}
+.onboard-icon{font-size:4rem;margin-bottom:20px}
+.onboard-title{font-family:'Cormorant Garamond','Vazirmatn',serif;font-size:1.8rem;color:var(--t1);margin-bottom:16px}
+html[lang="fa"] .onboard-title,html[lang="ar"] .onboard-title{font-family:'Vazirmatn',serif}
+.onboard-text{font-size:1rem;color:var(--t2);line-height:1.8;margin-bottom:30px}
+.onboard-dots{display:flex;gap:8px;justify-content:center;margin-bottom:20px}
+.onboard-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:all .3s ease}
+.onboard-dot.active{background:var(--accent);width:24px;border-radius:4px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.share-group{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.share-btn{background:var(--surface);border:1px solid var(--border);color:var(--t3);padding:8px 14px;border-radius:20px;font-size:.72rem;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:4px;transition:all .3s ease}
+.share-btn:hover{background:rgba(255,255,255,.06);color:var(--t1);border-color:var(--accent)}
+.share-btn svg{width:14px;height:14px;fill:currentColor}
+.foot{position:relative;z-index:1;padding:24px;text-align:center;font-size:.72rem;color:var(--t3);line-height:1.7;max-width:420px;border-top:1px solid var(--border);width:100%}
+.foot-links{display:flex;gap:16px;justify-content:center;margin-bottom:12px;flex-wrap:wrap}
+.foot-link{color:var(--t3);text-decoration:none;font-size:.75rem;transition:color .3s ease;background:none;border:none;cursor:pointer;font-family:inherit;padding:0}
+.foot-link:hover{color:var(--accent)}
+.heart{color:#ff8a8a;display:inline-block;animation:heartbeat 2s infinite;filter:drop-shadow(0 0 8px rgba(255,138,138,.3))}
+@keyframes heartbeat{0%,100%{transform:scale(1)}15%{transform:scale(1.2)}30%{transform:scale(1)}45%{transform:scale(1.15)}}
+
+.faq-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.faq-q{padding:14px 18px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:.9rem;color:var(--t1)}
+.faq-q span{transition:transform .3s;color:var(--t3);font-size:.7rem}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s;padding:0 18px;color:var(--t2);font-size:.85rem;line-height:1.7}
+.faq-item.open .faq-a{max-height:200px;padding:0 18px 16px}
+.faq-item.open .faq-q span{transform:rotate(180deg)}
+html[dir="rtl"] .faq-q{text-align:right;flex-direction:row-reverse}
+html[dir="rtl"] .faq-a{text-align:right}
+html[dir="rtl"] .faq-item.open .faq-q span{transform:rotate(-180deg)}
+
+.err{color:var(--err);font-size:.82rem;margin-top:14px;min-height:18px}
+.spec-note{font-size:.65rem;color:var(--t3);margin-top:20px;line-height:1.6;max-width:300px;opacity:.6}
+
+/* QA Modal */
+.qa-modal{position:fixed;inset:0;z-index:4000;background:rgba(8,12,20,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:none;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto}
+.qa-modal.active{display:flex}
+.qa-box{background:#0d1220;border:1px solid var(--border);border-radius:16px;padding:28px;max-width:560px;width:100%;position:relative}
+.qa-title{font-family:'Cormorant Garamond','Vazirmatn',serif;font-size:1.5rem;color:var(--t1);margin-bottom:6px}
+.qa-subtitle{font-size:.8rem;color:var(--t3);margin-bottom:20px}
+.qa-section{margin-bottom:18px}
+.qa-section h3{font-size:.82rem;color:var(--accent);margin-bottom:10px;letter-spacing:.05em;text-transform:uppercase;font-weight:600}
+.qa-check{display:flex;align-items:flex-start;gap:10px;padding:8px 0;font-size:.85rem;color:var(--t2);line-height:1.5}
+.qa-check input{margin-top:3px;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
+.qa-close{position:absolute;top:14px;right:14px;background:transparent;border:1px solid var(--border);color:var(--t3);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;font-family:inherit}
+.qa-close:hover{color:var(--t1);border-color:var(--accent)}
+html[dir="rtl"] .qa-close{right:auto;left:14px}
+.qa-version{font-size:.7rem;color:var(--t3);margin-top:16px;padding-top:14px;border-top:1px solid var(--border);text-align:center}
+
+@media(max-width:480px){
+  .display{font-size:clamp(1.8rem,6vw,2.6rem)}
+  .ring-wrapper{width:140px;height:140px}
+  .ring .dot{width:40px;height:40px}
+  .ring.in .dot{width:100px;height:100px}
+  .ring.out .dot{width:35px;height:35px}
+  .feats{grid-template-columns:repeat(2,1fr)}
+  .wave-ring:nth-child(1){inset:-6px}
+  .wave-ring:nth-child(2){inset:-14px}
+  .wave-ring:nth-child(3){inset:-22px}
+  .qa-box{padding:20px}
+}
+</style>
+</head>
+<body>
+
+<div class="bg" id="dreamBg">
+  <div class="ambient-ring"></div>
+  <div class="ambient-ring"></div>
+  <div class="ambient-ring"></div>
+  <div class="wind-lines" id="windLines"></div>
+</div>
+
+<div class="lang">
+  <button class="nav-link" onclick="scrollToSection('faqSec')" data-i="faqLink">FAQ</button>
+  <select id="langSel" onchange="setLang(this.value)" aria-label="Language">
+    <option value="en">English</option>
+    <option value="fa">فارسی</option>
+    <option value="ar">العربية</option>
+  </select>
+</div>
+
+<div class="onboard" id="onboard">
+  <button class="skip-btn" onclick="completeOnboard()" data-i="skip" aria-label="Skip introduction">Skip</button>
+  <div class="onboard-step active" data-step="1">
+    <div class="onboard-icon">🌬️</div>
+    <h2 class="onboard-title" data-i="on1t">Welcome to Another Breath</h2>
+    <p class="onboard-text" data-i="on1d">Your breath becomes art, and art becomes hope for a child.</p>
+  </div>
+  <div class="onboard-step" data-step="2">
+    <div class="onboard-icon">🎨</div>
+    <h2 class="onboard-title" data-i="on2t">Create Unique Art</h2>
+    <p class="onboard-text" data-i="on2d">Your breath creates a one-of-a-kind artwork. No two breaths are alike.</p>
+  </div>
+  <div class="onboard-step" data-step="3">
+    <div class="onboard-icon">❤️</div>
+    <h2 class="onboard-title" data-i="on3t">Help a Child</h2>
+    <p class="onboard-text" data-i="on3d">Half of every gift supports children in need through our verified partner.</p>
+  </div>
+  <div class="onboard-dots">
+    <div class="onboard-dot active"></div>
+    <div class="onboard-dot"></div>
+    <div class="onboard-dot"></div>
+  </div>
+  <button class="btn btn-p" onclick="nextOnboard()" data-i="onNext">Continue</button>
+</div>
+
+<!-- S1: Landing — merged single pledge box, no duplicate mission -->
+<div class="screen active" id="s1">
+  <h1 class="display" data-i="title">Another Breath</h1>
+  <p class="tagline" data-i="tagline">Turn one breath into something beautiful.</p>
+  <div class="pledge" data-i="pledge">
+    <strong>Our pledge</strong>
+    Half of every gift supports children in need. We will publish transparent quarterly impact reports once our verified partner is in place.
+  </div>
+  <div class="streak" id="streakBadge">
+    <span class="flame">🔥</span>
+    <span id="streakText"></span>
+  </div>
+  <button class="btn btn-p" onclick="go('s2')" data-i="begin">Begin</button>
+  <p class="small" style="margin-top:22px" data-i="priv">
+    Your audio stays in your browser. Nothing is recorded or sent anywhere.
+  </p>
+</div>
+
+<div class="screen" id="s2">
+  <h1 class="display" style="font-size:1.7rem" data-i="micT">Allow Microphone</h1>
+  <p class="tagline" data-i="micD">
+    Your audio stays in your browser.<br>
+    Nothing is recorded, stored, or transmitted.
+  </p>
+  <button class="btn btn-p" onclick="requestMic()" data-i="micA">Allow &amp; Continue</button>
+  <p class="err" id="micErr"></p>
+</div>
+
+<div class="screen" id="s3">
+  <h1 class="display" style="font-size:1.5rem" data-i="calT">Calibrating…</h1>
+  <p class="tagline" data-i="calD">
+    Stay quiet for a moment.<br>
+    We're listening to the room, not to you.
+  </p>
+  <div class="bar"><div class="fill" id="calFill"></div></div>
+  <p class="small" style="margin-top:12px" id="calInfo"></p>
+</div>
+
+<div class="screen" id="s4">
+  <p class="phase" id="phaseTxt" data-i="inhale">Breathe in</p>
+  <div class="ring-wrapper">
+    <div class="wave-ring"></div>
+    <div class="wave-ring"></div>
+    <div class="wave-ring"></div>
+    <div class="wind-arc"></div>
+    <div class="ring" id="ring"><div class="dot"></div></div>
+  </div>
+  <p class="small" data-i="hint">Let your breath flow naturally toward the microphone.</p>
+  <div class="bar breathing" id="breathBar">
+    <div class="fill" id="brFill"></div>
+    <div class="fill-wave"></div>
+  </div>
+</div>
+
+<div class="overlay" id="s5">
+  <div class="spin"></div>
+  <p data-i="creating">Your breath pattern is shaping the artwork…</p>
+</div>
+
+<div class="screen" id="s6">
+  <h1 class="display" style="font-size:1.5rem" data-i="yBr">Your Breath</h1>
+  <div class="art-frame"><canvas id="art" width="600" height="600"></canvas></div>
+  <p class="sig" id="sigEl"></p>
+  <div class="feats" id="featGrid"></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px">
+    <button class="btn btn-g" onclick="dlArt()" data-i="dl">Download</button>
+    <button class="btn btn-gold" onclick="give()" data-i="give">Give £2</button>
+    <button class="btn btn-ghost" onclick="resetAll()" data-i="again">Breathe Again</button>
+  </div>
+  <div class="share-group">
+    <button class="share-btn" onclick="shareArt('twitter')"><svg viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>Twitter</button>
+    <button class="share-btn" onclick="shareArt('whatsapp')"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>WhatsApp</button>
+    <button class="share-btn" onclick="shareArt('native')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>Share</button>
+  </div>
+  <p class="spec-note">
+    Breath Pattern Detection — not a medical or physiological measurement.<br>
+    Breath ID is an identifier, not a cryptographic hash.<br>
+    Same Feature Vector → Same Artwork. Always.
+  </p>
+</div>
+
+<section id="faqSec" style="width:100%;max-width:420px;padding:40px 24px;z-index:1;position:relative">
+  <h2 class="display" style="font-size:1.5rem;margin-bottom:24px" data-i="faqT">Frequently Asked Questions</h2>
+  <div id="faqContainer"></div>
+</section>
+
+<footer class="foot">
+  <div class="foot-links">
+    <a href="#" class="foot-link" data-i="privacy">Privacy</a>
+    <a href="#" class="foot-link" data-i="terms">Terms</a>
+    <a href="#" class="foot-link" data-i="contact">Contact</a>
+    <button class="foot-link" onclick="openQA()" data-i="qaLink">QA Checklist</button>
+  </div>
+  <span data-i="foot">Your breath pattern shapes the artwork. Audio is processed locally and never leaves your device.</span>
+  <p style="margin-top:8px" data-i="charity">Your gift travels directly, carried by <span class="heart">❤</span>, to children who need it most.</p>
+  <p style="margin-top:12px;font-size:.65rem;color:var(--t3);opacity:.5">Another Breath v5.0-final</p>
+</footer>
+
+<!-- QA Modal: Manual QA Checklist with EMPTY checkboxes -->
+<div class="qa-modal" id="qaModal">
+  <div class="qa-box">
+    <button class="qa-close" onclick="closeQA()" aria-label="Close">×</button>
+    <h2 class="qa-title" data-i="qaTitle">Manual QA Checklist</h2>
+    <p class="qa-subtitle" data-i="qaSubtitle">Empty checkboxes — to be ticked after real-device verification by the operator.</p>
+
+    <div class="qa-section">
+      <h3 data-i="qaSec1">Core Flow</h3>
+      <label class="qa-check"><input type="checkbox"> <span data-i="qa1">Onboarding → Continue → Begin (full 3-step)</span></label>
+      <label class="qa-check"><input type="checkbox"> <span data-i="qa2">Onboarding Skip button closes modal</span></label>
+      <label class="qa-check"><input type="checkbox"> <span data-i="qa3">Mic permission prompt appears</span></label>
+      <label class="qa-check"><input type="checkbox"> <span data-i="qa4">Calibration runs for 2s with progress bar</span></label>
+      <label class="qa-check"><input type="checkbox"> <span data-i="qa5">Breath capture (8s) with inhale/exhale guidance</span></label>
+      <label class="qa-check"><input type="checkbox"> <span data-i="qa6">Artwork renders after capture completes</span></label>
+      <label class="qa-check"><input type="checkbox"> <span data-i="qa7">AB-XXXX signature displayed</span></label>
+      <label class="qa-check"><input type="checkbox"> <span data-i="qa8">Feature grid shows 6 values</span></label>
+    </div>
+
+    <div class="qa-section">
+      <h3 data-i="qaSec2">Actions</h3>
+      <label class="qa-check"><input type="checkbox"> <span data-i="qa9">Download button saves PNG to device</span></label>
+      <label class="qa-check"><input type="checkbox"> <span data-i="qa10">Give button opens DONATION_URL</span></label>
+      <label class="qa-check"><input type="checkbox"> <span data-i="qa11">Breathe Again returns to landing cleanly</span></label>
+      <label class="qa-check"><input type="checkbox"> <span data-i="qa12">Twitter share opens intent URL</span></label>
+      <label class="qa-check"><input type="checkbox"> <span data-i="qa13">WhatsApp share opens wa.me</span></label>
+      <label class="qa-check"><input type="checkbox"> <span data-i="qa14">Native share invokes navigator.share where supported</span></label>
+    </div>
+
+    <div class="qa-section">
+      <h3 data-i="qaSec3">Localization</h3>
+      <label class="qa-check"><input type="checkbox"> <span data-i="qa15">Switch to فارسی — RTL layout applied</span></label>
+      <label class="qa-check"><input type="checkbox"> <span data-i="qa16">Switch to العربية — RTL layout applied</span></label>
+      <label class="qa-check"><input type="checkbox"> <span data-i="qa17">Switch back to English — LTR restored</span></label>
+      <label class="qa-check"><input type="checkbox"> <span data-i="qa18">FAQ expands/collapses correctly in RTL</span></label>
+    </div>
+
+    <div class="qa-section">
+      <h3 data-i="qaSec4">Stability</h3>
+      <label class="qa-check"><input type="checkbox"> <span data-i="qa19">Breathe Again × 5 — no console errors</span></label>
+      <label class="qa-check"><input type="checkbox"> <span data-i="qa20">Breathe Again × 10 — no AudioContext accumulation</span></label>
+      <label class="qa-check"><input type="checkbox"> <span data-i="qa21">Streak badge appears after two days</span></label>
+      <label class="qa-check"><input type="checkbox"> <span data-i="qa22">Language preference persists after reload</span></label>
+    </div>
+
+    <div class="qa-section">
+      <h3 data-i="qaSec5">Real Devices (operator to fill)</h3>
+      <label class="qa-check"><input type="checkbox"> <span>Chrome (desktop): _______</span></label>
+      <label class="qa-check"><input type="checkbox"> <span>Firefox (desktop): _______</span></label>
+      <label class="qa-check"><input type="checkbox"> <span>Safari iOS: _______</span></label>
+      <label class="qa-check"><input type="checkbox"> <span>Chrome Android: _______</span></label>
+    </div>
+
+    <div class="qa-version">
+      Another Breath v5.0-final · Build 2026-08-21 · <span data-i="qaStatus">Ready pending donation link</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  CONFIGURATION
+// ═══════════════════════════════════════════════════════
+var CONFIG = {
+  FFT: 512,
+  CAL_MS: 2000,
+  BREATH_MS: 8000,
+  SMOOTH_WIN: 5,
+  RMS_GATE: 2.8,
+  CENTROID_MIN: 150,
+  CENTROID_MAX: 4500,
+  BROADBAND_MIN: 0.35,
+  // ⚠️ REPLACE THIS BEFORE DEPLOYING — must not remain a placeholder
+  DONATION_URL: 'https://www.justgiving.com/your-charity-page'
+};
+
+// ═══════════════════════════════════════════════════════
+//  TRANSLATIONS (single pledge box, no redundant mission)
+// ═══════════════════════════════════════════════════════
+var T = {
+  en: {
+    label:'English', dir:'ltr',
+    title:'Another Breath',
+    tagline:'Turn one breath into something beautiful.',
+    pledge:'<strong>Our pledge</strong>Half of every gift supports children in need. We will publish transparent quarterly impact reports once our verified partner is in place.',
+    begin:'Begin',
+    priv:'Your audio stays in your browser. Nothing is recorded or sent anywhere.',
+    micT:'Allow Microphone',
+    micD:'Your audio stays in your browser.<br>Nothing is recorded, stored, or transmitted.',
+    micA:'Allow & Continue',
+    calT:'Calibrating…',
+    calD:'Stay quiet for a moment.<br>We\'re listening to the room, not to you.',
+    inhale:'Breathe in',
+    exhale:'Breathe out',
+    hint:'Let your breath flow naturally toward the microphone.',
+    creating:'Your breath pattern is shaping the artwork…',
+    yBr:'Your Breath',
+    dl:'Download',
+    give:'Give £2',
+    again:'Breathe Again',
+    foot:'Your breath pattern shapes the artwork. Audio is processed locally and never leaves your device.',
+    charity:'Your gift travels directly, carried by <span class="heart">❤</span>, to children who need it most.',
+    micErr:'Please allow microphone access to continue.',
+    fDur:'Duration', fInt:'Intensity', fPk:'Peaks',
+    fRhy:'Rhythm', fSta:'Stability', fFlo:'Flow',
+    on1t:'Welcome to Another Breath',
+    on1d:'Your breath becomes art, and art becomes hope for a child.',
+    on2t:'Create Unique Art',
+    on2d:'Your breath creates a one-of-a-kind artwork. No two breaths are alike.',
+    on3t:'Help a Child',
+    on3d:'Half of every gift supports children in need through our verified partner.',
+    onNext:'Continue',
+    skip:'Skip',
+    faqLink:'FAQ',
+    faqT:'Frequently Asked Questions',
+    privacy:'Privacy', terms:'Terms', contact:'Contact',
+    qaLink:'QA Checklist',
+    qaTitle:'Manual QA Checklist',
+    qaSubtitle:'Empty checkboxes — to be ticked after real-device verification by the operator.',
+    qaSec1:'Core Flow', qaSec2:'Actions', qaSec3:'Localization', qaSec4:'Stability', qaSec5:'Real Devices',
+    qaStatus:'Ready pending donation link',
+    qa1:'Onboarding → Continue → Begin (full 3-step)',
+    qa2:'Onboarding Skip button closes modal',
+    qa3:'Mic permission prompt appears',
+    qa4:'Calibration runs for 2s with progress bar',
+    qa5:'Breath capture (8s) with inhale/exhale guidance',
+    qa6:'Artwork renders after capture completes',
+    qa7:'AB-XXXX signature displayed',
+    qa8:'Feature grid shows 6 values',
+    qa9:'Download button saves PNG to device',
+    qa10:'Give button opens DONATION_URL',
+    qa11:'Breathe Again returns to landing cleanly',
+    qa12:'Twitter share opens intent URL',
+    qa13:'WhatsApp share opens wa.me',
+    qa14:'Native share invokes navigator.share where supported',
+    qa15:'Switch to فارسی — RTL layout applied',
+    qa16:'Switch to العربية — RTL layout applied',
+    qa17:'Switch back to English — LTR restored',
+    qa18:'FAQ expands/collapses correctly in RTL',
+    qa19:'Breathe Again × 5 — no console errors',
+    qa20:'Breathe Again × 10 — no AudioContext accumulation',
+    qa21:'Streak badge appears after two days',
+    qa22:'Language preference persists after reload',
+    faq:[
+      {q:'How does my donation help?', a:'Half of every gift goes directly to providing food, education, and healthcare for children in need through our verified partner.'},
+      {q:'Is my voice recorded?', a:'Never. Your breath is processed entirely in your browser and is never sent to any server.'},
+      {q:'How is the art generated?', a:'Your breath creates unique sound waves that are translated into visual patterns using deterministic generative algorithms.'}
+    ]
+  },
+  fa: {
+    label:'فارسی', dir:'rtl',
+    title:'نفسِ دیگری',
+    tagline:'یک نفس را به چیزی زیبا تبدیل کن.',
+    pledge:'<strong>تعهد ما</strong>نیمی از هر پیشکش از کودکان نیازمند حمایت می‌کند. پس از استقرار شریک تأییدشده، گزارش‌های فصلی شفاف منتشر خواهیم کرد.',
+    begin:'شروع',
+    priv:'صدای شما در مرورگرتان می‌ماند. هیچ چیز ضبط یا ارسال نمی‌شود.',
+    micT:'اجازه‌ی میکروفون',
+    micD:'صدای شما در مرورگرتان می‌ماند.<br>هیچ چیز ضبط، ذخیره یا ارسال نمی‌شود.',
+    micA:'اجازه و ادامه',
+    calT:'در حال کالیبره…',
+    calD:'لحظه‌ای ساکت بمانید.<br>ما صدای اتاق را می‌شنویم، نه شما را.',
+    inhale:'نفس بکشید',
+    exhale:'بازدم',
+    hint:'بگذارید نفستان به‌طور طبیعی به سمت میکروفون جریان یابد.',
+    creating:'الگوی نفس شما در حال شکل‌دادن به اثر هنری است…',
+    yBr:'نفسِ شما',
+    dl:'دانلود',
+    give:'پیشکش ۲ پوند',
+    again:'دوباره نفس بکش',
+    foot:'الگوی نفس شما اثر هنری را شکل می‌دهد. صدا به‌صورت محلی پردازش می‌شود.',
+    charity:'پیشکشت مستقیم سفر می‌کند، بر دوش <span class="heart">❤</span>، سوی کودکانی که بیش‌ازهمه به آن نیاز دارند.',
+    micErr:'لطفاً برای ادامه، دسترسی به میکروفون را مجاز کنید.',
+    fDur:'مدت', fInt:'شدت', fPk:'قله‌ها',
+    fRhy:'ریتم', fSta:'پایداری', fFlo:'جریان',
+    on1t:'به نفسِ دیگری خوش آمدی',
+    on1d:'نفسَت به هنر تبدیل می‌شود، و هنر به امید برای یک کودک.',
+    on2t:'هنر منحصربه‌فرد بساز',
+    on2d:'نفسَت یک اثر هنری یکتا می‌سازد. هیچ دو نفسی یکسان نیستند.',
+    on3t:'به یک کودک کمک کن',
+    on3d:'نیمی از هر پیشکش از طریق شریک تأییدشده‌ی ما از کودکان نیازمند حمایت می‌کند.',
+    onNext:'ادامه',
+    skip:'رد کردن',
+    faqLink:'سوالات',
+    faqT:'سوالات متداول',
+    privacy:'حریم خصوصی', terms:'شرایط', contact:'تماس',
+    qaLink:'چک‌لیست تست',
+    qaTitle:'چک‌لیست تست دستی',
+    qaSubtitle:'چک‌باکس‌های خالی — پس از تأیید روی دستگاه واقعی توسط اپراتور پر شوند.',
+    qaSec1:'جریان اصلی', qaSec2:'اقدامات', qaSec3:'بومی‌سازی', qaSec4:'پایداری', qaSec5:'دستگاه‌های واقعی',
+    qaStatus:'آماده، در انتظار لینک کمک',
+    faq:[
+      {q:'کمک من چگونه استفاده می‌شود؟', a:'نیمی از هر پیشکش مستقیماً برای تأمین غذا، آموزش و بهداشت کودکان نیازمند از طریق شریک تأییدشده هزینه می‌شود.'},
+      {q:'آیا صدای من ضبط می‌شود؟', a:'هرگز. نفس شما کاملاً در مرورگرتان پردازش می‌شود و هرگز به سروری ارسال نمی‌شود.'},
+      {q:'هنر چگونه تولید می‌شود؟', a:'نفس شما امواج صوتی یکتایی ایجاد می‌کند که با الگوریتم‌های مولد قطعی به الگوهای بصری تبدیل می‌شوند.'}
+    ]
+  },
+  ar: {
+    label:'العربية', dir:'rtl',
+    title:'نَفَسٌ آخَر',
+    tagline:'حوّل نَفَساً واحداً إلى شيء جميل.',
+    pledge:'<strong>تعهدنا</strong>نصف كل هدية يدعم الأطفال المحتاجين. سننشر تقارير ربع سنوية شفافة بمجرد اكتمال شراكتنا الموثقة.',
+    begin:'ابدأ',
+    priv:'صوتك يبقى في متصفحك. لا يُسجَّل أو يُرسَل أي شيء.',
+    micT:'السماح بالميكروفون',
+    micD:'صوتك يبقى في متصفحك.<br>لا يُسجَّل أو يُخزَّن أو يُرسَل أي شيء.',
+    micA:'السماح والمتابعة',
+    calT:'جارٍ المعايرة…',
+    calD:'ابقَ صامتاً لحظة.<br>نستمع إلى الغرفة، لا إليك.',
+    inhale:'استنشق',
+    exhale:'ازفر',
+    hint:'دع نَفَسَك يتدفق بشكل طبيعي نحو الميكروفون.',
+    creating:'نمط نَفَسَك يشكّل العمل الفني…',
+    yBr:'نَفَسُك',
+    dl:'تحميل',
+    give:'أهدِ £٢',
+    again:'تنفّس مجدداً',
+    foot:'نمط نَفَسَك يشكّل العمل الفني. يُعالَج الصوت محلياً.',
+    charity:'هديتك تسافر مباشرة، محمولة على <span class="heart">❤</span>، إلى الأطفال الأكثر احتياجاً.',
+    micErr:'يرجى السماح بالوصول إلى الميكروفون للمتابعة.',
+    fDur:'المدة', fInt:'الشدة', fPk:'القمم',
+    fRhy:'الإيقاع', fSta:'الاستقرار', fFlo:'التدفق',
+    on1t:'مرحباً بك في نَفَسٌ آخَر',
+    on1d:'نفسك يصبح فناً، والفن يصبح أملاً لطفل.',
+    on2t:'أنشئ فناً فريداً',
+    on2d:'نفسك يخلق عملاً فنياً فريداً. لا نَفَسان متشابهان.',
+    on3t:'ساعد طفلاً',
+    on3d:'نصف كل هدية يدعم الأطفال المحتاجين من خلال شريكنا الموثق.',
+    onNext:'متابعة',
+    skip:'تخطّي',
+    faqLink:'الأسئلة',
+    faqT:'الأسئلة الشائعة',
+    privacy:'الخصوصية', terms:'الشروط', contact:'اتصل',
+    qaLink:'قائمة الفحص',
+    qaTitle:'قائمة الفحص اليدوية',
+    qaSubtitle:'مربعات فارغة — ليتم وضع علامة عليها بعد التحقق على جهاز حقيقي.',
+    qaSec1:'التدفق الأساسي', qaSec2:'الإجراءات', qaSec3:'التوطين', qaSec4:'الاستقرار', qaSec5:'الأجهزة الحقيقية',
+    qaStatus:'جاهز، في انتظار رابط التبرع',
+    faq:[
+      {q:'كيف تساعد هديتي؟', a:'نصف كل هدية يذهب مباشرة لتوفير الغذاء والتعليم والرعاية الصحية للأطفال المحتاجين من خلال شريكنا الموثق.'},
+      {q:'هل يتم تسجيل صوتي؟', a:'أبداً. يتم معالجة نَفَسَك بالكامل في متصفحك ولا يُرسَل إلى أي خادم.'},
+      {q:'كيف يتم إنشاء الفن؟', a:'يخلق نَفَسَك موجات صوتية فريدة تُترجم إلى أنماط بصرية باستخدام خوارزميات توليدية حتمية.'}
+    ]
+  }
+};
+
+// ═══════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════
+var state = {
+  lang: localStorage.getItem('ab_lang') || navigator.language.split('-')[0] || 'en',
+  onboardStep: 1,
+  streakDays: parseInt(localStorage.getItem('streakDays') || '0'),
+  lastBreath: localStorage.getItem('lastBreathDate'),
+  _lastSig: null
+};
+if(!T[state.lang]) state.lang = 'en';
+
+// ═══════════════════════════════════════════════════════
+//  BREATH ENGINE
+//  — destroy() now removes ctx from registry before closing
+// ═══════════════════════════════════════════════════════
+var BreathEngine = (function() {
+  var ctx = null, analyser = null, stream = null;
+  var audioContextRegistry = [];
+  var noise = { rms: 0, centroid: 0, variance: 0, floor: 0 };
+  var frames = [], active = false;
+  var phaseCb = null, progressCb = null, calInfoCb = null;
+
+  function init() {
+    return navigator.mediaDevices.getUserMedia({
+      audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
+    }).then(function(s) {
+      stream = s;
+      ctx = new (window.AudioContext || window.webkitAudioContext)();
+      audioContextRegistry.push(ctx);
+      if(ctx.state === 'suspended') return ctx.resume();
+    }).then(function() {
+      var src = ctx.createMediaStreamSource(stream);
+      analyser = ctx.createAnalyser();
+      analyser.fftSize = CONFIG.FFT;
+      analyser.smoothingTimeConstant = 0.25;
+      src.connect(analyser);
+    });
+  }
+
+  function destroy() {
+    if(stream) {
+      try { stream.getTracks().forEach(function(t){t.stop();}); } catch(e){}
+      stream = null;
+    }
+    if(ctx) {
+      // Remove this ctx from registry BEFORE closing to prevent
+      // unbounded growth when init/destroy are called repeatedly
+      var idx = audioContextRegistry.indexOf(ctx);
+      if(idx > -1) audioContextRegistry.splice(idx, 1);
+      try { ctx.close().catch(function(){}); } catch(e){}
+      ctx = null;
+    }
+    analyser = null;
+    frames = [];
+    active = false;
+  }
+
+  function forceCloseAll() {
+    audioContextRegistry.forEach(function(c){
+      try {
+        if(c && c.state !== 'closed') c.close().catch(function(){});
+      } catch(e){}
+    });
+    audioContextRegistry = [];
+  }
+
+  function calibrate(done) {
+    var tBuf = new Float32Array(CONFIG.FFT);
+    var fBuf = new Uint8Array(analyser.frequencyBinCount);
+    var rmsArr = [], centArr = [];
+    var t0 = performance.now();
+    function tick() {
+      var el = performance.now() - t0, p = Math.min(el / CONFIG.CAL_MS, 1);
+      if(progressCb) progressCb(p, 'cal');
+      analyser.getFloatTimeDomainData(tBuf);
+      analyser.getByteFrequencyData(fBuf);
+      rmsArr.push(calcRMS(tBuf));
+      centArr.push(calcCentroid(fBuf));
+      if(p < 1) { requestAnimationFrame(tick); }
+      else {
+        noise = {
+          rms: calcMean(rmsArr),
+          centroid: calcMean(centArr),
+          variance: calcVariance(rmsArr),
+          floor: Math.min.apply(null, rmsArr)
+        };
+        if(calInfoCb) calInfoCb('Noise floor: ' + noise.rms.toFixed(5) + ' | Centroid: ' + Math.round(noise.centroid) + 'Hz');
+        done();
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function capture(done) {
+    frames = []; active = true;
+    var tBuf = new Float32Array(CONFIG.FFT);
+    var fBuf = new Uint8Array(analyser.frequencyBinCount);
+    var t0 = performance.now(), lastPhase = '';
+    function tick() {
+      var el = performance.now() - t0, p = Math.min(el / CONFIG.BREATH_MS, 1);
+      if(progressCb) progressCb(p, 'breath');
+      var cycle = el % 7000;
+      var currentPhase = (cycle < 3500) ? 'inhale' : 'exhale';
+      if(currentPhase !== lastPhase) {
+        lastPhase = currentPhase;
+        if(phaseCb) phaseCb(currentPhase);
+      }
+      analyser.getFloatTimeDomainData(tBuf);
+      analyser.getByteFrequencyData(fBuf);
+      frames.push({
+        t: el,
+        rms: calcRMS(tBuf),
+        centroid: calcCentroid(fBuf),
+        broadband: calcBroadband(fBuf)
+      });
+      if(p < 1 && active) { requestAnimationFrame(tick); }
+      else { active = false; done(extractFeatures()); }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function extractFeatures() {
+    var i, j;
+    var smoothed = [];
+    for(i = 0; i < frames.length; i++) {
+      var sum = 0, count = 0;
+      var lo = Math.max(0, i - CONFIG.SMOOTH_WIN);
+      var hi = Math.min(frames.length - 1, i + CONFIG.SMOOTH_WIN);
+      for(j = lo; j <= hi; j++) { sum += frames[j].rms; count++; }
+      smoothed.push(sum / count);
+    }
+    var gate = noise.rms * CONFIG.RMS_GATE;
+    var classified = [];
+    for(i = 0; i < frames.length; i++) {
+      var f = frames[i];
+      var isBreath = smoothed[i] > gate &&
+                     f.centroid > CONFIG.CENTROID_MIN &&
+                     f.centroid < CONFIG.CENTROID_MAX &&
+                     f.broadband > CONFIG.BROADBAND_MIN &&
+                     Math.abs(smoothed[i] - noise.rms) > noise.variance * 3;
+      classified.push({ t: f.t, rms: f.rms, smoothRms: smoothed[i],
+                        centroid: f.centroid, broadband: f.broadband, isBreath: isBreath });
+    }
+    var breathFrames = classified.filter(function(c){return c.isBreath;});
+    var duration = 0;
+    if(breathFrames.length > 1) duration = breathFrames[breathFrames.length-1].t - breathFrames[0].t;
+    var intensity = 0;
+    if(breathFrames.length > 0) {
+      var intSum = 0;
+      for(i = 0; i < breathFrames.length; i++) intSum += breathFrames[i].smoothRms - noise.rms;
+      intensity = intSum / breathFrames.length;
+    }
+    var peakTimes = [];
+    for(i = 1; i < smoothed.length - 1; i++) {
+      if(smoothed[i] > smoothed[i-1] && smoothed[i] > smoothed[i+1] && smoothed[i] > gate) {
+        peakTimes.push(frames[i].t);
+        i += 4;
+      }
+    }
+    var peakCount = peakTimes.length;
+    var rhythm = 0;
+    if(peakTimes.length > 1) {
+      var intervalSum = 0;
+      for(i = 1; i < peakTimes.length; i++) intervalSum += peakTimes[i] - peakTimes[i-1];
+      rhythm = intervalSum / (peakTimes.length - 1);
+    }
+    var stability = 0;
+    if(breathFrames.length > 2) {
+      var vals = breathFrames.map(function(b){return b.smoothRms;});
+      var mean = calcMean(vals);
+      var v = calcVariance(vals);
+      if(mean > 0) stability = Math.sqrt(v) / mean;
+    }
+    var flow = 0;
+    if(classified.length > 0) flow = breathFrames.length / classified.length;
+    return { duration: duration, intensity: intensity, peakCount: peakCount,
+             rhythm: rhythm, stability: stability, flow: flow };
+  }
+
+  function toSignature(features) {
+    var dur = Math.min(Math.max(features.duration, 0), 10000);
+    var int = Math.min(Math.max(features.intensity, 0), 1);
+    var pk = Math.min(features.peakCount, 30);
+    var rhy = Math.min(Math.max(features.rhythm, 0), 5000);
+    var sta = Math.min(Math.max(features.stability, 0), 2);
+    var flo = Math.min(Math.max(features.flow, 0), 1);
+    var vector = [
+      (dur / 1000).toFixed(2),
+      int.toFixed(2),
+      String(pk),
+      (rhy / 1000).toFixed(2),
+      sta.toFixed(2),
+      flo.toFixed(2)
+    ].join('|');
+    var seed = djb2(vector);
+    var id = 'AB-' + String(seed % 10000).padStart(4, '0');
+    return { vector: vector, seed: seed, id: id, features: features };
+  }
+
+  function calcRMS(buf) { var s=0; for(var i=0;i<buf.length;i++) s+=buf[i]*buf[i]; return Math.sqrt(s/buf.length); }
+  function calcCentroid(fBuf) {
+    var weighted=0,total=0,nyquist=ctx?ctx.sampleRate/2:24000;
+    for(var i=0;i<fBuf.length;i++){weighted+=(i/fBuf.length)*nyquist*fBuf[i];total+=fBuf[i];}
+    return total>0?weighted/total:0;
+  }
+  function calcBroadband(fBuf) {
+    var max=0; for(var i=0;i<fBuf.length;i++){if(fBuf[i]>max)max=fBuf[i];}
+    var thresh=max*0.2,count=0; for(var i=0;i<fBuf.length;i++){if(fBuf[i]>thresh)count++;}
+    return fBuf.length>0?count/fBuf.length:0;
+  }
+  function calcMean(arr){var s=0;for(var i=0;i<arr.length;i++)s+=arr[i];return arr.length>0?s/arr.length:0;}
+  function calcVariance(arr){if(arr.length===0)return 0;var m=calcMean(arr),s=0;for(var i=0;i<arr.length;i++)s+=(arr[i]-m)*(arr[i]-m);return s/arr.length;}
+  function djb2(str){var h=5381;for(var i=0;i<str.length;i++){h=((h<<5)+h+str.charCodeAt(i))&0xFFFFFFFF;}return h>>>0;}
+
+  return {
+    init: init, destroy: destroy, forceCloseAll: forceCloseAll,
+    calibrate: calibrate, capture: capture, toSignature: toSignature,
+    setPhaseCallback: function(fn){phaseCb=fn;},
+    setProgressCallback: function(fn){progressCb=fn;},
+    setCalInfoCallback: function(fn){calInfoCb=fn;}
+  };
+})();
+
+// ═══════════════════════════════════════════════════════
+//  ARTWORK GENERATOR (deterministic)
+// ═══════════════════════════════════════════════════════
+var ArtworkGenerator = (function() {
+  function mulberry32(a) {
+    return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};
+  }
+  function generate(canvas, seed, features) {
+    var ctx = canvas.getContext('2d'), W = canvas.width, H = canvas.height;
+    var rng = mulberry32(seed), cx = W/2, cy = H/2;
+    var baseHue = 190 + features.flow * 60;
+    var sat = Math.min(55 + features.intensity * 250, 90);
+    var lum = 58 + features.stability * 18;
+    ctx.fillStyle = '#080c14'; ctx.fillRect(0,0,W,H);
+
+    var ringCount = 3 + Math.floor(features.peakCount * 1.2);
+    for(var r=0; r<ringCount; r++){
+      var radius = 55 + (r/ringCount)*195 + rng()*25;
+      var pts = 70 + Math.floor(rng()*50);
+      var hue = baseHue + rng()*40 - 20;
+      var alpha = 0.12 + rng()*0.22;
+      var wobbleFreq = 2 + Math.floor(rng()*5);
+      var wobbleAmp = 8 + features.intensity*70 + rng()*12;
+      var phase = rng()*Math.PI*2;
+      ctx.beginPath();
+      for(var i=0; i<=pts; i++){
+        var angle = (i/pts)*Math.PI*2;
+        var wobble = Math.sin(angle*wobbleFreq + phase + seed*0.001) * wobbleAmp;
+        var rad = radius + wobble;
+        var x = cx + Math.cos(angle)*rad, y = cy + Math.sin(angle)*rad;
+        if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.closePath();
+      ctx.strokeStyle = 'hsla('+hue+','+sat+'%,'+lum+'%,'+alpha+')';
+      ctx.lineWidth = 0.8 + rng()*2;
+      ctx.shadowBlur = 12 + rng()*18;
+      ctx.shadowColor = 'hsla('+hue+',80%,70%,0.4)';
+      ctx.stroke(); ctx.shadowBlur = 0;
+    }
+
+    var pCount = Math.floor(features.duration/120) + 15;
+    for(var p=0; p<pCount; p++){
+      var pa = rng()*Math.PI*2, pd = 35 + rng()*210;
+      var px = cx + Math.cos(pa)*pd, py = cy + Math.sin(pa)*pd;
+      var ps = 0.8 + rng()*2.5, ph = baseHue + rng()*50 - 25;
+      ctx.beginPath(); ctx.arc(px,py,ps,0,Math.PI*2);
+      ctx.fillStyle = 'hsla('+ph+',65%,75%,'+(0.15+rng()*0.35)+')';
+      ctx.fill();
+    }
+
+    var glowR = 35 + features.intensity*280;
+    var grad = ctx.createRadialGradient(cx,cy,0,cx,cy,glowR);
+    grad.addColorStop(0,'hsla('+baseHue+',55%,80%,'+(0.12+features.flow*0.18)+')');
+    grad.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,W,H);
+
+    var lineCount = 4 + Math.floor(features.stability*12);
+    for(var l=0; l<lineCount; l++){
+      var y0 = 80 + rng()*(H-160);
+      var amp = features.stability*25 + rng()*8;
+      var freq = 2 + rng()*5;
+      var lh = baseHue + 25 + rng()*20;
+      ctx.beginPath();
+      for(var lx=40; lx<W-40; lx+=3){
+        var ly = y0 + Math.sin((lx/W)*Math.PI*freq + seed*0.01)*amp;
+        if(lx===40) ctx.moveTo(lx,ly); else ctx.lineTo(lx,ly);
+      }
+      ctx.strokeStyle = 'hsla('+lh+',45%,70%,0.07)';
+      ctx.lineWidth = 0.5; ctx.stroke();
+    }
+
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.font = '13px Inter,sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Another Breath', cx, H - 28);
+    ctx.font = '10px Inter,sans-serif';
+    ctx.fillText('AB-' + String(seed % 10000).padStart(4,'0'), cx, H - 12);
+  }
+  return { generate: generate };
+})();
+
+// ═══════════════════════════════════════════════════════
+//  UI LAYER
+// ═══════════════════════════════════════════════════════
+function t(key){ return (T[state.lang] && T[state.lang][key]) || T.en[key] || key; }
+
+function setLang(l){
+  if(!T[l]) l = 'en';
+  state.lang = l;
+  localStorage.setItem('ab_lang', l);
+  document.documentElement.lang = l;
+  document.documentElement.dir = (l === 'fa' || l === 'ar') ? 'rtl' : 'ltr';
+  var els = document.querySelectorAll('[data-i]');
+  for(var i=0;i<els.length;i++){ var k=els[i].getAttribute('data-i'); if(T[l]&&T[l][k]) els[i].innerHTML=T[l][k]; }
+  document.getElementById('langSel').value = l;
+  buildFAQ();
+}
+
+function go(id){
+  var screens = document.querySelectorAll('.screen,.overlay');
+  for(var i=0;i<screens.length;i++) screens[i].classList.remove('active');
+  document.getElementById(id).classList.add('active');
+}
+
+function createBreathingBackground(){
+  var bg = document.getElementById('dreamBg');
+  for(var i=0;i<30;i++){
+    var p = document.createElement('div');
+    p.className = 'particle';
+    var size = Math.random()*3 + 1;
+    var left = Math.random()*100;
+    var duration = Math.random()*16 + 12;
+    var delay = Math.random()*25;
+    var driftX = (Math.random()-0.5)*80;
+    p.style.cssText = 'width:'+size+'px;height:'+size+'px;left:'+left+'%;animation-duration:'+duration+'s;animation-delay:-'+delay+'s;--drift-x:'+driftX+'px;opacity:'+(Math.random()*0.4+0.15);
+    bg.appendChild(p);
+  }
+  var windContainer = document.getElementById('windLines');
+  for(var i=0;i<6;i++){
+    var line = document.createElement('div');
+    line.className = 'wind-line';
+    line.style.top = (10 + Math.random()*80)+'%';
+    line.style.animationDelay = (Math.random()*6)+'s';
+    line.style.animationDuration = (6 + Math.random()*6)+'s';
+    line.style.opacity = 0.1 + Math.random()*0.2;
+    windContainer.appendChild(line);
+  }
+}
+
+function checkOnboard(){
+  if(!localStorage.getItem('onboardingCompleted')){
+    document.getElementById('onboard').classList.add('active');
+  }
+}
+
+function nextOnboard(){
+  var steps = document.querySelectorAll('.onboard-step');
+  var dots = document.querySelectorAll('.onboard-dot');
+  if(state.onboardStep < steps.length){
+    steps[state.onboardStep-1].classList.remove('active');
+    dots[state.onboardStep-1].classList.remove('active');
+    state.onboardStep++;
+    steps[state.onboardStep-1].classList.add('active');
+    dots[state.onboardStep-1].classList.add('active');
+    if(state.onboardStep === steps.length){
+      var btn = document.querySelector('.onboard .btn-p');
+      if(btn){
+        btn.innerHTML = t('begin');
+        btn.setAttribute('onclick', 'completeOnboard()');
+        btn.removeAttribute('data-i');
+      }
+    }
+  }
+}
+
+function completeOnboard(){
+  document.getElementById('onboard').classList.remove('active');
+  localStorage.setItem('onboardingCompleted', 'true');
+}
+
+function updateStreak(){
+  var today = new Date().toDateString();
+  var yesterday = new Date(Date.now() - 86400000).toDateString();
+  if(state.lastBreath === today){ return; }
+  else if(state.lastBreath === yesterday){ state.streakDays++; }
+  else { state.streakDays = 1; }
+  state.lastBreath = today;
+  localStorage.setItem('streakDays', state.streakDays);
+  localStorage.setItem('lastBreathDate', state.lastBreath);
+  if(state.streakDays > 1){
+    var badge = document.getElementById('streakBadge');
+    badge.classList.add('show');
+    document.getElementById('streakText').textContent = state.streakDays + ' day streak!';
+  }
+}
+
+function buildFAQ(){
+  var container = document.getElementById('faqContainer');
+  var faqs = (T[state.lang] && T[state.lang].faq) || T.en.faq || [];
+  container.innerHTML = '';
+  for(var i=0;i<faqs.length;i++){
+    var item = document.createElement('div');
+    item.className = 'faq-item';
+    item.innerHTML = '<div class="faq-q" onclick="this.parentElement.classList.toggle(\'open\')">'+
+      faqs[i].q+'<span>▼</span></div>'+
+      '<div class="faq-a">'+faqs[i].a+'</div>';
+    container.appendChild(item);
+  }
+}
+
+function requestMic(){
+  var errEl = document.getElementById('micErr');
+  errEl.textContent = '';
+  BreathEngine.init().then(function(){
+    go('s3');
+    BreathEngine.calibrate(function(){
+      setTimeout(function(){
+        go('s4');
+        BreathEngine.capture(function(features){
+          BreathEngine.destroy();
+          onBreathComplete(features);
+        });
+      }, 600);
+    });
+  }).catch(function(e){
+    console.error('Mic error:', e);
+    errEl.textContent = t('micErr');
+  });
+}
+
+function onBreathComplete(features){
+  go('s5');
+  var sig = BreathEngine.toSignature(features);
+  setTimeout(function(){
+    var canvas = document.getElementById('art');
+    ArtworkGenerator.generate(canvas, sig.seed, features);
+    go('s6');
+    document.getElementById('sigEl').innerHTML = sig.id.replace('AB-', 'AB-<span>') + '</span>';
+    var grid = document.getElementById('featGrid');
+    grid.innerHTML = '';
+    var list = [
+      { l: t('fDur'), v: (features.duration/1000).toFixed(1)+'s' },
+      { l: t('fInt'), v: (features.intensity*100).toFixed(1) },
+      { l: t('fPk'), v: String(features.peakCount) },
+      { l: t('fRhy'), v: features.rhythm>0?(features.rhythm/1000).toFixed(1)+'s':'—' },
+      { l: t('fSta'), v: (features.stability*100).toFixed(0)+'%' },
+      { l: t('fFlo'), v: (features.flow*100).toFixed(0)+'%' }
+    ];
+    for(var i=0;i<list.length;i++){
+      var d = document.createElement('div'); d.className='feat';
+      d.innerHTML = '<div class="v">'+list[i].v+'</div><div class="l">'+list[i].l+'</div>';
+      grid.appendChild(d);
+    }
+    state._lastSig = sig;
+    updateStreak();
+  }, 1600);
+}
+
+function dlArt(){
+  var canvas = document.getElementById('art');
+  var link = document.createElement('a');
+  link.download = (state._lastSig ? state._lastSig.id : 'breath') + '.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+function give(){ window.open(CONFIG.DONATION_URL, '_blank'); }
+
+function resetAll(){
+  BreathEngine.destroy();
+  BreathEngine.forceCloseAll();
+  state._lastSig = null;
+  go('s1');
+}
+
+function shareArt(platform){
+  var url = window.location.href;
+  if(platform === 'native' && navigator.share){
+    navigator.share({
+      title: 'Another Breath',
+      text: 'I created a breath of art! 🌬️',
+      url: url
+    }).catch(function(err){
+      if(err.name !== 'AbortError') console.warn('Share failed:', err);
+    });
+    return;
+  }
+  var shareUrl = '';
+  if(platform === 'twitter') shareUrl = 'https://twitter.com/intent/tweet?text='+encodeURIComponent('I created a breath of art! 🌬️ #AnotherBreath')+'&url='+encodeURIComponent(url);
+  else if(platform === 'whatsapp') shareUrl = 'https://wa.me/?text='+encodeURIComponent('Another Breath - turn your breath into art! 🌬️ '+url);
+  if(shareUrl) window.open(shareUrl, '_blank');
+}
+
+function scrollToSection(id){ document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
+
+function openQA(){ document.getElementById('qaModal').classList.add('active'); }
+function closeQA(){ document.getElementById('qaModal').classList.remove('active'); }
+
+// ── WIRING ──
+BreathEngine.setPhaseCallback(function(phase){
+  var el = document.getElementById('phaseTxt');
+  var ring = document.getElementById('ring');
+  el.textContent = t(phase);
+  if(phase === 'inhale'){ ring.classList.add('in'); ring.classList.remove('out'); }
+  else { ring.classList.remove('in'); ring.classList.add('out'); }
+});
+BreathEngine.setProgressCallback(function(p,type){
+  if(type === 'cal'){ var f=document.getElementById('calFill'); if(f) f.style.width=(p*100)+'%'; }
+  else if(type === 'breath'){ var f=document.getElementById('brFill'); if(f) f.style.width=(p*100)+'%'; }
+});
+BreathEngine.setCalInfoCallback(function(info){
+  var el = document.getElementById('calInfo');
+  if(el) el.textContent = info;
+});
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', function(){
+  createBreathingBackground();
+  setLang(state.lang);
+  buildFAQ();
+  checkOnboard();
+
+  // Donation URL placeholder safeguard
+  if(!CONFIG.DONATION_URL || CONFIG.DONATION_URL.indexOf('your-charity-page') > -1) {
+    console.warn(
+      '%c⚠️ Another Breath v5.0-final',
+      'color:#ff8a8a;font-weight:bold;font-size:14px'
+    );
+    console.warn(
+      '%cDONATION_URL still contains the placeholder "your-charity-page". ' +
+      'Replace it in the CONFIG object before deploying to production. ' +
+      'Build status: Ready pending donation link.',
+      'color:#ff8a8a'
+    );
+  }
+
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    var tagline = document.querySelector('#s2 .tagline');
+    if(tagline){
+      tagline.innerHTML += '<br><br><span style="color:var(--accent)">⚠️ No microphone detected. Try using Chrome or Firefox.</span>';
+    }
+  }
+});
+
+// Close QA modal on Escape
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape'){
+    var qa = document.getElementById('qaModal');
+    if(qa && qa.classList.contains('active')) closeQA();
+  }
+});
+
+// Close QA modal on backdrop click
+document.getElementById('qaModal').addEventListener('click', function(e){
+  if(e.target === this) closeQA();
+});
+</script>
+</body>
+</html>
