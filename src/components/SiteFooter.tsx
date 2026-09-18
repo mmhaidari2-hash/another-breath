@@ -31,6 +31,9 @@ export default function SiteFooter() {
           <Link href="/studio" className="hover:text-white">
             Studio
           </Link>
+          <Link href="/cofounder" className="hover:text-signal">
+            Owner
+          </Link>
           <Link href="/legal/terms" className="hover:text-white">
             Terms
           </Link>
