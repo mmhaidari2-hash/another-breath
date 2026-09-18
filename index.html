@@ -124,14 +124,11 @@ header.top{display:flex;justify-content:space-between;align-items:center;margin-
 <main id="landing" class="container" role="main">
   <header class="top">
     <div class="brand-mark">Another Breath</div>
-    <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
-      <select id="lang-select" class="lang-select" aria-label="Language">
-        <option value="en">English</option>
-        <option value="fa">فارسی</option>
-        <option value="ar">العربية</option>
-      </select>
-      <button class="btn btn-ghost" id="btn-qa" data-i18n="qaTitle">Manual QA</button>
-    </div>
+    <select id="lang-select" class="lang-select" aria-label="Language">
+      <option value="en">English</option>
+      <option value="fa">فارسی</option>
+      <option value="ar">العربية</option>
+    </select>
   </header>
 
   <section class="hero">
@@ -209,6 +206,7 @@ header.top{display:flex;justify-content:space-between;align-items:center;margin-
 
 <footer>
   <p>&copy; 2026 Another Breath · <span data-i18n="tagline">Your breath shapes the art</span> · v7.1</p>
+  <p style="margin-top:.75rem"><button class="btn btn-ghost" id="btn-qa" style="padding:.4rem 1rem;font-size:.8rem" data-i18n="qaTitle">Manual QA</button></p>
 </footer>
 
 <section id="app-view" class="hidden" role="dialog" aria-label="Breath Capture" aria-modal="true">
