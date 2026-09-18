@@ -9,20 +9,18 @@ const schema = z.object({
   product: z.string().trim().min(2).max(120),
   mrr: z.string().trim().max(40).optional(),
   url: z.string().trim().max(300).optional(),
+  niche: z.string().trim().max(80).optional(),
+  askingPrice: z.string().trim().max(40).optional(),
   notes: z.string().trim().max(2000).optional(),
 });
 
 export async function POST(req: Request) {
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
   if (!checkRateLimit(`seller:${ip}`)) {
-    return NextResponse.json(
-      { error: 'Too many requests. Try again in a minute.' },
-      { status: 429 }
-    );
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
   }
 
-  const body = await req.json();
-  const parsed = schema.safeParse(body);
+  const parsed = schema.safeParse(await req.json());
   if (!parsed.success) {
     return NextResponse.json(
       { error: parsed.error.errors[0]?.message ?? 'Invalid input' },

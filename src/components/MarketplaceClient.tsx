@@ -1,11 +1,16 @@
 'use client';
 
+import { Suspense } from 'react';
 import MarketplaceBrowser from '@/components/MarketplaceBrowser';
 import { useLang } from '@/components/LanguageProvider';
 import type { ListingDTO } from '@/lib/utils';
+import { useSearchParams } from 'next/navigation';
 
-export default function MarketplaceClient({ listings }: { listings: ListingDTO[] }) {
+function MarketInner({ listings }: { listings: ListingDTO[] }) {
   const { t } = useLang();
+  const params = useSearchParams();
+  const q = params.get('q') || '';
+
   return (
     <main className="pb-24 pt-12">
       <div className="mx-auto max-w-shell px-4 sm:px-6">
@@ -15,9 +20,17 @@ export default function MarketplaceClient({ listings }: { listings: ListingDTO[]
         </h1>
         <p className="mt-4 max-w-2xl text-lg text-coal-soft">{t.marketplaceSub}</p>
         <div className="mt-10">
-          <MarketplaceBrowser listings={listings} />
+          <MarketplaceBrowser listings={listings} initialQuery={q} />
         </div>
       </div>
     </main>
+  );
+}
+
+export default function MarketplaceClient({ listings }: { listings: ListingDTO[] }) {
+  return (
+    <Suspense fallback={<main className="p-10">Loading market…</main>}>
+      <MarketInner listings={listings} />
+    </Suspense>
   );
 }

@@ -27,6 +27,15 @@ export default function SiteHeader() {
             {t.navListings}
           </Link>
           <Link
+            href="/compare"
+            className={cn(
+              'hidden px-3 py-2 text-sm font-medium sm:inline',
+              pathname.startsWith('/compare') ? 'text-signal' : 'text-coal-soft hover:text-coal'
+            )}
+          >
+            Compare
+          </Link>
+          <Link
             href="/trust"
             className={cn(
               'hidden px-3 py-2 text-sm font-medium sm:inline',

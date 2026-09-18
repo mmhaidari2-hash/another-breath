@@ -1,4 +1,4 @@
-// کلادک — Phase 1 schema (SQLite-friendly)
+// کلادک — Phase 1+ schema (SQLite)
 
 generator client {
   provider = "prisma-client-js"
@@ -10,11 +10,11 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
+  id        String    @id @default(cuid())
+  email     String    @unique
   name      String
-  role      String   @default("BUYER")
-  createdAt DateTime @default(now())
+  role      String    @default("BUYER")
+  createdAt DateTime  @default(now())
   listings  Listing[]
 }
 
@@ -33,7 +33,18 @@ model Listing {
 
   mrr         Float?
   askingPrice Float
-  multiple    Float? // asking / (mrr*12) when computable — stored after verification
+  multiple    Float?
+
+  // Rich verified payload (JSON strings for SQLite)
+  // mrrHistory: [{month,mrr}]
+  mrrHistory     String?
+  // highlights: string[]
+  highlights     String?
+  reasonForSale  String?
+  customersApprox Int?
+  businessModel  String?
+  // gallery: [{label,tone}] abstract product frames — not stock photos
+  gallery        String?
 
   sellerId String
   seller   User   @relation(fields: [sellerId], references: [id])
@@ -65,9 +76,9 @@ model ScoringRubric {
 }
 
 model Lead {
-  id         String  @id @default(cuid())
+  id         String   @id @default(cuid())
   listingId  String
-  listing    Listing @relation(fields: [listingId], references: [id])
+  listing    Listing  @relation(fields: [listingId], references: [id])
   buyerName  String
   buyerEmail String
   budget     Float?
@@ -79,12 +90,14 @@ model Lead {
 }
 
 model SellerInquiry {
-  id        String   @id @default(cuid())
-  name      String
-  email     String
-  product   String
-  mrr       String?
-  url       String?
-  notes     String?
-  createdAt DateTime @default(now())
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  product     String
+  mrr         String?
+  url         String?
+  niche       String?
+  askingPrice String?
+  notes       String?
+  createdAt   DateTime @default(now())
 }
