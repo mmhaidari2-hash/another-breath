@@ -4,6 +4,8 @@ import { prisma } from '@/lib/db';
 import LeadForm from '@/components/LeadForm';
 import { formatCurrency, formatDate } from '@/lib/utils';
 
+export const dynamic = 'force-dynamic';
+
 export default async function ListingDetailPage({
   params,
 }: {

@@ -4,6 +4,8 @@ import HowItWorks from '@/components/HowItWorks';
 import SellCTA from '@/components/SellCTA';
 import ListingCard from '@/components/ListingCard';
 
+export const dynamic = 'force-dynamic';
+
 export default async function HomePage() {
   const listings = await prisma.listing.findMany({
     where: { category: 'Micro-SaaS', verificationStatus: 'VERIFIED' },
