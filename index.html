@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="generator" content="Another Breath v7.1-Premium">
-<title>Another Breath — Biological Art from Your Breath</title>
+<meta name="generator" content="Another Breath v7.2-NFT">
+<title>Another Breath — Biological 1/1 NFT from Your Breath</title>
 <meta name="description" content="Your breath becomes a one-of-one biological artwork. Live waveform, deterministic bio-art, and collector editions that fund children in need.">
 <meta property="og:title" content="Another Breath"><meta property="og:description" content="Biological 1/1 art shaped by your breath. Half of every collect supports children.">
 <meta property="og:url" content="https://mmhaidari2-hash.github.io/another-breath/">
@@ -114,7 +114,9 @@ header.top{display:flex;justify-content:space-between;align-items:center;margin-
 .price-pill{display:flex;justify-content:space-between;align-items:center;gap:.75rem;padding:.85rem 1rem;border:1px solid var(--border);border-radius:14px;background:rgba(0,0,0,.2);cursor:pointer;transition:border-color .25s,box-shadow .25s;font:inherit;color:inherit;width:100%;text-align:inherit}
 .price-pill:hover,.price-pill.active{border-color:var(--accent);box-shadow:0 0 20px var(--glow)}
 .price-pill .name{font-weight:500}.price-pill .amt{color:var(--accent);font-variant-numeric:tabular-nums;white-space:nowrap}
-.half-note{font-size:.8rem;color:var(--t3);margin-top:.75rem;line-height:1.45}
+.fingerprint{font-family:ui-monospace,monospace;font-size:.72rem;color:var(--t3);word-break:break-all;margin-top:.65rem;line-height:1.45}
+.nft-actions{display:flex;flex-direction:column;gap:.55rem;margin-top:1rem}
+.nft-badge{display:inline-block;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(232,200,122,.35);padding:.25rem .55rem;border-radius:999px;margin-bottom:.5rem}
 @media(max-width:480px){.container{padding:1rem}.hero{padding:2rem 0}.live-vitals{grid-template-columns:repeat(3,1fr)}.vital-mini .v{font-size:.8rem}}
 </style>
 </head>
@@ -201,11 +203,12 @@ header.top{display:flex;justify-content:space-between;align-items:center;margin-
     <div class="faq-item" tabindex="0" role="button" aria-expanded="false"><div class="faq-q"><span data-i18n="faq1Q">Is this a medical device?</span><span aria-hidden="true">+</span></div><div class="faq-a" data-i18n="faq1A">No. Another Breath is a creative, artistic experience. We make no medical or therapeutic claims.</div></div>
     <div class="faq-item" tabindex="0" role="button" aria-expanded="false"><div class="faq-q"><span data-i18n="faq2Q">How is the art generated?</span><span aria-hidden="true">+</span></div><div class="faq-a" data-i18n="faq2A">Locally in your browser. Your live breath waveform and acoustic features become a deterministic seed and visual DNA. Same breath signature = same art, forever.</div></div>
     <div class="faq-item" tabindex="0" role="button" aria-expanded="false"><div class="faq-q"><span data-i18n="faq3Q">How do you make money globally?</span><span aria-hidden="true">+</span></div><div class="faq-a" data-i18n="faq3A">Digital collects, patronage, and studio prints via Stripe Payment Links. Half funds charity. Connect your payment URLs in CONFIG to go live in any country Stripe supports.</div></div>
+    <div class="faq-item" tabindex="0" role="button" aria-expanded="false"><div class="faq-q"><span data-i18n="faq4Q">Is the NFT real and unique per person?</span><span aria-hidden="true">+</span></div><div class="faq-a" data-i18n="faq4A">Yes. Your live breath waveform and pulse-rate of breathing become a SHA-256 fingerprint. That hash seeds the art and can be minted once on-chain via AnotherBreathNFT so each signature is a true 1/1. Audio never leaves your device.</div></div>
   </section>
 </main>
 
 <footer>
-  <p>&copy; 2026 Another Breath · <span data-i18n="tagline">Your breath shapes the art</span> · v7.1</p>
+  <p>&copy; 2026 Another Breath · <span data-i18n="tagline">Your breath shapes the art</span> · v7.2</p>
   <p style="margin-top:.75rem"><button class="btn btn-ghost" id="btn-qa" style="padding:.4rem 1rem;font-size:.8rem" data-i18n="qaTitle">Manual QA</button></p>
 </footer>
 
@@ -240,6 +243,7 @@ header.top{display:flex;justify-content:space-between;align-items:center;margin-
         <div class="nft-cert" id="nft-cert">
           <strong data-i18n="certTitle">Certificate of Authenticity · 1/1</strong>
           <div id="cert-body">—</div>
+          <div class="fingerprint" id="nft-fingerprint">—</div>
         </div>
       </div>
       <div>
@@ -249,13 +253,14 @@ header.top{display:flex;justify-content:space-between;align-items:center;margin-
             <div class="vital"><div class="k" data-i18n="mDur">Duration</div><div class="v" id="m-dur">—</div></div>
             <div class="vital"><div class="k" data-i18n="mInt">Intensity</div><div class="v" id="m-int">—</div></div>
             <div class="vital"><div class="k" data-i18n="mRhythm">Rhythm</div><div class="v" id="m-rhythm">—</div></div>
-            <div class="vital"><div class="k" data-i18n="mStab">Stability</div><div class="v" id="m-stab">—</div></div>
             <div class="vital"><div class="k" data-i18n="mFlow">Flow</div><div class="v" id="m-flow">—</div></div>
+            <div class="vital"><div class="k" data-i18n="mPulse">Breath pulse</div><div class="v" id="m-pulse">—</div></div>
             <div class="vital"><div class="k" data-i18n="mPeaks">Peaks</div><div class="v" id="m-peaks">—</div></div>
           </div>
           <canvas id="result-chart" width="840" height="220"></canvas>
         </div>
         <div class="collect-panel">
+          <span class="nft-badge" data-i18n="nftBadge">On-chain ready · 1/1</span>
           <h3 data-i18n="collectTitle">Collect this piece</h3>
           <p data-i18n="collectD">Choose an edition. Half of every payment supports verified child-focused charities.</p>
           <div class="price-pills" role="listbox" aria-label="Editions">
@@ -264,7 +269,12 @@ header.top{display:flex;justify-content:space-between;align-items:center;margin-
             <button type="button" class="price-pill" data-tier="print"><span class="name" data-i18n="tier3T">Studio Print</span><span class="amt" data-i18n="tier3P">from $240</span></button>
           </div>
           <button class="btn btn-primary" id="btn-checkout" style="width:100%" data-i18n="checkout">Checkout</button>
+          <div class="nft-actions">
+            <button class="btn" id="btn-nft-pack" style="width:100%" data-i18n="nftPack">Download NFT Package</button>
+            <button class="btn btn-primary" id="btn-mint" style="width:100%" data-i18n="mintNft">Mint Unique NFT</button>
+          </div>
           <p class="half-note" data-i18n="halfNote">50% charity · 50% studio · Stripe-ready globally</p>
+          <p class="half-note" data-i18n="nftNote">Unique SHA-256 breath fingerprint. Audio stays on-device. Only the hash can be minted on-chain.</p>
         </div>
         <div class="controls" style="margin-top:1.25rem">
           <button class="btn" id="btn-download" data-i18n="download">Download PNG</button>
@@ -307,20 +317,28 @@ header.top{display:flex;justify-content:space-between;align-items:center;margin-
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.5/dist/ethers.umd.min.js"></script>
 <script>
 /* ============================================================
-   Another Breath · v7.0-Premium
-   BreathEngine · WaveformChart · BioArtGenerator · Collect
+   Another Breath · v7.2-NFT
+   BreathEngine · WaveformChart · BioArtGenerator · NftEngine
    ============================================================ */
 
 const CONFIG = {
-  // Replace with real Stripe Payment Links (or any checkout URLs) to go live worldwide
   PAYMENT_LINKS: {
     collect: "PLACEHOLDER",
     patron: "PLACEHOLDER",
     print: "PLACEHOLDER"
   },
   DONATION_URL: "PLACEHOLDER",
+  // Deploy contracts/AnotherBreathNFT.sol then paste address + chainId
+  NFT: {
+    chainId: 8453, // Base mainnet (change to 84532 for Base Sepolia testnet)
+    chainName: "Base",
+    contractAddress: "PLACEHOLDER",
+    // Optional: public HTTPS base for uploaded metadata JSON after IPFS/hosting
+    metadataBaseUrl: ""
+  },
   CALIBRATION_MS: 2000,
   MIN_BREATH_MS: 8000,
   RMS_GATE_MULT: 2.2,
@@ -345,6 +363,7 @@ const I18N = {
     faq1Q: "Is this a medical device?", faq1A: "No. Another Breath is a creative, artistic experience. We make no medical or therapeutic claims.",
     faq2Q: "How is the art generated?", faq2A: "Locally in your browser. Your live breath waveform and acoustic features become a deterministic seed and visual DNA. Same breath signature = same art, forever.",
     faq3Q: "How do you make money globally?", faq3A: "Digital collects, patronage, and studio prints via Stripe Payment Links. Half funds charity. Connect your payment URLs in CONFIG to go live in any country Stripe supports.",
+    faq4Q: "Is the NFT real and unique per person?", faq4A: "Yes. Your live breath waveform and pulse-rate of breathing become a SHA-256 fingerprint. That hash seeds the art and can be minted once on-chain via AnotherBreathNFT so each signature is a true 1/1. Audio never leaves your device.",
     onbTitle: "Before we begin", onbBody: "We need microphone access to detect your breath and draw the live waveform. No audio is ever recorded, stored, or transmitted. Everything happens locally.",
     skip: "Skip", continue: "Continue", close: "Close",
     qaTitle: "Manual QA", qaIntro: "These are empty checkboxes. No automated tests are claimed.",
@@ -358,7 +377,14 @@ const I18N = {
     vRms: "Flow", vCent: "Timbre", vPeaks: "Peaks",
     vitalsTitle: "Breath Vitals", collectTitle: "Collect this piece", collectD: "Choose an edition. Half of every payment supports verified child-focused charities.",
     halfNote: "50% charity · 50% studio · Stripe-ready globally",
-    mDur: "Duration", mInt: "Intensity", mRhythm: "Rhythm", mStab: "Stability", mFlow: "Flow", mPeaks: "Peaks",
+    nftBadge: "On-chain ready · 1/1", nftPack: "Download NFT Package", mintNft: "Mint Unique NFT",
+    nftNote: "Unique SHA-256 breath fingerprint. Audio stays on-device. Only the hash can be minted on-chain.",
+    mintNeedWallet: "Install MetaMask (or another wallet) to mint on-chain.",
+    mintNeedContract: "Deploy AnotherBreathNFT and set CONFIG.NFT.contractAddress to mint on-chain. Your NFT package is ready to download now.",
+    mintOk: "Mint submitted. Check your wallet for the transaction.",
+    mintFail: "Mint failed. See console for details.",
+    packOk: "NFT package downloaded (image + metadata).",
+    mDur: "Duration", mInt: "Intensity", mRhythm: "Rhythm", mStab: "Stability", mFlow: "Flow", mPeaks: "Peaks", mPulse: "Breath pulse",
     tier1T: "Digital Collect", tier1P: "$29", tier1D: "High-res PNG, certificate, and your breath vitals locked to the piece.",
     tier1a: "4K download", tier1b: "Authenticity ID", tier1c: "Waveform snapshot", tier1Btn: "Collect Digital",
     tier2T: "Patron Edition", tier2P: "$99", tier2D: "Named patronage, public ledger credit, and priority for seasonal drop reports.",
@@ -382,6 +408,7 @@ const I18N = {
     faq1Q: "آیا این وسیله پزشکی است؟", faq1A: "خیر. نفسی دیگر یک تجربه‌ی هنری است. هیچ ادعای پزشکی نمی‌کنیم.",
     faq2Q: "اثر چگونه ساخته می‌شود؟", faq2A: "محلی در مرورگر. موج زنده و ویژگی‌های صوتی نفس به seed و DNA بصری قطعی تبدیل می‌شوند. همان امضا = همان اثر.",
     faq3Q: "چطور جهانی پول درمی‌آورد؟", faq3A: "کلکسیون دیجیتال، پاترون و چاپ استودیویی با لینک پرداخت Stripe. نیمی خیریه. لینک‌ها را در CONFIG بگذارید تا در کشورهای پشتیبانی‌شده زنده شود.",
+    faq4Q: "آیا NFT واقعی و برای هر نفر یکتاست؟", faq4A: "بله. موج زنده و نرخ پالس تنفس شما به اثرانگشت SHA-256 تبدیل می‌شود. همان هش اثر را می‌سازد و فقط یک‌بار روی زنجیره با قرارداد AnotherBreathNFT مینت می‌شود. صدا از دستگاه خارج نمی‌شود.",
     onbTitle: "پیش از شروع", onbBody: "برای تشخیص تنفس و رسم موج زنده به میکروفون نیاز داریم. هیچ صدایی ضبط یا ارسال نمی‌شود.",
     skip: "رد شدن", continue: "ادامه", close: "بستن",
     qaTitle: "چک‌لیست دستی", qaIntro: "چک‌باکس خالی. تست خودکار ادعا نمی‌شود.",
@@ -395,7 +422,14 @@ const I18N = {
     vRms: "جریان", vCent: "طنین", vPeaks: "قله",
     vitalsTitle: "ویتال تنفس", collectTitle: "کلکسیون این اثر", collectD: "نسخه را انتخاب کنید. نیمی از هر پرداخت برای خیریه‌های کودکان.",
     halfNote: "۵۰٪ خیریه · ۵۰٪ استودیو · آماده‌ی Stripe",
-    mDur: "مدت", mInt: "شدت", mRhythm: "ریتم", mStab: "پایداری", mFlow: "جریان", mPeaks: "قله‌ها",
+    nftBadge: "آماده‌ی زنجیره · ۱ از ۱", nftPack: "دانلود پکیج NFT", mintNft: "مینت NFT یکتا",
+    nftNote: "اثرانگشت SHA-256 از نفس شما. صدا روی دستگاه می‌ماند؛ فقط هش روی زنجیره مینت می‌شود.",
+    mintNeedWallet: "برای مینت روی زنجیره MetaMask یا کیف‌پول دیگری نصب کنید.",
+    mintNeedContract: "قرارداد AnotherBreathNFT را دیپلوی کنید و آدرس را در CONFIG.NFT.contractAddress بگذارید. پکیج NFT الان قابل دانلود است.",
+    mintOk: "تراکنش مینت ارسال شد. کیف‌پول را چک کنید.",
+    mintFail: "مینت ناموفق بود. کنسول را ببینید.",
+    packOk: "پکیج NFT دانلود شد (تصویر + متادیتا).",
+    mDur: "مدت", mInt: "شدت", mRhythm: "ریتم", mStab: "پایداری", mFlow: "جریان", mPeaks: "قله‌ها", mPulse: "پالس تنفس",
     tier1T: "کلکسیون دیجیتال", tier1P: "$29", tier1D: "PNG باکیفیت، گواهی، و ویتال قفل‌شده روی اثر.",
     tier1a: "دانلود ۴K", tier1b: "شناسه اصالت", tier1c: "اسنپ‌شات موج", tier1Btn: "خرید دیجیتال",
     tier2T: "نسخه پاترون", tier2P: "$99", tier2D: "حمایت نام‌دار، اعتبار در گزارش عمومی، اولویت در دراپ‌های فصلی.",
@@ -419,6 +453,7 @@ const I18N = {
     faq1Q: "هل هذا جهاز طبي؟", faq1A: "لا. تجربة فنية إبداعية بلا ادعاءات طبية.",
     faq2Q: "كيف يُولَّد الفن؟", faq2A: "محلياً. الموجة الحية وخصائص الصوت تصبح بذرة وDNA بصري حتمي.",
     faq3Q: "كيف يحقق دخلاً عالمياً؟", faq3A: "جمع رقمي ورعاية وطبعات عبر روابط Stripe. ضع الروابط في CONFIG للتفعيل عالمياً.",
+    faq4Q: "هل الـ NFT حقيقي وفريد لكل شخص؟", faq4A: "نعم. موجة التنفس ومعدل نبض التنفس يصبحان بصمة SHA-256. تُزرع الفن ويمكن سكّها مرة واحدة على السلسلة عبر AnotherBreathNFT. الصوت لا يغادر جهازك.",
     onbTitle: "قبل أن نبدأ", onbBody: "نحتاج الميكروفون لرسم الموجة الحية. لا يُسجَّل أو يُرسل أي صوت.",
     skip: "تخطي", continue: "متابعة", close: "إغلاق",
     qaTitle: "فحص يدوي", qaIntro: "مربعات فارغة بلا اختبارات آلية.",
@@ -432,7 +467,14 @@ const I18N = {
     vRms: "تدفق", vCent: "طابع", vPeaks: "قمم",
     vitalsTitle: "حيوية النفس", collectTitle: "اجمع هذه القطعة", collectD: "اختر إصداراً. نصف كل دفعة للجمعيات.",
     halfNote: "٥٠٪ جمعيات · ٥٠٪ استوديو · جاهز لـ Stripe",
-    mDur: "المدة", mInt: "الشدة", mRhythm: "الإيقاع", mStab: "الاستقرار", mFlow: "التدفق", mPeaks: "القمم",
+    nftBadge: "جاهز للسلسلة · ١/١", nftPack: "تحميل حزمة NFT", mintNft: "سك NFT فريد",
+    nftNote: "بصمة SHA-256 من نفسك. الصوت يبقى محلياً؛ فقط الهاش يُسك على السلسلة.",
+    mintNeedWallet: "ثبّت MetaMask أو محفظة أخرى للسك على السلسلة.",
+    mintNeedContract: "انشر AnotherBreathNFT وضع العنوان في CONFIG.NFT.contractAddress. حزمة NFT جاهزة للتحميل الآن.",
+    mintOk: "تم إرسال معاملة السك. تحقق من محفظتك.",
+    mintFail: "فشل السك. راجع وحدة التحكم.",
+    packOk: "تم تحميل حزمة NFT (صورة + بيانات وصفية).",
+    mDur: "المدة", mInt: "الشدة", mRhythm: "الإيقاع", mStab: "الاستقرار", mFlow: "التدفق", mPeaks: "القمم", mPulse: "نبض التنفس",
     tier1T: "جمع رقمي", tier1P: "$29", tier1D: "PNG عالي الدقة وشهادة وحيوية مقفلة على القطعة.",
     tier1a: "تحميل 4K", tier1b: "معرف أصالة", tier1c: "لقطة موجة", tier1Btn: "جمع رقمي",
     tier2T: "إصدار الراعي", tier2P: "$99", tier2D: "رعاية باسمك ورصيد في التقرير العام.",
@@ -449,7 +491,8 @@ const THEME_NAMES = { "london-mist": "London Mist", "persian-garden": "Persian G
 const state = {
   lang: "en", theme: "london-mist", ctx: null, analyser: null, stream: null, rafId: null,
   startTime: 0, features: [], noiseProfile: null, isRunning: false,
-  breathSeed: null, breathId: null, currentArt: null, feats: null, quantized: null,
+  breathSeed: null, breathId: null, breathHash: null, fingerprint: null, nftMeta: null,
+  currentArt: null, feats: null, quantized: null,
   selectedTier: "collect", livePeaks: 0, ctxRegistry: []
 };
 
@@ -502,6 +545,12 @@ function djb2(str) {
   let h = 5381;
   for (let i = 0; i < str.length; i++) h = ((h << 5) + h) + str.charCodeAt(i);
   return h >>> 0;
+}
+
+async function sha256Hex(str) {
+  const data = new TextEncoder().encode(str);
+  const buf = await crypto.subtle.digest("SHA-256", data);
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
 function mulberry32(seed) {
@@ -704,6 +753,7 @@ const BreathEngine = {
     const aboveFloor = feats.filter(f => f.rms > state.noiseProfile.floor).length;
     const flow = aboveFloor / feats.length;
     const waveform = feats.filter((_, i) => i % Math.max(1, Math.floor(feats.length / 64)) === 0).map(f => Math.round(f.rms * 10000) / 10000);
+    const breathPulse = rhythm > 0 ? Math.round((60000 / rhythm) * 10) / 10 : 0;
     return {
       duration: Math.round(duration * 100) / 100,
       intensity: Math.round(intensity * 10000) / 10000,
@@ -713,6 +763,7 @@ const BreathEngine = {
       flow: Math.round(flow * 100) / 100,
       centroid: Math.round(avgCentroid),
       avgRms: Math.round(avgRms * 10000) / 10000,
+      breathPulse,
       waveform
     };
   },
@@ -725,15 +776,124 @@ const BreathEngine = {
       r: Math.round(f.rhythm / 100) * 100,
       s: Math.round(f.stability * 10) / 10,
       f: Math.round(f.flow * 10) / 10,
-      c: Math.round(f.centroid / 50) * 50
+      c: Math.round(f.centroid / 50) * 50,
+      bp: Math.round((f.breathPulse || 0) * 2) / 2
     };
   },
+  async makeIdentity(feats, quantized) {
+    if (!feats || !quantized) return null;
+    const waveSig = (feats.waveform || []).map(v => v.toFixed(4)).join(",");
+    const dna = [
+      `d=${quantized.d}`, `i=${quantized.i}`, `p=${quantized.p}`, `r=${quantized.r}`,
+      `s=${quantized.s}`, `f=${quantized.f}`, `c=${quantized.c}`, `bp=${quantized.bp}`,
+      `theme=${state.theme}`, `wave=${waveSig}`
+    ].join("|");
+    const fingerprint = await sha256Hex(dna);
+    const seed = djb2(fingerprint);
+    const id = "AB-" + fingerprint.slice(0, 8).toUpperCase();
+    return { id, seed, fingerprint, dna, breathHash: "0x" + fingerprint };
+  },
   makeId(quantized) {
+    // sync fallback for hero preview only
     if (!quantized) return null;
-    const str = `${quantized.d}|${quantized.i}|${quantized.p}|${quantized.r}|${quantized.s}|${quantized.f}|${quantized.c}|${state.lang}`;
+    const str = `${quantized.d}|${quantized.i}|${quantized.p}|${quantized.r}|${quantized.s}|${quantized.f}|${quantized.c}|${quantized.bp || 0}|${state.lang}`;
     const hash = djb2(str);
     const id = "AB-" + (hash % 10000).toString().padStart(4, "0");
-    return { id, seed: hash };
+    return { id, seed: hash, fingerprint: null, breathHash: null };
+  }
+};
+
+/* ---------- NFT engine: metadata + on-chain mint ---------- */
+const NFT_ABI = [
+  "function mintBreath(bytes32 breathHash, string uri) returns (uint256)",
+  "function existsBreath(bytes32 breathHash) view returns (bool)",
+  "function tokenOfBreath(bytes32) view returns (uint256)"
+];
+
+const NftEngine = {
+  buildMetadata(ident, feats, theme) {
+    const name = `Another Breath ${ident.id}`;
+    const description = "Biological 1/1 artwork generated from a live breath waveform and respiratory pulse signature. Audio never left the creator's device; only this cryptographic fingerprint is mintable on-chain.";
+    const attributes = [
+      { trait_type: "Breath ID", value: ident.id },
+      { trait_type: "Theme", value: THEME_NAMES[theme] || theme },
+      { trait_type: "Duration (s)", value: feats.duration },
+      { trait_type: "Intensity", value: feats.intensity },
+      { trait_type: "Breath Pulse (br/min)", value: feats.breathPulse || 0 },
+      { trait_type: "Rhythm (ms)", value: feats.rhythm },
+      { trait_type: "Stability", value: feats.stability },
+      { trait_type: "Flow", value: feats.flow },
+      { trait_type: "Peaks", value: feats.peaks },
+      { trait_type: "Timbre Centroid (Hz)", value: feats.centroid },
+      { trait_type: "Edition", value: "1/1" },
+      { trait_type: "Fingerprint", value: ident.fingerprint }
+    ];
+    return {
+      name,
+      description,
+      image: "", // filled with data URL or hosted URL at export time
+      external_url: "https://mmhaidari2-hash.github.io/another-breath/",
+      background_color: "060a12",
+      attributes,
+      another_breath: {
+        version: "7.2",
+        breathHash: ident.breathHash,
+        seed: ident.seed,
+        quantized: BreathEngine.quantize(feats),
+        waveform: feats.waveform
+      }
+    };
+  },
+  downloadPackage() {
+    if (!state.nftMeta || !state.breathId) return false;
+    const canvas = document.getElementById("art-canvas-result");
+    const image = canvas.toDataURL("image/png");
+    const meta = { ...state.nftMeta, image };
+    const blob = new Blob([JSON.stringify(meta, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `${state.breathId}-metadata.json`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    const img = document.createElement("a");
+    img.href = image;
+    img.download = `${state.breathId}-bioart.png`;
+    img.click();
+    return true;
+  },
+  async mint() {
+    if (!state.breathHash || !state.fingerprint) throw new Error("no fingerprint");
+    const addr = CONFIG.NFT.contractAddress;
+    if (!addr || addr.includes("PLACEHOLDER")) {
+      const err = new Error("NO_CONTRACT");
+      throw err;
+    }
+    if (!window.ethereum) {
+      const err = new Error("NO_WALLET");
+      throw err;
+    }
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    const network = await provider.getNetwork();
+    if (Number(network.chainId) !== Number(CONFIG.NFT.chainId)) {
+      try {
+        await window.ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: "0x" + Number(CONFIG.NFT.chainId).toString(16) }]
+        });
+      } catch (e) {
+        throw new Error("WRONG_CHAIN");
+      }
+    }
+    const signer = await provider.getSigner();
+    const contract = new ethers.Contract(addr, NFT_ABI, signer);
+    const exists = await contract.existsBreath(state.breathHash);
+    if (exists) throw new Error("ALREADY_MINTED");
+    let uri = CONFIG.NFT.metadataBaseUrl
+      ? `${CONFIG.NFT.metadataBaseUrl.replace(/\/$/, "")}/${state.breathId}.json`
+      : `data:application/json,${encodeURIComponent(JSON.stringify(state.nftMeta))}`;
+    const tx = await contract.mintBreath(state.breathHash, uri);
+    return tx;
   }
 };
 
@@ -921,6 +1081,8 @@ const UI = {
     });
     document.getElementById("btn-checkout").addEventListener("click", () => this.checkout(state.selectedTier));
     document.getElementById("btn-download").addEventListener("click", () => this.downloadArt());
+    document.getElementById("btn-nft-pack").addEventListener("click", () => this.downloadNftPack());
+    document.getElementById("btn-mint").addEventListener("click", () => this.mintNft());
     document.getElementById("btn-share").addEventListener("click", () => this.share());
     document.getElementById("btn-again").addEventListener("click", () => {
       document.getElementById("result-view").classList.add("hidden");
@@ -931,11 +1093,22 @@ const UI = {
     if (Object.values(CONFIG.PAYMENT_LINKS).every(v => !v || v.includes("PLACEHOLDER"))) {
       console.warn("[Another Breath] Connect CONFIG.PAYMENT_LINKS (Stripe) to enable global checkout.");
     }
+    if (!CONFIG.NFT.contractAddress || CONFIG.NFT.contractAddress.includes("PLACEHOLDER")) {
+      console.warn("[Another Breath] Deploy contracts/AnotherBreathNFT.sol and set CONFIG.NFT.contractAddress to enable mint.");
+    }
     // Test hook for automation
     window.__AB = {
       studioSample: () => this.studioSample(),
       getArtDataURL: () => document.getElementById("art-canvas-result").toDataURL("image/png"),
-      getState: () => ({ breathId: state.breathId, seed: state.breathSeed, feats: state.feats })
+      getState: () => ({
+        breathId: state.breathId,
+        seed: state.breathSeed,
+        fingerprint: state.fingerprint,
+        breathHash: state.breathHash,
+        feats: state.feats,
+        nftMeta: state.nftMeta
+      }),
+      getNftMeta: () => state.nftMeta
     };
   },
   makeStudioBreath() {
@@ -963,6 +1136,7 @@ const UI = {
     const stability = peakAvg > 0 ? Math.sqrt(peakVar) / peakAvg : 0.3;
     const flow = features.filter(f => f.rms > 0.03).length / features.length;
     const waveform = features.filter((_, i) => i % 5 === 0).map(f => Math.round(f.rms * 10000) / 10000);
+    const breathPulse = rhythm > 0 ? Math.round((60000 / rhythm) * 10) / 10 : 0;
     const feats = {
       duration: Math.round(duration * 100) / 100,
       intensity: Math.round(intensity * 10000) / 10000,
@@ -972,23 +1146,27 @@ const UI = {
       flow: Math.round(flow * 100) / 100,
       centroid: Math.round(avgCentroid),
       avgRms: Math.round(features.reduce((a, b) => a + b.rms, 0) / features.length * 10000) / 10000,
+      breathPulse,
       waveform
     };
     return { features, feats };
   },
-  renderHeroArt() {
+  async renderHeroArt() {
     const sample = this.makeStudioBreath();
     const q = BreathEngine.quantize(sample.feats);
-    const ident = BreathEngine.makeId(q);
+    const ident = await BreathEngine.makeIdentity(sample.feats, q) || BreathEngine.makeId(q);
     if (!ident) return;
     BioArtGenerator.render(document.getElementById("hero-art"), ident.seed, state.theme, sample.feats);
   },
-  presentResult(ident, feats, features) {
+  async presentResult(ident, feats, features) {
     state.breathId = ident.id;
     state.breathSeed = ident.seed;
+    state.fingerprint = ident.fingerprint || null;
+    state.breathHash = ident.breathHash || null;
     state.feats = feats;
     state.quantized = BreathEngine.quantize(feats);
     state.features = features;
+    state.nftMeta = NftEngine.buildMetadata(ident, feats, state.theme);
     document.getElementById("breath-id").textContent = ident.id;
 
     const finalCanvas = document.getElementById("art-canvas-result");
@@ -999,8 +1177,8 @@ const UI = {
     document.getElementById("m-dur").textContent = feats.duration + "s";
     document.getElementById("m-int").textContent = feats.intensity.toFixed(4);
     document.getElementById("m-rhythm").textContent = feats.rhythm + "ms";
-    document.getElementById("m-stab").textContent = feats.stability.toFixed(3);
     document.getElementById("m-flow").textContent = Math.round(feats.flow * 100) + "%";
+    document.getElementById("m-pulse").textContent = (feats.breathPulse || 0) + " /min";
     document.getElementById("m-peaks").textContent = String(feats.peaks);
 
     WaveformChart.drawResult(document.getElementById("result-chart"), features);
@@ -1009,17 +1187,19 @@ const UI = {
       `${ident.id} · 1/1 · ${THEME_NAMES[state.theme]}<br>` +
       `Seed: ${ident.seed}<br>` +
       `DNA: ${JSON.stringify(state.quantized)}`;
+    document.getElementById("nft-fingerprint").textContent =
+      ident.fingerprint ? `SHA-256 · ${ident.fingerprint}` : "Fingerprint pending";
 
     document.getElementById("landing").classList.add("hidden");
     document.getElementById("app-view").classList.add("hidden");
     document.getElementById("result-view").classList.remove("hidden");
   },
-  studioSample() {
+  async studioSample() {
     const sample = this.makeStudioBreath();
     const quantized = BreathEngine.quantize(sample.feats);
-    const ident = BreathEngine.makeId(quantized);
+    const ident = await BreathEngine.makeIdentity(sample.feats, quantized);
     if (!ident) return;
-    this.presentResult(ident, sample.feats, sample.features);
+    await this.presentResult(ident, sample.feats, sample.features);
   },
   showModal(id) { document.getElementById(id).classList.remove("hidden"); },
   hideModal(id) { document.getElementById(id).classList.add("hidden"); },
@@ -1060,14 +1240,14 @@ const UI = {
     document.getElementById("status-bar").textContent = I18N[state.lang].generating;
     const feats = BreathEngine.extractFeatures();
     const quantized = BreathEngine.quantize(feats);
-    const ident = BreathEngine.makeId(quantized);
+    const ident = feats ? await BreathEngine.makeIdentity(feats, quantized) : null;
     if (!ident) {
       alert("No breath detected. Please try again in a quiet space.");
       BreathEngine.destroy();
       this.closeApp();
       return;
     }
-    this.presentResult(ident, feats, state.features);
+    await this.presentResult(ident, feats, state.features);
     BreathEngine.destroy();
   },
   closeApp() {
@@ -1082,6 +1262,24 @@ const UI = {
     link.download = `${state.breathId || "breath"}-${state.theme}-bioart.png`;
     link.href = c.toDataURL("image/png");
     link.click();
+  },
+  downloadNftPack() {
+    if (NftEngine.downloadPackage()) this.showToast(I18N[state.lang].packOk);
+  },
+  async mintNft() {
+    try {
+      const tx = await NftEngine.mint();
+      this.showToast(I18N[state.lang].mintOk + (tx?.hash ? ` · ${tx.hash.slice(0, 10)}…` : ""));
+    } catch (e) {
+      const msg = String(e && e.message || e);
+      if (msg.includes("NO_WALLET")) this.showToast(I18N[state.lang].mintNeedWallet);
+      else if (msg.includes("NO_CONTRACT")) this.showToast(I18N[state.lang].mintNeedContract);
+      else if (msg.includes("ALREADY_MINTED")) this.showToast("This breath fingerprint was already minted.");
+      else {
+        console.error(e);
+        this.showToast(I18N[state.lang].mintFail);
+      }
+    }
   },
   async share() {
     const text = `${state.breathId || "Another Breath"} — biological 1/1 art`;
