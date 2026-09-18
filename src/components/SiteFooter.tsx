@@ -11,6 +11,9 @@ export default function SiteFooter() {
         <div>
           <p className="font-display text-4xl font-bold tracking-tight">CLADAK</p>
           <p className="mt-3 max-w-md text-sm text-white/60">{t.footerTag}</p>
+          <p className="mt-2 font-mono text-[10px] uppercase tracking-wider text-white/35">
+            Based in England · GBP · England &amp; Wales law
+          </p>
         </div>
         <div className="flex flex-wrap gap-6 text-sm text-white/55">
           <Link href="/marketplace" className="hover:text-white">

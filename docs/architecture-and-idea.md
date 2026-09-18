@@ -1,3 +1,8 @@
+## Operator context (locked)
+- Owner based in **England**
+- Public product: **English only**; Persian = cofounder access only (`/cofounder`)
+- Default currency: **GBP**; governing law: **England and Wales**
+
 # بازطراحی معماری کلادک — نسخه ۲ (مهندسی معکوس)
 
 این سند بر اساس سه چیز نوشته شده: داده‌های واقعی بازار (Flippa، Acquire.com)، الگوهای شکست مارکت‌پلیس‌ها (تمرکز باریک به‌جای پهن)، و تصمیم‌هایی که خودت گرفتی (تأیید یک‌ماهه، فازبندی، تعریف حوزه‌ای).
