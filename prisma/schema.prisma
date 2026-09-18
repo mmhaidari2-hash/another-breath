@@ -1,0 +1,166 @@
+// Cladak — Phase 1 schema (SQLite) auth + audit + agreements
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String
+  role         String    @default("BUYER") // BUYER | SELLER | ADMIN | COFOUNDER
+  passwordHash String?
+  createdAt    DateTime  @default(now())
+  listings     Listing[]
+}
+
+model Listing {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  title       String
+  description String
+  category    String  @default("Micro-SaaS")
+  websiteUrl  String?
+  // PUBLIC = show URL · INTRO_ONLY = hide until platform intro
+  demoPolicy  String  @default("INTRO_ONLY")
+  tagline     String?
+  niche       String?
+  techStack   String?
+  foundedYear Int?
+  featured    Boolean @default(false)
+
+  mrr         Float?
+  askingPrice Float
+  multiple    Float?
+
+  mrrHistory      String?
+  highlights      String?
+  reasonForSale   String?
+  customersApprox Int?
+  businessModel   String?
+  gallery         String?
+
+  // Evidence flags reviewed manually (not live Stripe/GA APIs)
+  evidenceRevenue Boolean @default(false)
+  evidenceProduct Boolean @default(false)
+  evidenceUi      Boolean @default(false)
+
+  sellerId String
+  seller   User   @relation(fields: [sellerId], references: [id])
+
+  verificationStatus String  @default("PENDING")
+  verificationNotes  String?
+  verifiedAt         DateTime?
+
+  score Float?
+  grade String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  leads Lead[]
+
+  @@index([verificationStatus, category])
+  @@index([featured])
+  @@index([sellerId])
+}
+
+model ScoringRubric {
+  id         String   @id @default(cuid())
+  category   String   @unique
+  version    Int      @default(1)
+  criteria   String
+  gradeBands String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Lead {
+  id         String  @id @default(cuid())
+  listingId  String
+  listing    Listing @relation(fields: [listingId], references: [id])
+
+  buyerName  String
+  buyerEmail String
+  budget     Float?
+  timeline   String?
+  message    String?
+
+  // QUEUED | INTRODUCED | CLOSED_REPORTED
+  status        String  @default("QUEUED")
+  introducedAt  DateTime?
+  closedNote    String?
+
+  acceptedTerms            Boolean @default(false)
+  acceptedNonCircumvention Boolean @default(false)
+  ipHash                   String?
+  userAgent                String?
+
+  createdAt DateTime @default(now())
+
+  @@index([listingId])
+  @@index([buyerEmail])
+  @@index([status])
+}
+
+model SellerInquiry {
+  id                       String   @id @default(cuid())
+  name                     String
+  email                    String
+  product                  String
+  mrr                      String?
+  url                      String?
+  niche                    String?
+  askingPrice              String?
+  notes                    String?
+  acceptedSellerTerms      Boolean  @default(false)
+  acceptedNonCircumvention Boolean  @default(false)
+  // NEW | REVIEWING | ACCEPTED | DECLINED
+  status                   String   @default("NEW")
+  ipHash                   String?
+  createdAt                DateTime @default(now())
+
+  @@index([email])
+  @@index([status])
+}
+
+model DataRightsRequest {
+  id          String   @id @default(cuid())
+  email       String
+  fullName    String
+  requestType String // ACCESS | DELETE | CORRECT
+  details     String?
+  ipHash      String?
+  createdAt   DateTime @default(now())
+
+  @@index([email])
+  @@index([createdAt])
+}
+
+model AuditEvent {
+  id         String   @id @default(cuid())
+  action     String
+  entityType String?
+  entityId   String?
+  meta       String?
+  ipHash     String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  @@index([action, createdAt])
+  @@index([entityType, entityId])
+}
+
+model PlatformConfig {
+  id                   String @id @default("default")
+  successFeeMinPercent Float  @default(3)
+  successFeeMaxPercent Float  @default(5)
+  supportEmail         String @default("support@cladak.com")
+  governingLaw         String @default("England and Wales")
+  nonCircumventionDays Int    @default(730)
+}

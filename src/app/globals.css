@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --stone: #e6e8ec;
+  --coal: #0b0c0f;
+  --signal: #ff3b00;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--stone);
+  color: var(--coal);
+  font-family: 'DM Sans', Vazirmatn, system-ui, sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+html[lang='fa'] body {
+  font-family: Vazirmatn, 'DM Sans', system-ui, sans-serif;
+}
+
+::selection {
+  background: rgba(255, 59, 0, 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.hero-field {
+  background:
+    radial-gradient(ellipse 55% 45% at 92% 18%, rgba(255, 59, 0, 0.16), transparent 60%),
+    linear-gradient(160deg, #eceef2 0%, #e3e6eb 48%, #dfe3e9 100%);
+}
+
+.noise {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.input-field {
+  @apply w-full border border-coal/15 bg-stone-raised px-3.5 py-3 text-sm text-coal outline-none transition placeholder:text-coal-mute focus:border-signal focus:ring-1 focus:ring-signal/30;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center bg-signal px-5 py-3 text-sm font-semibold tracking-wide text-white transition hover:bg-signal-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal disabled:opacity-50;
+}
+
+.btn-ghost {
+  @apply inline-flex items-center justify-center border border-coal/20 bg-transparent px-5 py-3 text-sm font-semibold text-coal transition hover:border-coal hover:bg-coal hover:text-white;
+}
+
+.eyebrow {
+  @apply font-mono text-[11px] font-medium uppercase tracking-[0.22em] text-signal;
+}
+
+/* horizontal ticker lane */
+.ticker-mask {
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+html[dir='rtl'] .ticker-mask {
+  mask-image: linear-gradient(270deg, transparent, #000 8%, #000 92%, transparent);
+}
