@@ -54,17 +54,19 @@ export default function SellWizard() {
     return (
       <div className="border border-coal bg-stone-raised p-8 shadow-hard">
         <p className="eyebrow">Submitted</p>
-        <h2 className="mt-3 font-display text-4xl font-bold">
-          {fa ? 'در صف بررسی دستی' : 'In manual review queue'}
-        </h2>
+        <h2 className="mt-3 font-display text-4xl font-bold">In manual review queue</h2>
         <p className="mt-3 text-coal-soft">
-          {fa
-            ? 'تا تأیید، در بازار عمومی دیده نمی‌شود.'
-            : 'It will not appear publicly until verified.'}
+          A PENDING listing was created. It stays private until Ops marks it VERIFIED. Open Studio to
+          track status.
         </p>
-        <Link href="/marketplace" className="btn-primary mt-8">
-          {fa ? 'بازار' : 'Market'}
-        </Link>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link href="/studio" className="btn-primary">
+            Open Studio
+          </Link>
+          <Link href="/login" className="btn-ghost">
+            Sign in
+          </Link>
+        </div>
       </div>
     );
   }

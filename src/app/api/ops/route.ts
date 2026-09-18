@@ -38,6 +38,8 @@ export async function POST(req: Request) {
         evidenceRevenue: true,
         evidenceProduct: true,
         evidenceUi: true,
+        verificationNotes:
+          'Manual Phase-1 verification complete. Evidence reviewed by Cladak ops (England).',
       },
     });
     await writeAudit({
