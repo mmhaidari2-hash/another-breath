@@ -78,6 +78,7 @@ export async function POST(req: Request) {
     });
     const res = NextResponse.json({
       success: true,
+      token,
       user: { id: user.id, email: user.email, name: user.name, role: user.role },
     });
     res.cookies.set(sessionCookieOptions(token));
@@ -118,6 +119,7 @@ export async function POST(req: Request) {
   });
   const res = NextResponse.json({
     success: true,
+    token,
     user: { id: user.id, email: user.email, name: user.name, role: user.role },
   });
   res.cookies.set(sessionCookieOptions(token));

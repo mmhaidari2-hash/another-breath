@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "name": "Cladak",
+    "slug": "cladak",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F4F1EC"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.cladak.exchange"
+    },
+    "android": {
+      "package": "com.cladak.exchange",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "backgroundColor": "#F4F1EC",
+        "foregroundImage": "./assets/adaptive-icon.png"
+      },
+      "permissions": [],
+      "playStoreUrl": "https://play.google.com/store/apps/details?id=com.cladak.exchange"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-secure-store"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "replace-with-eas-project-id"
+      },
+      "apiUrl": "https://cladak.com"
+    }
+  }
+}

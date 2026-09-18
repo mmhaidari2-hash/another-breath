@@ -1,10 +1,19 @@
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { prisma } from '@/lib/db';
 import { parseSessionToken, SESSION_COOKIE, type SessionPayload } from '@/lib/auth';
 
 export async function getSession(): Promise<SessionPayload | null> {
   const jar = cookies();
-  return parseSessionToken(jar.get(SESSION_COOKIE)?.value);
+  const cookieToken = jar.get(SESSION_COOKIE)?.value;
+  if (cookieToken) {
+    const fromCookie = parseSessionToken(cookieToken);
+    if (fromCookie) return fromCookie;
+  }
+  const auth = headers().get('authorization');
+  if (auth?.startsWith('Bearer ')) {
+    return parseSessionToken(auth.slice(7));
+  }
+  return null;
 }
 
 export async function requireUser(roles?: string[]) {

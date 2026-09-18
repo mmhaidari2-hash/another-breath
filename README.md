@@ -1,21 +1,20 @@
-# کلادک (CLADAK) — فاز ۱ · Micro-SaaS Exchange
+# CLADAK — Phase 1 · Verified Micro-SaaS Exchange
 
-بازار تأییدشده برای خرید و فروش Micro-SaaS. فقط لیستینگ‌های دستی‌بررسی‌شده در فهرست عمومی دیده می‌شوند.
+England-based marketplace for buying and selling Micro-SaaS. Public product is **English only**. Persian is cofounder-gated. GBP · England & Wales law.
 
-📄 معماری: [`docs/architecture-and-idea.md`](./docs/architecture-and-idea.md)
+Architecture: [`docs/architecture-and-idea.md`](./docs/architecture-and-idea.md)  
+Android / Play path: [`mobile/PLAY_STORE.md`](./mobile/PLAY_STORE.md)
 
-## محصول
-- لندینگ + بازار با جستجو/فیلتر/مرتب‌سازی
-- ۱۰ لیستینگ تأییدشده (seed) با MRR، درجه، stack، یادداشت بررسی
-- صفحه جزئیات + فرم Lead واقعی (Zod + rate limit)
-- صفحه Trust / Verification
-- فرم فروش با API ذخیره‌سازی `SellerInquiry`
-- FA / EN
+## Product
+- Web market + listing desks + Sell → PENDING → Ops VERIFY loop
+- Auth, Studio, Ops, Closing protocol, Trust Center
+- Anti-circumvention gated leads
+- Mobile app (`mobile/`) for Google Play via EAS
 
-## قانون طلایی
-هیچ آمار یا ادعای جعلی روی صفحات عمومی نگذارید مگر واقعاً درست باشد.
+## Golden rule
+No fabricated stats, SOC2, or escrow claims.
 
-## اجرا
+## Web
 ```bash
 npm install
 cp .env.example .env
@@ -24,4 +23,12 @@ npm run db:seed
 npm run dev
 ```
 
-Production: `DATABASE_URL` را به PostgreSQL ببرید و `provider` اسکیما را عوض کنید.
+## Mobile
+```bash
+cd mobile
+npm install
+cp .env.example .env
+npx expo start
+```
+
+See `mobile/PLAY_STORE.md` for AAB / Play Console steps.
