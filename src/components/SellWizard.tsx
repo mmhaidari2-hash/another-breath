@@ -22,6 +22,8 @@ export default function SellWizard() {
     askingPrice: '',
     notes: '',
   });
+  const [acceptedSellerTerms, setAcceptedSellerTerms] = useState(false);
+  const [acceptedNonCircumvention, setAcceptedNonCircumvention] = useState(false);
 
   const next = () => setStep((s) => Math.min(STEPS, s + 1));
   const back = () => setStep((s) => Math.max(1, s - 1));
@@ -33,7 +35,11 @@ export default function SellWizard() {
       const res = await fetch('/api/seller-inquiries', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          acceptedSellerTerms: true,
+          acceptedNonCircumvention: true,
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? 'Error');
@@ -150,6 +156,43 @@ export default function SellWizard() {
                 MRR {form.mrr || '—'} · Ask {form.askingPrice || '—'}
               </p>
             </div>
+            <label className="flex items-start gap-2 text-xs leading-relaxed text-coal-soft">
+              <input
+                type="checkbox"
+                className="mt-0.5 accent-[#FF3B00]"
+                checked={acceptedSellerTerms}
+                onChange={(e) => setAcceptedSellerTerms(e.target.checked)}
+                required
+              />
+              <span>
+                {fa ? 'شرایط فروشنده و کارمزد موفقیت را می‌پذیرم.' : 'I accept Seller Terms and success fees.'}{' '}
+                <a href="/legal/terms" className="text-signal underline" target="_blank" rel="noreferrer">
+                  Terms
+                </a>
+              </span>
+            </label>
+            <label className="flex items-start gap-2 text-xs leading-relaxed text-coal-soft">
+              <input
+                type="checkbox"
+                className="mt-0.5 accent-[#FF3B00]"
+                checked={acceptedNonCircumvention}
+                onChange={(e) => setAcceptedNonCircumvention(e.target.checked)}
+                required
+              />
+              <span>
+                {fa
+                  ? 'متعهد می‌شوم معامله را خارج از کلادک نببندم.'
+                  : 'I will not close deals off-platform outside Cladak.'}{' '}
+                <a
+                  href="/legal/non-circumvention"
+                  className="text-signal underline"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Non-Circumvention
+                </a>
+              </span>
+            </label>
           </>
         )}
 
@@ -176,7 +219,9 @@ export default function SellWizard() {
               type="button"
               className="btn-primary"
               onClick={submit}
-              disabled={status === 'loading'}
+              disabled={
+                status === 'loading' || !acceptedSellerTerms || !acceptedNonCircumvention
+              }
             >
               {status === 'loading' ? '…' : fa ? 'ارسال برای بررسی' : 'Submit for review'}
             </button>

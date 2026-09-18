@@ -19,6 +19,18 @@ export default function SiteFooter() {
           <Link href="/trust" className="hover:text-white">
             {t.navTrust}
           </Link>
+          <Link href="/questions" className="hover:text-white">
+            50 Qs
+          </Link>
+          <Link href="/legal/terms" className="hover:text-white">
+            Terms
+          </Link>
+          <Link href="/legal/privacy" className="hover:text-white">
+            Privacy
+          </Link>
+          <Link href="/legal/non-circumvention" className="hover:text-signal">
+            Non-Circumvention
+          </Link>
           <Link href="/sell" className="hover:text-signal">
             {t.navSell}
           </Link>

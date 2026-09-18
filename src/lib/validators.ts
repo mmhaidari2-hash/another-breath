@@ -7,6 +7,25 @@ export const leadFormSchema = z.object({
   budget: z.coerce.number().min(0).optional(),
   timeline: z.enum(['Immediately', '1-3 months', '3-6 months', '6+ months']).optional(),
   message: z.string().trim().max(2000).optional(),
+  acceptedTerms: z.literal(true, {
+    errorMap: () => ({ message: 'قبول شرایط الزامی است' }),
+  }),
+  acceptedNonCircumvention: z.literal(true, {
+    errorMap: () => ({ message: 'قبول منع دورزدن پلتفرم الزامی است' }),
+  }),
 });
 
 export type LeadFormInput = z.infer<typeof leadFormSchema>;
+
+export const sellerInquirySchema = z.object({
+  name: z.string().trim().min(2).max(100),
+  email: z.string().trim().email(),
+  product: z.string().trim().min(2).max(120),
+  mrr: z.string().trim().max(40).optional(),
+  url: z.string().trim().max(300).optional(),
+  niche: z.string().trim().max(80).optional(),
+  askingPrice: z.string().trim().max(40).optional(),
+  notes: z.string().trim().max(2000).optional(),
+  acceptedSellerTerms: z.literal(true),
+  acceptedNonCircumvention: z.literal(true),
+});

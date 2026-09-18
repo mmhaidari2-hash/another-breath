@@ -319,6 +319,7 @@ async function main() {
       featured: item.featured,
       description: item.description,
       websiteUrl: item.websiteUrl,
+      demoPolicy: item.slug === 'another-breath' ? 'PUBLIC' : 'INTRO_ONLY',
       mrr: item.mrr,
       askingPrice: item.askingPrice,
       grade: item.grade,
@@ -345,6 +346,12 @@ async function main() {
   }
 
   console.log(`✅ Seeded ${LISTINGS.length} rich verified listings.`);
+
+  await prisma.platformConfig.upsert({
+    where: { id: 'default' },
+    update: {},
+    create: { id: 'default' },
+  });
 }
 
 main()

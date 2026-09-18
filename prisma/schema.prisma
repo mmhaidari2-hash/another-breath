@@ -1,4 +1,4 @@
-// کلادک — Phase 1+ schema (SQLite)
+// کلادک — Phase 1+ schema (SQLite) with audit + agreements
 
 generator client {
   provider = "prisma-client-js"
@@ -25,6 +25,8 @@ model Listing {
   description String
   category    String  @default("Micro-SaaS")
   websiteUrl  String?
+  // PUBLIC = show URL · INTRO_ONLY = hide until platform intro (anti-circumvention)
+  demoPolicy  String  @default("INTRO_ONLY")
   tagline     String?
   niche       String?
   techStack   String?
@@ -35,16 +37,12 @@ model Listing {
   askingPrice Float
   multiple    Float?
 
-  // Rich verified payload (JSON strings for SQLite)
-  // mrrHistory: [{month,mrr}]
-  mrrHistory     String?
-  // highlights: string[]
-  highlights     String?
-  reasonForSale  String?
+  mrrHistory      String?
+  highlights      String?
+  reasonForSale   String?
   customersApprox Int?
-  businessModel  String?
-  // gallery: [{label,tone}] abstract product frames — not stock photos
-  gallery        String?
+  businessModel   String?
+  gallery         String?
 
   sellerId String
   seller   User   @relation(fields: [sellerId], references: [id])
@@ -76,28 +74,63 @@ model ScoringRubric {
 }
 
 model Lead {
-  id         String   @id @default(cuid())
+  id         String  @id @default(cuid())
   listingId  String
-  listing    Listing  @relation(fields: [listingId], references: [id])
+  listing    Listing @relation(fields: [listingId], references: [id])
+
   buyerName  String
   buyerEmail String
   budget     Float?
   timeline   String?
   message    String?
-  createdAt  DateTime @default(now())
+
+  acceptedTerms            Boolean @default(false)
+  acceptedNonCircumvention Boolean @default(false)
+  ipHash                   String?
+  userAgent                String?
+
+  createdAt DateTime @default(now())
 
   @@index([listingId])
+  @@index([buyerEmail])
 }
 
 model SellerInquiry {
-  id          String   @id @default(cuid())
-  name        String
-  email       String
-  product     String
-  mrr         String?
-  url         String?
-  niche       String?
-  askingPrice String?
-  notes       String?
-  createdAt   DateTime @default(now())
+  id                   String   @id @default(cuid())
+  name                 String
+  email                String
+  product              String
+  mrr                  String?
+  url                  String?
+  niche                String?
+  askingPrice          String?
+  notes                String?
+  acceptedSellerTerms  Boolean  @default(false)
+  acceptedNonCircumvention Boolean @default(false)
+  ipHash               String?
+  createdAt            DateTime @default(now())
+}
+
+// ممیزی: هر رویداد حساس (بدون ذخیره IP خام)
+model AuditEvent {
+  id         String   @id @default(cuid())
+  action     String
+  entityType String?
+  entityId   String?
+  meta       String?
+  ipHash     String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  @@index([action, createdAt])
+  @@index([entityType, entityId])
+}
+
+model PlatformConfig {
+  id                    String @id @default("default")
+  successFeeMinPercent  Float  @default(3)
+  successFeeMaxPercent  Float  @default(5)
+  supportEmail          String @default("support@cladak.local")
+  governingLaw          String @default("To be set by platform owner")
+  nonCircumventionDays  Int    @default(730)
 }

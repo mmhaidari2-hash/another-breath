@@ -125,9 +125,9 @@ export default function ListingExperience({
               <Info label="Stack" value={listing.techStack} ltr />
             )}
             {listing.foundedYear && <Info label="Founded" value={String(listing.foundedYear)} />}
-            {listing.websiteUrl && (
-              <div className="border border-coal/12 bg-stone-raised p-5 sm:col-span-2">
-                <p className="font-mono text-[10px] uppercase tracking-wider text-coal-mute">Live URL</p>
+            <div className="border border-coal/12 bg-stone-raised p-5 sm:col-span-2">
+              <p className="font-mono text-[10px] uppercase tracking-wider text-coal-mute">Live access</p>
+              {listing.demoPolicy === 'PUBLIC' && listing.websiteUrl ? (
                 <a
                   href={listing.websiteUrl}
                   target="_blank"
@@ -137,8 +137,13 @@ export default function ListingExperience({
                 >
                   {listing.websiteUrl}
                 </a>
-              </div>
-            )}
+              ) : (
+                <p className="mt-2 text-sm text-coal-soft">
+                  URL is <strong>intro-only</strong> to reduce off-platform circumvention. Request contact;
+                  Cladak mediates the demo access.
+                </p>
+              )}
+            </div>
           </div>
 
           {listing.reasonForSale && (
@@ -183,9 +188,10 @@ export default function ListingExperience({
             </div>
             <div className="space-y-2 border border-coal/10 bg-stone-soft p-4 text-xs leading-relaxed text-coal-soft">
               <p className="font-semibold text-coal">Process (Phase 1)</p>
-              <p>1. Request contact through this form</p>
-              <p>2. Seller responds with diligence pack</p>
-              <p>3. Escrow / closing tools arrive in Phase 2</p>
+              <p>1. Accept Terms + Non-Circumvention</p>
+              <p>2. Request contact — seller email stays private</p>
+              <p>3. Cladak introduces parties; success fee applies</p>
+              <p>4. Escrow / closing tools: Phase 2</p>
             </div>
             <div className="h-px bg-coal/10" />
             <LeadForm listingId={listing.id} listingTitle={listing.title} />

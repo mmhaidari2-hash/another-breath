@@ -43,6 +43,7 @@ export type ListingDTO = {
   businessModel?: string | null;
   customersApprox?: number | null;
   reasonForSale?: string | null;
+  demoPolicy?: string | null;
   highlights?: string[];
   gallery?: GalleryFrame[];
   mrrHistory?: MrrPoint[];
@@ -71,6 +72,7 @@ export function parseListing(l: {
   businessModel?: string | null;
   customersApprox?: number | null;
   reasonForSale?: string | null;
+  demoPolicy?: string | null;
   highlights?: string | null;
   gallery?: string | null;
   mrrHistory?: string | null;
@@ -107,6 +109,7 @@ export function parseListing(l: {
     businessModel: l.businessModel ?? null,
     customersApprox: l.customersApprox ?? null,
     reasonForSale: l.reasonForSale ?? null,
+    demoPolicy: l.demoPolicy ?? 'INTRO_ONLY',
     highlights: safe<string[]>(l.highlights, []),
     gallery: safe<GalleryFrame[]>(l.gallery, []),
     mrrHistory: safe<MrrPoint[]>(l.mrrHistory, []),
