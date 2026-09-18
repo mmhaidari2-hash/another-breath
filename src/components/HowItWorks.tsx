@@ -11,19 +11,22 @@ export default function HowItWorks() {
   ];
 
   return (
-    <section className="border-y border-ink/8 bg-paper-raised py-24">
+    <section className="border-y border-coal/10 bg-stone-soft py-24">
       <div className="mx-auto max-w-shell px-4 sm:px-6">
-        <p className="section-eyebrow">{t.navTrust}</p>
-        <h2 className="mt-3 max-w-2xl font-display text-4xl tracking-tight text-ink sm:text-5xl">
+        <p className="eyebrow">{t.navTrust}</p>
+        <h2 className="mt-3 max-w-2xl font-display text-4xl font-bold tracking-tight text-coal sm:text-6xl">
           {t.howTitle}
         </h2>
-        <p className="mt-4 max-w-2xl text-ink-soft">{t.howSub}</p>
-        <ol className="mt-14 grid gap-8 sm:grid-cols-3">
-          {steps.map((s) => (
-            <li key={s.n} className="relative border-t border-ink/10 pt-6">
-              <span className="font-display text-5xl text-forest/25">{s.n}</span>
-              <h3 className="mt-3 text-lg font-semibold text-ink">{s.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink-soft">{s.body}</p>
+        <p className="mt-4 max-w-2xl text-coal-soft">{t.howSub}</p>
+        <ol className="mt-14 grid gap-0 border border-coal/12 sm:grid-cols-3">
+          {steps.map((s, i) => (
+            <li
+              key={s.n}
+              className={`bg-stone-raised p-8 ${i > 0 ? 'border-t border-coal/12 sm:border-t-0 sm:border-s' : ''}`}
+            >
+              <span className="font-display text-5xl font-bold text-signal/30">{s.n}</span>
+              <h3 className="mt-4 text-lg font-semibold">{s.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-coal-soft">{s.body}</p>
             </li>
           ))}
         </ol>

@@ -11,65 +11,61 @@ export default function TrustPage() {
     ? [
         {
           t: 'چه چیزی تأیید می‌شود',
-          d: 'درآمد اعلامی (اسکرین/دسترسی فقط‌خواندنی در صورت امکان)، دمو محصول، کیفیت UI/UX، و یادداشت شفاف از بررسی‌کننده.',
+          d: 'درآمد اعلامی، دمو محصول، کیفیت UI، و یادداشت شفاف بررسی‌کننده.',
         },
         {
-          t: 'چه چیزی تأیید نمی‌شود (هنوز)',
-          d: 'اتصال خودکار Stripe/GA در فاز ۲ است. الان بررسی دستی است — و صادقانه همین را می‌گوییم.',
+          t: 'چه چیزی هنوز خودکار نیست',
+          d: 'Stripe/GA خودکار فاز ۲ است. الان بررسی دستی است — و همین را می‌گوییم.',
         },
         {
           t: 'قانون طلایی',
-          d: 'هیچ عدد یا گواهی ساختگی روی صفحات عمومی نمی‌رود. اگر عدد واقعی نداریم، خالی می‌ماند یا با عبارت صادقانه پر می‌شود.',
+          d: 'هیچ عدد ساختگی روی صفحات عمومی نمی‌رود.',
         },
         {
           t: 'امتیاز و درجه',
-          d: 'فقط بعد از تأیید محاسبه می‌شود. rubric حوزه‌ی Micro-SaaS در دیتابیس است و قابل‌تغییر بدون هاردکد.',
+          d: 'فقط بعد از تأیید. rubric در دیتابیس است.',
         },
       ]
     : [
         {
           t: 'What we verify',
-          d: 'Claimed revenue (screens / read-only access when possible), product demo, UI/UX quality, and a clear reviewer note.',
+          d: 'Claimed revenue, product demo, UI quality, and a clear reviewer note.',
         },
         {
-          t: 'What we do not pretend to verify yet',
-          d: 'Automated Stripe/GA pulls are Phase 2. Today review is manual — and we say so honestly.',
+          t: 'What is not automated yet',
+          d: 'Stripe/GA pulls are Phase 2. Review is manual — and we say so.',
         },
         {
           t: 'Golden rule',
-          d: 'No fabricated numbers or certificates on public pages. If we lack a real figure, it stays empty or uses honest wording.',
+          d: 'No fabricated numbers on public pages.',
         },
         {
           t: 'Score & grade',
-          d: 'Computed only after verification. The Micro-SaaS rubric lives in the database — not hardcoded.',
+          d: 'Only after verification. Rubric lives in the database.',
         },
       ];
 
   return (
-    <main className="pb-24 pt-10">
+    <main className="pb-24 pt-12">
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
-        <Link href="/" className="text-sm text-ink-faint hover:text-ink">
+        <Link href="/" className="text-sm text-coal-mute hover:text-coal">
           {fa ? 'بازگشت' : 'Back'}
         </Link>
-        <p className="section-eyebrow mt-8">{fa ? 'اعتماد' : 'Trust'}</p>
-        <h1 className="mt-3 font-display text-4xl tracking-tight text-ink sm:text-6xl">
-          {fa ? 'چطور تأیید می‌کنیم' : 'How verification works'}
+        <p className="eyebrow mt-8">Trust</p>
+        <h1 className="mt-3 font-display text-5xl font-extrabold tracking-tight sm:text-7xl">
+          {fa ? 'چطور تأیید می‌کنیم' : 'How we verify'}
         </h1>
-        <p className="mt-5 text-lg text-ink-soft leading-relaxed">
-          {fa
-            ? 'کلادک یک دایرکتوری باز نیست. فهرست عمومی فقط لیستینگ‌های VERIFIED را نشان می‌دهد.'
-            : 'Cladak is not an open dump of listings. The public market only shows VERIFIED assets.'}
-        </p>
-        <div className="mt-12 space-y-6">
-          {blocks.map((b) => (
-            <article key={b.t} className="rounded-2xl border border-ink/10 bg-paper-raised p-6 shadow-soft">
-              <h2 className="text-lg font-semibold text-ink">{b.t}</h2>
-              <p className="mt-2 text-sm leading-relaxed text-ink-soft">{b.d}</p>
+        <div className="mt-12 space-y-4">
+          {blocks.map((b, i) => (
+            <article key={b.t} className="border border-coal/12 bg-stone-raised p-6">
+              <p className="font-mono text-[11px] text-signal">0{i + 1}</p>
+              <h2 className="mt-2 font-display text-2xl font-bold">{b.t}</h2>
+              <p className="mt-2 text-sm leading-relaxed text-coal-soft">{b.d}</p>
             </article>
           ))}
         </div>
         <Link href="/sell" className="btn-primary mt-10">
-          {fa ? 'ارسال محصول برای بررسی' : 'Submit a product for review'}
+          {fa ? 'ارسال محصول' : 'Submit a product'}
         </Link>
       </div>
     </main>

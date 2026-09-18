@@ -16,7 +16,6 @@ export default function SellForm() {
     url: '',
     notes: '',
   });
-
   const fa = lang === 'fa';
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -40,24 +39,24 @@ export default function SellForm() {
 
   if (status === 'success') {
     return (
-      <div className="rounded-2xl border border-forest/25 bg-forest/10 p-8 text-ink">
-        <h2 className="font-display text-3xl">
+      <div className="border border-coal bg-stone-raised p-8 shadow-hard">
+        <h2 className="font-display text-3xl font-bold">
           {fa ? 'درخواست ثبت شد' : 'Request received'}
         </h2>
-        <p className="mt-3 text-ink-soft">
+        <p className="mt-3 text-coal-soft">
           {fa
-            ? 'تیم بررسی دستی با شما تماس می‌گیرد. تا تأیید، چیزی عمومی نمی‌شود.'
-            : 'Our review team will contact you. Nothing goes public until verified.'}
+            ? 'تیم بررسی دستی تماس می‌گیرد. تا تأیید، چیزی عمومی نمی‌شود.'
+            : 'Manual review will contact you. Nothing is public until verified.'}
         </p>
         <Link href="/marketplace" className="btn-primary mt-6">
-          {fa ? 'بازگشت به بازار' : 'Back to market'}
+          {fa ? 'بازار' : 'Market'}
         </Link>
       </div>
     );
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4 rounded-2xl border border-ink/10 bg-paper-raised p-6 shadow-soft sm:p-8">
+    <form onSubmit={onSubmit} className="space-y-4 border border-coal bg-stone-raised p-6 shadow-hard sm:p-8">
       {(
         [
           ['name', fa ? 'نام' : 'Name', false],
@@ -68,7 +67,7 @@ export default function SellForm() {
         ] as const
       ).map(([key, label, ltr]) => (
         <div key={key}>
-          <label className="mb-1.5 block text-xs font-medium text-ink-faint" htmlFor={key}>
+          <label className="mb-1.5 block font-mono text-[10px] uppercase tracking-wider text-coal-mute" htmlFor={key}>
             {label}
           </label>
           <input
@@ -83,8 +82,8 @@ export default function SellForm() {
         </div>
       ))}
       <div>
-        <label className="mb-1.5 block text-xs font-medium text-ink-faint" htmlFor="notes">
-          {fa ? 'توضیح کوتاه' : 'Short notes'}
+        <label className="mb-1.5 block font-mono text-[10px] uppercase tracking-wider text-coal-mute" htmlFor="notes">
+          {fa ? 'توضیح' : 'Notes'}
         </label>
         <textarea
           id="notes"
@@ -96,13 +95,7 @@ export default function SellForm() {
       </div>
       {error && <p className="text-sm text-red-600">{error}</p>}
       <button type="submit" disabled={status === 'loading'} className="btn-primary w-full">
-        {status === 'loading'
-          ? fa
-            ? 'در حال ارسال…'
-            : 'Sending…'
-          : fa
-            ? 'ارسال برای بررسی دستی'
-            : 'Submit for manual review'}
+        {status === 'loading' ? (fa ? '...' : '...') : fa ? 'ارسال برای بررسی' : 'Submit for review'}
       </button>
     </form>
   );

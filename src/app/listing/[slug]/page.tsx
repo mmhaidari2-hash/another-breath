@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/db';
 import LeadForm from '@/components/LeadForm';
-import ListingCard from '@/components/ListingCard';
+import ListingTile from '@/components/ListingTile';
 import { formatCurrency, formatDate } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
@@ -14,7 +14,6 @@ export default async function ListingDetailPage({
 }) {
   const listing = await prisma.listing.findUnique({
     where: { slug: params.slug },
-    include: { seller: true },
   });
 
   if (!listing || listing.verificationStatus !== 'VERIFIED') notFound();
@@ -26,184 +25,148 @@ export default async function ListingDetailPage({
       OR: [{ niche: listing.niche ?? undefined }, { grade: listing.grade ?? undefined }],
     },
     take: 3,
-    orderBy: { createdAt: 'desc' },
   });
 
   return (
-    <main className="pb-24 pt-10">
-      <div className="mx-auto max-w-shell px-4 sm:px-6">
-        <Link href="/marketplace" className="text-sm font-medium text-ink-faint hover:text-ink">
-          بازگشت به بازار / Back to market
-        </Link>
+    <main className="pb-24">
+      {/* Case-study masthead */}
+      <section className="border-b border-coal/10 bg-coal text-white">
+        <div className="mx-auto max-w-shell px-4 py-12 sm:px-6 sm:py-16">
+          <Link href="/marketplace" className="text-sm text-white/50 hover:text-white">
+            Market / بازار
+          </Link>
+          <div className="mt-8 flex flex-wrap items-center gap-3 font-mono text-[11px] uppercase tracking-[0.16em]">
+            <span className="text-signal">{listing.niche}</span>
+            <span className="text-white/35">·</span>
+            <span>Grade {listing.grade}</span>
+            <span className="text-white/35">·</span>
+            <span className="text-signal">Verified</span>
+          </div>
+          <h1 className="mt-4 font-display text-[clamp(3rem,10vw,6.5rem)] font-extrabold leading-[0.9] tracking-[-0.03em]">
+            {listing.title}
+          </h1>
+          {listing.tagline && (
+            <p className="mt-5 max-w-2xl text-lg text-white/65 sm:text-xl">{listing.tagline}</p>
+          )}
+          <div className="mt-10 grid grid-cols-2 gap-px bg-white/10 sm:grid-cols-4">
+            <Stat label="Asking" value={formatCurrency(listing.askingPrice)} />
+            <Stat
+              label="MRR"
+              value={listing.mrr !== null ? formatCurrency(listing.mrr) : '—'}
+              accent
+            />
+            <Stat
+              label="Multiple"
+              value={listing.multiple !== null ? `${listing.multiple}×` : '—'}
+            />
+            <Stat label="Score" value={listing.score !== null ? String(listing.score) : '—'} />
+          </div>
+        </div>
+      </section>
 
-        <div className="mt-8 grid grid-cols-1 gap-10 lg:grid-cols-12">
-          <div className="space-y-8 lg:col-span-7">
-            <header>
-              <div className="mb-4 flex flex-wrap items-center gap-2">
-                {listing.niche && (
-                  <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-faint">
-                    {listing.niche}
-                  </span>
-                )}
-                {listing.grade && (
-                  <span className="rounded-md border border-forest/30 bg-forest/10 px-2 py-0.5 text-[11px] font-semibold text-forest">
-                    درجه / Grade {listing.grade}
-                  </span>
-                )}
-                <span className="rounded-md border border-forest/25 bg-forest/10 px-2 py-0.5 text-[11px] font-semibold text-forest">
-                  تأییدشده / Verified
-                </span>
-              </div>
-              <h1 className="font-display text-5xl tracking-tight text-ink sm:text-6xl">
-                {listing.title}
-              </h1>
-              {listing.tagline && (
-                <p className="mt-4 text-xl text-ink-soft">{listing.tagline}</p>
-              )}
-              <p className="mt-3 text-sm text-ink-faint">
-                ثبت {formatDate(listing.createdAt)}
-                {listing.verifiedAt ? ` · تأیید ${formatDate(listing.verifiedAt)}` : ''}
-              </p>
-            </header>
+      <div className="mx-auto grid max-w-shell gap-10 px-4 py-12 sm:px-6 lg:grid-cols-12">
+        <div className="space-y-10 lg:col-span-7">
+          <section>
+            <p className="eyebrow">Thesis</p>
+            <p className="mt-4 whitespace-pre-line text-lg leading-relaxed text-coal-soft">
+              {listing.description}
+            </p>
+          </section>
 
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <Metric label="Asking" value={formatCurrency(listing.askingPrice)} />
-              <Metric
-                label="MRR"
-                value={listing.mrr !== null ? formatCurrency(listing.mrr) : '—'}
-                accent
-              />
-              <Metric
-                label="Multiple"
-                value={listing.multiple !== null ? `${listing.multiple}×` : '—'}
-              />
-              <Metric label="Score" value={listing.score !== null ? String(listing.score) : '—'} />
-            </div>
-
-            <section>
-              <h2 className="text-sm font-semibold uppercase tracking-[0.14em] text-forest">
-                توضیحات / Description
-              </h2>
-              <p className="mt-3 whitespace-pre-line text-base leading-relaxed text-ink-soft">
-                {listing.description}
-              </p>
-            </section>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              {listing.techStack && (
-                <div className="rounded-xl border border-ink/10 bg-paper-raised p-4">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-ink-faint">
-                    Stack
-                  </p>
-                  <p className="mt-1 text-sm text-ink" dir="ltr">
-                    {listing.techStack}
-                  </p>
-                </div>
-              )}
-              {listing.foundedYear && (
-                <div className="rounded-xl border border-ink/10 bg-paper-raised p-4">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-ink-faint">
-                    Founded
-                  </p>
-                  <p className="mt-1 text-sm text-ink">{listing.foundedYear}</p>
-                </div>
-              )}
-            </div>
-
-            {listing.websiteUrl && (
-              <section>
-                <h2 className="text-sm font-semibold uppercase tracking-[0.14em] text-forest">
-                  Website
-                </h2>
-                <a
-                  href={listing.websiteUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-2 inline-block text-sm font-medium text-navy underline-offset-4 hover:underline"
-                  dir="ltr"
-                >
-                  {listing.websiteUrl}
-                </a>
-              </section>
-            )}
-
-            {listing.verificationNotes && (
-              <section className="rounded-2xl border border-ink/10 bg-navy/[0.04] p-5">
-                <h2 className="text-sm font-semibold text-ink">یادداشت بررسی / Review notes</h2>
-                <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-                  {listing.verificationNotes}
+          <div className="grid gap-4 sm:grid-cols-2">
+            {listing.techStack && (
+              <div className="border border-coal/12 bg-stone-raised p-5">
+                <p className="font-mono text-[10px] uppercase tracking-wider text-coal-mute">Stack</p>
+                <p className="mt-2 font-display text-xl font-bold" dir="ltr">
+                  {listing.techStack}
                 </p>
-              </section>
+              </div>
+            )}
+            {listing.foundedYear && (
+              <div className="border border-coal/12 bg-stone-raised p-5">
+                <p className="font-mono text-[10px] uppercase tracking-wider text-coal-mute">Founded</p>
+                <p className="mt-2 font-display text-xl font-bold">{listing.foundedYear}</p>
+              </div>
             )}
           </div>
 
-          <aside className="lg:col-span-5">
-            <div className="sticky top-24 space-y-6 rounded-2xl border border-ink/10 bg-paper-raised p-6 shadow-lift">
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-faint">
-                  Asking price
+          {listing.websiteUrl && (
+            <section>
+              <p className="eyebrow">Live</p>
+              <a
+                href={listing.websiteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-block font-mono text-sm text-signal underline-offset-4 hover:underline"
+                dir="ltr"
+              >
+                {listing.websiteUrl}
+              </a>
+            </section>
+          )}
+
+          {listing.verificationNotes && (
+            <section className="border border-coal bg-coal p-6 text-white">
+              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-signal">
+                Review notes
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-white/75">
+                {listing.verificationNotes}
+              </p>
+              {listing.verifiedAt && (
+                <p className="mt-4 font-mono text-[11px] text-white/40">
+                  Verified {formatDate(listing.verifiedAt)}
                 </p>
-                <p className="mt-1 font-display text-5xl tracking-tight text-ink">
-                  {formatCurrency(listing.askingPrice)}
-                </p>
-                {listing.mrr !== null && (
-                  <p className="mt-2 text-sm text-ink-soft">
-                    MRR:{' '}
-                    <span className="font-semibold text-forest">
-                      {formatCurrency(listing.mrr)}
-                    </span>
-                  </p>
-                )}
-              </div>
-              <div className="h-px bg-ink/10" />
-              <div>
-                <h3 className="mb-4 text-sm font-semibold text-ink">
-                  درخواست تماس / Contact seller
-                </h3>
-                <LeadForm listingId={listing.id} listingTitle={listing.title} />
-              </div>
-            </div>
-          </aside>
+              )}
+            </section>
+          )}
         </div>
 
-        {related.length > 0 && (
-          <section className="mt-20">
-            <h2 className="font-display text-3xl text-ink">مرتبط / Related</h2>
-            <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-3">
-              {related.map((l) => (
-                <ListingCard
-                  key={l.id}
-                  listing={{
-                    ...l,
-                    featured: l.featured,
-                  }}
-                  askingLabel="Asking"
-                  mrrLabel="MRR"
-                  verifiedLabel="Verified"
-                  gradeLabel="Grade"
-                />
-              ))}
-            </div>
-          </section>
-        )}
+        <aside className="lg:col-span-5">
+          <div className="sticky top-24 border border-coal bg-stone-raised p-6 shadow-hard">
+            <p className="font-mono text-[10px] uppercase tracking-wider text-coal-mute">Acquisition</p>
+            <p className="mt-2 font-display text-5xl font-extrabold tracking-tight">
+              {formatCurrency(listing.askingPrice)}
+            </p>
+            {listing.mrr !== null && (
+              <p className="mt-2 text-sm text-coal-soft">
+                MRR <span className="font-semibold text-signal">{formatCurrency(listing.mrr)}</span>
+              </p>
+            )}
+            <div className="my-6 h-px bg-coal/10" />
+            <h3 className="mb-4 font-display text-xl font-bold">Contact seller</h3>
+            <LeadForm listingId={listing.id} listingTitle={listing.title} />
+          </div>
+        </aside>
       </div>
+
+      {related.length > 0 && (
+        <section className="mx-auto max-w-shell px-4 sm:px-6">
+          <h2 className="font-display text-3xl font-bold">Related</h2>
+          <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            {related.map((l) => (
+              <ListingTile
+                key={l.id}
+                listing={l}
+                askingLabel="Asking"
+                mrrLabel="MRR"
+                verifiedLabel="Verified"
+              />
+            ))}
+          </div>
+        </section>
+      )}
     </main>
   );
 }
 
-function Metric({
-  label,
-  value,
-  accent,
-}: {
-  label: string;
-  value: string;
-  accent?: boolean;
-}) {
+function Stat({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
-    <div className="rounded-xl border border-ink/10 bg-paper-raised p-4">
-      <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-faint">{label}</p>
-      <p className={`mt-1 text-lg font-semibold ${accent ? 'text-forest' : 'text-ink'}`}>{value}</p>
+    <div className="bg-coal px-4 py-5 sm:px-6">
+      <p className="font-mono text-[10px] uppercase tracking-wider text-white/40">{label}</p>
+      <p className={`mt-2 text-xl font-semibold sm:text-2xl ${accent ? 'text-signal' : 'text-white'}`}>
+        {value}
+      </p>
     </div>
   );
 }

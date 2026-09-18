@@ -1,9 +1,9 @@
 import { prisma } from '@/lib/db';
 import Hero from '@/components/Hero';
+import FeaturedLane from '@/components/FeaturedLane';
 import HowItWorks from '@/components/HowItWorks';
 import SellCTA from '@/components/SellCTA';
-import FeaturedGrid from '@/components/FeaturedGrid';
-import HomeListings from '@/components/HomeListings';
+import HomeStrip from '@/components/HomeStrip';
 import type { ListingDTO } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
@@ -42,9 +42,9 @@ export default async function HomePage() {
 
   return (
     <main>
-      <Hero />
-      <FeaturedGrid listings={featured} />
-      <HomeListings listings={dtos} />
+      <Hero listings={dtos} />
+      <FeaturedLane listings={featured} />
+      <HomeStrip listings={dtos} />
       <HowItWorks />
       <SellCTA />
     </main>

@@ -45,9 +45,9 @@ export default function LeadForm({
 
   if (status === 'success') {
     return (
-      <div className="rounded-xl border border-forest/25 bg-forest/10 p-4 text-sm leading-relaxed text-forest">
+      <div className="border border-signal/40 bg-signal/10 p-4 text-sm text-coal">
         {t.leadSuccess}
-        <span className="mt-1 block font-medium text-ink">«{listingTitle}»</span>
+        <span className="mt-1 block font-display text-lg font-bold">{listingTitle}</span>
       </div>
     );
   }
@@ -55,7 +55,7 @@ export default function LeadForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="buyerName" className="mb-1.5 block text-xs font-medium text-ink-faint">
+        <label htmlFor="buyerName" className="mb-1.5 block font-mono text-[10px] uppercase tracking-wider text-coal-mute">
           {t.name}
         </label>
         <input
@@ -67,7 +67,7 @@ export default function LeadForm({
         />
       </div>
       <div>
-        <label htmlFor="buyerEmail" className="mb-1.5 block text-xs font-medium text-ink-faint">
+        <label htmlFor="buyerEmail" className="mb-1.5 block font-mono text-[10px] uppercase tracking-wider text-coal-mute">
           {t.email}
         </label>
         <input
@@ -81,7 +81,7 @@ export default function LeadForm({
         />
       </div>
       <div>
-        <label htmlFor="budget" className="mb-1.5 block text-xs font-medium text-ink-faint">
+        <label htmlFor="budget" className="mb-1.5 block font-mono text-[10px] uppercase tracking-wider text-coal-mute">
           {t.budget}
         </label>
         <input
@@ -95,7 +95,7 @@ export default function LeadForm({
         />
       </div>
       <div>
-        <label htmlFor="message" className="mb-1.5 block text-xs font-medium text-ink-faint">
+        <label htmlFor="message" className="mb-1.5 block font-mono text-[10px] uppercase tracking-wider text-coal-mute">
           {t.message}
         </label>
         <textarea
