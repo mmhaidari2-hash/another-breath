@@ -32,13 +32,14 @@ export default async function PrivacyPage() {
         <a href="/legal/data-request" className="text-signal underline">
           Data Rights form
         </a>{' '}
-        or {config.supportEmail}. We respond within a reasonable period. Authenticated self-serve
-        GDPR tooling arrives with accounts (Phase 2).
+        or {config.supportEmail}. We respond within a reasonable period. Ops can fulfill requests
+        from the Ops desk; after fee close, party accounts are purged automatically.
       </p>
       <h2 className="font-display text-xl font-bold text-coal">Security</h2>
       <p>
-        Transport security headers, input validation (Zod), rate limits, and least-data API responses.
-        Authentication/SSO is Phase 2. Production requires a unique AUDIT_SALT.
+        Transport security headers, input validation (Zod), rate limits, session auth (email +
+        password), and least-data API responses. Production requires a unique AUDIT_SALT and
+        SESSION_SECRET.
       </p>
       <p className="text-xs text-coal-mute">Last updated: 2026-09-18</p>
     </LegalShell>

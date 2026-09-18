@@ -210,7 +210,9 @@ export default function ListingExperience({
               <p>2. Request intro — seller email stays private forever on Cladak</p>
               <p>3. Cladak mediates contact; success fee (3–5%) applies</p>
               <p>4. Closing off-platform after intro still owes the fee</p>
-              <p className="text-coal-mute">Escrow tooling is Phase 2 — we do not pretend otherwise.</p>
+              <p className="text-coal-mute">
+                Optional partner escrow on close — Cladak never holds funds.
+              </p>
             </div>
             <div className="h-px bg-coal/10" />
             <LeadForm

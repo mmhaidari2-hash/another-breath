@@ -7,7 +7,7 @@ export default function OpsControls({
   kind,
   id,
 }: {
-  kind: 'verify' | 'introduce' | 'intake';
+  kind: 'verify' | 'introduce' | 'intake' | 'rights' | 'escrow';
   id: string;
 }) {
   const router = useRouter();
@@ -36,22 +36,90 @@ export default function OpsControls({
   return (
     <div className="mt-3 flex flex-wrap items-center gap-2">
       {kind === 'verify' && (
-        <button type="button" disabled={loading} className="btn-primary !px-3 !py-1.5 text-xs" onClick={() => run('VERIFY')}>
-          Mark verified
-        </button>
+        <>
+          <button
+            type="button"
+            disabled={loading}
+            className="btn-primary !px-3 !py-1.5 text-xs"
+            onClick={() => run('VERIFY')}
+          >
+            Mark verified
+          </button>
+          <button
+            type="button"
+            disabled={loading}
+            className="btn-ghost !px-3 !py-1.5 text-xs"
+            onClick={() => run('REJECT')}
+          >
+            Reject
+          </button>
+        </>
       )}
       {kind === 'introduce' && (
-        <button type="button" disabled={loading} className="btn-primary !px-3 !py-1.5 text-xs" onClick={() => run('INTRODUCE')}>
+        <button
+          type="button"
+          disabled={loading}
+          className="btn-primary !px-3 !py-1.5 text-xs"
+          onClick={() => run('INTRODUCE')}
+        >
           Mark introduced
         </button>
       )}
       {kind === 'intake' && (
         <>
-          <button type="button" disabled={loading} className="btn-primary !px-3 !py-1.5 text-xs" onClick={() => run('ACCEPT')}>
-            Accept review
+          <button
+            type="button"
+            disabled={loading}
+            className="btn-primary !px-3 !py-1.5 text-xs"
+            onClick={() => run('ACCEPT')}
+          >
+            Accept
           </button>
-          <button type="button" disabled={loading} className="btn-ghost !px-3 !py-1.5 text-xs" onClick={() => run('DECLINE')}>
+          <button
+            type="button"
+            disabled={loading}
+            className="btn-ghost !px-3 !py-1.5 text-xs"
+            onClick={() => run('DECLINE')}
+          >
             Decline
+          </button>
+        </>
+      )}
+      {kind === 'rights' && (
+        <button
+          type="button"
+          disabled={loading}
+          className="btn-primary !px-3 !py-1.5 text-xs"
+          onClick={() => run('FULFILL')}
+        >
+          Fulfill
+        </button>
+      )}
+      {kind === 'escrow' && (
+        <>
+          <button
+            type="button"
+            disabled={loading}
+            className="btn-ghost !px-3 !py-1.5 text-xs"
+            onClick={() => run('FUNDED')}
+          >
+            Funded
+          </button>
+          <button
+            type="button"
+            disabled={loading}
+            className="btn-primary !px-3 !py-1.5 text-xs"
+            onClick={() => run('RELEASED')}
+          >
+            Released
+          </button>
+          <button
+            type="button"
+            disabled={loading}
+            className="btn-ghost !px-3 !py-1.5 text-xs"
+            onClick={() => run('CANCELLED')}
+          >
+            Cancel
           </button>
         </>
       )}

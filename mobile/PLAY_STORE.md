@@ -53,11 +53,13 @@ npx eas-cli submit --platform android --profile production
 - **Data safety:** Account email for auth; no ad SDKs; purge after fee
 
 ## Pre-submit checklist
+- [x] Feature graphic `mobile/assets/store/feature_graphic_1024x500.png` (brand block)
 - [ ] HTTPS API live + `EXPO_PUBLIC_API_URL` set
 - [ ] Privacy + Terms URLs open in-app
-- [ ] Feature graphic 1024×500 + icon 512
+- [ ] Icon 512 (Expo default assets present)
 - [ ] STRIPE_SECRET_KEY on server (or accept demo-only until live)
 - [ ] RESEND_API_KEY for real buyer/seller mail (optional; outbox works without)
+- [ ] Your Play Console + EAS projectId
 
 ## Honest note
 Publishing requires your Google Play Developer account. Code + listing draft are ready; the agent cannot click “Publish” without your Play credentials.

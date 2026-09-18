@@ -3,9 +3,11 @@ import { z } from 'zod';
 import { prisma } from '@/lib/db';
 import { requireUser } from '@/lib/session';
 import { writeAudit } from '@/lib/audit';
+import { applyScoreToListing } from '@/lib/scoring';
+import { sendTransactional } from '@/lib/email';
 
 const schema = z.object({
-  kind: z.enum(['verify', 'introduce', 'intake']),
+  kind: z.enum(['verify', 'introduce', 'intake', 'rights', 'escrow']),
   id: z.string().min(1),
   action: z.string().min(1),
 });
@@ -58,8 +60,29 @@ export async function POST(req: Request) {
           'Ops verified seller evidence pack (England). Revenue + product URLs reviewed; sworn declaration on file.',
       },
     });
+    await applyScoreToListing(id);
     await writeAudit({
       action: 'LISTING_VERIFIED',
+      entityType: 'Listing',
+      entityId: id,
+      meta: { by: user.id },
+      ip,
+      userAgent: req.headers.get('user-agent'),
+    });
+    return NextResponse.json({ success: true });
+  }
+
+  if (kind === 'verify' && action === 'REJECT') {
+    await prisma.listing.update({
+      where: { id },
+      data: {
+        verificationStatus: 'REJECTED',
+        verificationNotes: 'Rejected by Ops — evidence insufficient or policy breach.',
+        featured: false,
+      },
+    });
+    await writeAudit({
+      action: 'LISTING_REJECTED',
       entityType: 'Listing',
       entityId: id,
       meta: { by: user.id },
@@ -95,7 +118,8 @@ export async function POST(req: Request) {
   }
 
   if (kind === 'intake') {
-    const status = action === 'ACCEPT' ? 'REVIEWING' : action === 'DECLINE' ? 'DECLINED' : null;
+    const status =
+      action === 'ACCEPT' ? 'ACCEPTED' : action === 'DECLINE' ? 'DECLINED' : null;
     if (!status) return NextResponse.json({ error: 'Bad action' }, { status: 400 });
     await prisma.sellerInquiry.update({ where: { id }, data: { status } });
     await writeAudit({
@@ -103,6 +127,65 @@ export async function POST(req: Request) {
       entityType: 'SellerInquiry',
       entityId: id,
       meta: { status, by: user.id },
+      ip,
+      userAgent: req.headers.get('user-agent'),
+    });
+    return NextResponse.json({ success: true });
+  }
+
+  if (kind === 'rights' && action === 'FULFILL') {
+    const row = await prisma.dataRightsRequest.findUnique({ where: { id } });
+    if (!row) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+
+    if (row.requestType === 'DELETE') {
+      const email = row.email.toLowerCase();
+      await prisma.lead.updateMany({
+        where: { buyerEmail: email },
+        data: {
+          buyerName: 'purged',
+          buyerEmail: `purged_rights_${id}@invalid.local`,
+          message: null,
+          ipHash: null,
+          userAgent: null,
+        },
+      });
+      await prisma.sellerInquiry.deleteMany({ where: { email } });
+      const u = await prisma.user.findUnique({ where: { email } });
+      if (u && !['ADMIN', 'COFOUNDER'].includes(u.role)) {
+        const left = await prisma.listing.count({ where: { sellerId: u.id } });
+        if (left === 0) await prisma.user.delete({ where: { id: u.id } }).catch(() => null);
+      }
+    }
+
+    await sendTransactional({
+      to: row.email,
+      subject: `Cladak data-rights ${row.requestType} fulfilled`,
+      template: 'DATA_RIGHTS_FULFILLED',
+      meta: { requestId: id, type: row.requestType },
+      body: `Your ${row.requestType} request (${id}) was fulfilled by Cladak Ops.\n— Cladak (England & Wales)`,
+    });
+
+    await writeAudit({
+      action: 'DATA_RIGHTS_FULFILLED',
+      entityType: 'DataRightsRequest',
+      entityId: id,
+      meta: { type: row.requestType, by: user.id },
+      ip,
+      userAgent: req.headers.get('user-agent'),
+    });
+    return NextResponse.json({ success: true });
+  }
+
+  if (kind === 'escrow' && (action === 'FUNDED' || action === 'RELEASED' || action === 'CANCELLED')) {
+    await prisma.escrowCase.update({
+      where: { id },
+      data: { status: action },
+    });
+    await writeAudit({
+      action: `ESCROW_${action}`,
+      entityType: 'EscrowCase',
+      entityId: id,
+      meta: { by: user.id },
       ip,
       userAgent: req.headers.get('user-agent'),
     });

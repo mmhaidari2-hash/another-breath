@@ -15,7 +15,7 @@ export default function TrustDesk({ verified }: { verified: number }) {
         },
         {
           t: 'شواهد درآمد / محصول / UI',
-          d: 'فاز ۱: شواهد آپلود/اسکرین دستی. Stripe/GA زنده فاز ۲ است — بدون ادعای دروغ.',
+          d: 'پک مدرک فروشنده الزامی است (لینک درآمد + محصول زنده + سوگند). اینجست زنده Stripe/GA هنوز نیست.',
         },
         {
           t: 'ضد دور زدن',
@@ -23,7 +23,7 @@ export default function TrustDesk({ verified }: { verified: number }) {
         },
         {
           t: 'پروتکل Closing',
-          d: 'مسیر intro → diligence → close مستند است. Escrow شریک فاز ۲؛ امروز جعل نمی‌کنیم.',
+          d: 'Intro → مدرک → Stripe fee → escrow پارتنر (اختیاری) → purge. کلادک پول نگه نمی‌دارد.',
         },
       ]
     : [
@@ -33,7 +33,7 @@ export default function TrustDesk({ verified }: { verified: number }) {
         },
         {
           t: 'Revenue · product · UI evidence',
-          d: 'Phase 1 reviews seller-submitted evidence by hand. Live Stripe/GA ingest is Phase 2 — stated plainly.',
+          d: 'Seller evidence pack required (revenue URL + live product + sworn). Live Stripe/GA ingest not claimed.',
         },
         {
           t: 'Anti-circumvention by default',
@@ -41,7 +41,7 @@ export default function TrustDesk({ verified }: { verified: number }) {
         },
         {
           t: 'Documented closing protocol',
-          d: 'Intro → diligence → commercial terms → close is written down. Escrow partner rails are Phase 2.',
+          d: 'Intro → evidence → Stripe fee → optional partner escrow → purge. Cladak never custodies funds.',
         },
       ];
 

@@ -54,8 +54,8 @@
 | 34 | مالکیت داده مشتریان محصولم؟ | مال شماست؛ کلادک فقط متادیتای لیستینگ را نگه می‌دارد | Terms |
 | 35 | حذف لیستینگ؟ | از طریق ادمین/درخواست — فرایند در Terms | الان اضافه شد |
 | 36 | چند حوزه همزمان؟ | فعلاً فقط Micro-SaaS | داره |
-| 37 | پرداخت آنلاین کارمزد؟ | فاز ۲ | فاز ۲ |
-| 38 | پنل فروشنده؟ | فاز بعد — فعلاً Studio/درخواست | فاز ۲ |
+| 37 | پرداخت آنلاین کارمزد؟ | Stripe Checkout + webhook (یا دمو) | live |
+| 38 | پنل فروشنده؟ | Studio + Ops | live |
 
 ## د) ممیز / ناظر / امنیت / رگولاتوری (۳۹–۵۰)
 
@@ -65,8 +65,8 @@
 | 40 | اعتبارسنجی ورودی؟ | Zod روی Lead و SellerInquiry | داره + تقویت |
 | 41 | Rate limiting؟ | In-memory فاز۱؛ Redis فاز۲ | داره |
 | 42 | لاگ ممیزی؟ | AuditEvent برای lead/agreement/view | الان اضافه شد |
-| 43 | رمزنگاری داده حساس؟ | DB فایل/هاست؛ رمز عبور کاربر هنوز Auth ندارد | فاز ۲ Auth |
-| 44 | GDPR/حذف داده؟ | Privacy + فرم/API Data Rights (ACCESS/DELETE/CORRECT) + Audit | الان اضافه شد |
+| 43 | رمزنگاری داده حساس؟ | HTTPS + scrypt passwords + purge بعد از fee | live |
+| 44 | GDPR/حذف داده؟ | Data Rights + Ops fulfill + auto purge | live |
 | 45 | ادعای «legally binding» الکی؟ | ممنوع — قانون طلایی | داره |
 | 46 | CSP / clickjacking؟ | X-Frame-Options DENY + CSP پایه | الان اضافه شد |
 | 47 | افشای اطلاعات فروشنده در API؟ | API فقط success؛ بدون ایمیل فروشنده | الان اضافه شد |
@@ -88,5 +88,7 @@
 9. صفحه ۵۰ سؤال تعاملی (فیلتر نقش + وضعیت)  
 10. فرم و API درخواست حقوق داده (GDPR-style intake)  
 
-## شکاف‌های عمدی فاز ۲ (نباید جعل شود)
-- Escrow واقعی، NDA/VDR، Auth کامل، پرداخت کارمزد، Stripe/GA خودکار، Redis rate-limit
+## شکاف‌های عمدی که هنوز به تو نیاز دارند
+- کلید Stripe زنده، Resend، دامنه HTTPS، پابلیش Play Console
+- NDA/VDR کامل، ingest زنده Stripe/GA (نه لینک مدرک)، Redis rate-limit چندinstance
+- Escrow custody واقعی (الان فقط ارجاع پارتنر — کلادک پول نگه نمی‌دارد)

@@ -6,6 +6,7 @@ import { hashIp, writeAudit } from '@/lib/audit';
 import { getSession } from '@/lib/session';
 import { slugify } from '@/lib/utils';
 import { sendTransactional } from '@/lib/email';
+import { applyScoreToListing } from '@/lib/scoring';
 
 export async function POST(req: Request) {
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
@@ -161,6 +162,10 @@ export async function POST(req: Request) {
     ip,
     userAgent: ua,
   });
+
+  if (shouldVerify) {
+    await applyScoreToListing(listing.id);
+  }
 
   await sendTransactional({
     to: email,

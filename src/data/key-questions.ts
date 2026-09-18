@@ -109,8 +109,8 @@ export const KEY_QUESTIONS: KeyQuestion[] = [
       en: 'What is the roadmap?',
     },
     a: {
-      fa: 'فاز۱ لیست+تأیید دستی+Lead · فاز۲ Stripe/GA+اشتراک+Escrow · فاز۳ حوزه جدید.',
-      en: 'P1 listing+manual verify+lead · P2 Stripe/GA+subscription+escrow · P3 new verticals.',
+      fa: 'فاز۱ بازار+مدرک+Lead · Stripe Checkout+escrow پارتنر+purge · فاز۲ ingest زنده GA/اشتراک · فاز۳ حوزه جدید.',
+      en: 'P1 market+evidence+lead · Stripe Checkout+partner escrow+purge · P2 live GA ingest/subscriptions · P3 new verticals.',
     },
     href: '/trust',
   },
@@ -240,16 +240,16 @@ export const KEY_QUESTIONS: KeyQuestion[] = [
   {
     id: 16,
     persona: 'buyer',
-    status: 'phase2',
+    status: 'live',
     q: {
       fa: 'Escrow دارید؟',
       en: 'Do you offer escrow?',
     },
     a: {
-      fa: 'فاز ۲ — الان صریح نوشته شده که نداریم و ادعای جعلی ممنوع است.',
-      en: 'Phase 2 — we state clearly we do not have it; fake claims are forbidden.',
+      fa: 'بله به‌صورت ارجاع به پارتنر مجوزدار (مثل Escrow.com). کلادک پول نگه نمی‌دارد.',
+      en: 'Yes as referral to a licensed partner (e.g. Escrow.com). Cladak never custodies funds.',
     },
-    href: '/trust',
+    href: '/closing',
   },
   {
     id: 17,
@@ -525,29 +525,30 @@ export const KEY_QUESTIONS: KeyQuestion[] = [
   {
     id: 37,
     persona: 'seller',
-    status: 'phase2',
+    status: 'live',
     q: {
       fa: 'پرداخت آنلاین کارمزد؟',
       en: 'Online fee payment?',
     },
     a: {
-      fa: 'فاز ۲.',
-      en: 'Phase 2.',
+      fa: 'بله — Stripe Checkout (GBP). بدون کلید Stripe، دمو checkout همان purge را اجرا می‌کند.',
+      en: 'Yes — Stripe Checkout (GBP). Without Stripe keys, demo checkout still runs purge.',
     },
+    href: '/closing',
   },
   {
     id: 38,
     persona: 'seller',
-    status: 'phase2',
+    status: 'live',
     q: {
       fa: 'پنل فروشنده؟',
       en: 'Seller dashboard?',
     },
     a: {
-      fa: 'فاز بعد — فعلاً Studio/درخواست فروش.',
-      en: 'Later phase — currently sell inquiry / studio.',
+      fa: 'Studio برای فروشنده + Ops برای کوفایندر/ادمین.',
+      en: 'Studio for sellers + Ops for cofounder/admin.',
     },
-    href: '/sell',
+    href: '/studio',
   },
   {
     id: 39,
@@ -605,27 +606,27 @@ export const KEY_QUESTIONS: KeyQuestion[] = [
   {
     id: 43,
     persona: 'auditor',
-    status: 'phase2',
+    status: 'live',
     q: {
       fa: 'رمزنگاری داده حساس؟',
       en: 'Encryption of sensitive data?',
     },
     a: {
-      fa: 'حمل‌ونقل/هاست؛ Auth و رمز عبور کاربر هنوز نیست.',
-      en: 'Transport/host-level; user auth/passwords not yet.',
+      fa: 'HTTPS + هدرها؛ پسورد با scrypt؛ بعد از کارمزد، PII طرفین purge می‌شود.',
+      en: 'HTTPS + headers; passwords via scrypt; after fee, party PII is purged.',
     },
   },
   {
     id: 44,
     persona: 'auditor',
-    status: 'added',
+    status: 'live',
     q: {
       fa: 'GDPR / حذف داده؟',
       en: 'GDPR / data deletion?',
     },
     a: {
-      fa: 'Privacy + فرم Data Rights برای دسترسی/حذف؛ tooling کامل Auth فاز۲.',
-      en: 'Privacy + Data Rights form for access/deletion; full auth tooling in Phase 2.',
+      fa: 'فرم Data Rights + fulfill در Ops؛ purge خودکار بعد از fee.',
+      en: 'Data Rights form + Ops fulfill; automatic purge after fee.',
     },
     href: '/legal/data-request',
   },
