@@ -5,6 +5,7 @@ import { checkRateLimit } from '@/lib/rate-limit';
 import { hashIp, writeAudit } from '@/lib/audit';
 import { getSession } from '@/lib/session';
 import { slugify } from '@/lib/utils';
+import { sendTransactional } from '@/lib/email';
 
 export async function POST(req: Request) {
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
@@ -32,20 +33,21 @@ export async function POST(req: Request) {
   const session = await getSession();
   const email = parsed.data.email.toLowerCase();
 
-  const seller = session?.email === email
-    ? await prisma.user.findUnique({ where: { id: session.userId } })
-    : await prisma.user.upsert({
-        where: { email },
-        update: {
-          name: parsed.data.name,
-          role: 'SELLER',
-        },
-        create: {
-          email,
-          name: parsed.data.name,
-          role: 'SELLER',
-        },
-      });
+  const seller =
+    session?.email === email
+      ? await prisma.user.findUnique({ where: { id: session.userId } })
+      : await prisma.user.upsert({
+          where: { email },
+          update: {
+            name: parsed.data.name,
+            role: 'SELLER',
+          },
+          create: {
+            email,
+            name: parsed.data.name,
+            role: 'SELLER',
+          },
+        });
 
   if (!seller) {
     return NextResponse.json({ error: 'Seller account unavailable' }, { status: 500 });
@@ -74,7 +76,17 @@ export async function POST(req: Request) {
     update: {},
     create: { id: 'default' },
   });
-  const autoVerify = config.autoVerifyOnSubmit;
+
+  const evidencePackComplete = Boolean(
+    parsed.data.swornEvidence &&
+      parsed.data.evidenceRevenueUrl &&
+      parsed.data.evidenceProductUrl &&
+      parsed.data.evidenceUiAttested
+  );
+
+  const shouldVerify =
+    evidencePackComplete &&
+    (config.verifyWhenEvidenceComplete || config.autoVerifyOnSubmit);
 
   const listing = await prisma.listing.create({
     data: {
@@ -94,14 +106,20 @@ export async function POST(req: Request) {
           ? Math.round((asking / (mrrRaw * 12)) * 10) / 10
           : null,
       category: 'Micro-SaaS',
-      verificationStatus: autoVerify ? 'VERIFIED' : 'PENDING',
-      verifiedAt: autoVerify ? new Date() : null,
-      verificationNotes: autoVerify
-        ? 'Auto-verified on submit (automation mode). Evidence assumed seller-attested.'
-        : 'Awaiting manual review.',
-      evidenceRevenue: autoVerify,
-      evidenceProduct: autoVerify,
-      evidenceUi: autoVerify,
+      verificationStatus: shouldVerify ? 'VERIFIED' : 'PENDING',
+      verifiedAt: shouldVerify ? new Date() : null,
+      verificationNotes: shouldVerify
+        ? 'Verified on complete seller evidence pack (revenue URL + product URL + UI attestation + sworn declaration).'
+        : evidencePackComplete
+          ? 'Evidence pack complete — awaiting ops confirm.'
+          : 'Incomplete evidence — provide revenue proof URL, live product URL, UI attestation, and sworn declaration.',
+      evidenceRevenue: Boolean(parsed.data.evidenceRevenueUrl),
+      evidenceProduct: Boolean(parsed.data.evidenceProductUrl),
+      evidenceUi: Boolean(parsed.data.evidenceUiAttested),
+      evidenceRevenueUrl: parsed.data.evidenceRevenueUrl || null,
+      evidenceProductUrl: parsed.data.evidenceProductUrl || null,
+      evidenceNotes: parsed.data.evidenceNotes || null,
+      swornEvidence: Boolean(parsed.data.swornEvidence),
       sellerId: seller.id,
       highlights: JSON.stringify([]),
       gallery: JSON.stringify([
@@ -124,18 +142,36 @@ export async function POST(req: Request) {
       notes: parsed.data.notes,
       acceptedSellerTerms: true,
       acceptedNonCircumvention: true,
-      status: autoVerify ? 'ACCEPTED' : 'REVIEWING',
+      status: shouldVerify ? 'ACCEPTED' : 'REVIEWING',
       ipHash: hashIp(ip),
     },
   });
 
   await writeAudit({
-    action: autoVerify ? 'LISTING_AUTO_VERIFIED' : 'SELLER_INQUIRY_CREATED',
+    action: shouldVerify ? 'LISTING_EVIDENCE_VERIFIED' : 'SELLER_INQUIRY_CREATED',
     entityType: 'SellerInquiry',
     entityId: row.id,
-    meta: { product: parsed.data.product, listingId: listing.id, slug, autoVerify },
+    meta: {
+      product: parsed.data.product,
+      listingId: listing.id,
+      slug,
+      evidencePackComplete,
+      shouldVerify,
+    },
     ip,
     userAgent: ua,
+  });
+
+  await sendTransactional({
+    to: email,
+    subject: shouldVerify
+      ? `Live on Cladak — ${parsed.data.product}`
+      : `Received — evidence review — ${parsed.data.product}`,
+    template: shouldVerify ? 'LISTING_LIVE' : 'LISTING_PENDING_EVIDENCE',
+    meta: { listingId: listing.id, slug },
+    body: shouldVerify
+      ? `Your asset "${parsed.data.product}" is live after evidence pack verification.\nSlug: ${slug}\n— Cladak`
+      : `We received "${parsed.data.product}". It stays PENDING until revenue proof URL, product URL, UI attestation, and sworn declaration are complete (or Ops verifies).\n— Cladak Diligence`,
   });
 
   return NextResponse.json(
@@ -144,10 +180,11 @@ export async function POST(req: Request) {
       id: row.id,
       listingId: listing.id,
       slug,
-      status: autoVerify ? 'VERIFIED' : 'PENDING',
-      message: autoVerify
-        ? 'Live on market (automation mode).'
-        : 'Queued for manual verification. Not public until VERIFIED.',
+      status: shouldVerify ? 'VERIFIED' : 'PENDING',
+      evidencePackComplete,
+      message: shouldVerify
+        ? 'Live on market — evidence pack complete.'
+        : 'Queued — complete evidence pack required for public listing.',
     },
     { status: 201 }
   );

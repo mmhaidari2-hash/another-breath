@@ -32,6 +32,12 @@ export const sellerInquirySchema = z.object({
   niche: z.string().trim().max(80).optional(),
   askingPrice: z.string().trim().max(40).optional(),
   notes: z.string().trim().max(2000).optional(),
+  // Diligence evidence pack
+  evidenceRevenueUrl: z.union([z.string().trim().url().max(500), z.literal('')]).optional(),
+  evidenceProductUrl: z.union([z.string().trim().url().max(500), z.literal('')]).optional(),
+  evidenceNotes: z.string().trim().max(2000).optional(),
+  evidenceUiAttested: z.boolean().optional(),
+  swornEvidence: z.boolean().optional(),
   acceptedSellerTerms: z.literal(true),
   acceptedNonCircumvention: z.literal(true),
 });

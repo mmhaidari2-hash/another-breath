@@ -4,27 +4,35 @@ export const metadata = {
   title: 'Closing protocol — Cladak',
 };
 
-export default function ClosingPage() {
+export default function ClosingPage({
+  searchParams,
+}: {
+  searchParams?: { paid?: string; demo?: string; fee?: string; cancelled?: string };
+}) {
+  const paid = searchParams?.paid === '1';
+  const cancelled = searchParams?.cancelled === '1';
+  const demo = searchParams?.demo === '1';
+
   const steps = [
     {
       t: '1 · Qualified intro',
-      d: 'Buyer accepts Terms + Non-Circumvention. Seller contact stays private until Cladak marks the lead INTRODUCED.',
+      d: 'Buyer accepts Terms + Non-Circumvention. Auto-intro emails both parties. Seller contact stays mediated.',
     },
     {
       t: '2 · Diligence window',
-      d: 'Buyer reviews verification notes, MRR snapshots, product access (when demoPolicy allows). NDA/VDR packs can be attached offline in Phase 1.',
+      d: 'Public listings require a complete evidence pack: revenue proof URL, live product URL, UI attestation, sworn declaration. Ops cannot VERIFY without that pack.',
     },
     {
       t: '3 · Commercial terms',
-      d: 'Parties agree price, transition support, and asset transfer checklist. Success fee (3–5%) is due on closed deals introduced via Cladak.',
+      d: 'Parties agree price and transfer checklist. Success fee (3–5%) is collected via Stripe Checkout on close.',
     },
     {
-      t: '4 · Closing desk',
-      d: 'Phase 1 documents the closing checklist and fee survival. Phase 2 adds escrow partner rails. We do not fake escrow today.',
+      t: '4 · Partner escrow',
+      d: 'Optional: open an EscrowCase referred to a licensed partner (default Escrow.com). Cladak never holds or custodies buyer/seller funds.',
     },
     {
-      t: '5 · Post-close',
-      d: 'Report close in Studio / Ops so audit trail stays complete. Circumvention within the configured window still owes the success fee.',
+      t: '5 · Fee → purge',
+      d: 'Stripe webhook (or demo checkout) books an anonymous FeeLedger row, then deletes buyer/seller accounts and listing PII automatically.',
     },
   ];
 
@@ -37,9 +45,21 @@ export default function ClosingPage() {
         <p className="eyebrow mt-8">Deal protocol</p>
         <h1 className="mt-3 font-display text-5xl font-extrabold tracking-tight">Closing</h1>
         <p className="mt-4 text-lg text-coal-soft">
-          How a Cladak intro becomes a closed Micro-SaaS transfer — without pretending Phase-2 rails
-          already exist.
+          Intro → evidence → Stripe fee → partner escrow (optional) → automatic purge. No fake
+          custody.
         </p>
+
+        {paid && (
+          <div className="mt-6 border border-signal/40 bg-signal/10 p-4 text-sm">
+            Fee payment recorded{demo ? ' (demo mode)' : ''}.
+            {searchParams?.fee ? ` £${searchParams.fee}.` : ''} Parties purged.
+          </div>
+        )}
+        {cancelled && (
+          <div className="mt-6 border border-coal/15 bg-stone-soft p-4 text-sm text-coal-soft">
+            Checkout cancelled — lead still open. You can retry from the listing intro panel.
+          </div>
+        )}
 
         <ol className="mt-10 space-y-4">
           {steps.map((s) => (

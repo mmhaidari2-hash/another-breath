@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useLang } from '@/components/LanguageProvider';
 
-const STEPS = 3;
+const STEPS = 4;
 
 export default function SellWizard() {
   const { lang } = useLang();
@@ -12,6 +12,7 @@ export default function SellWizard() {
   const [step, setStep] = useState(1);
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [error, setError] = useState<string | null>(null);
+  const [resultMsg, setResultMsg] = useState<string | null>(null);
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -21,7 +22,12 @@ export default function SellWizard() {
     mrr: '',
     askingPrice: '',
     notes: '',
+    evidenceRevenueUrl: '',
+    evidenceProductUrl: '',
+    evidenceNotes: '',
   });
+  const [evidenceUiAttested, setEvidenceUiAttested] = useState(false);
+  const [swornEvidence, setSwornEvidence] = useState(false);
   const [acceptedSellerTerms, setAcceptedSellerTerms] = useState(false);
   const [acceptedNonCircumvention, setAcceptedNonCircumvention] = useState(false);
 
@@ -37,12 +43,15 @@ export default function SellWizard() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...form,
+          evidenceUiAttested,
+          swornEvidence,
           acceptedSellerTerms: true,
           acceptedNonCircumvention: true,
         }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? 'Error');
+      setResultMsg(data.message);
       setStatus('success');
     } catch (err: unknown) {
       setStatus('error');
@@ -54,9 +63,10 @@ export default function SellWizard() {
     return (
       <div className="border border-coal bg-stone-raised p-8 shadow-hard">
         <p className="eyebrow">Submitted</p>
-        <h2 className="mt-3 font-display text-4xl font-bold">Submitted</h2>
+        <h2 className="mt-3 font-display text-4xl font-bold">Diligence received</h2>
         <p className="mt-3 text-coal-soft">
-          Automation mode: assets go live when auto-verify is on. Track anything left in Studio.
+          {resultMsg ||
+            'Listings go public only with a complete evidence pack (or Ops review).'}
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link href="/marketplace" className="btn-primary">
@@ -73,14 +83,14 @@ export default function SellWizard() {
   return (
     <div className="border border-coal bg-stone-raised shadow-hard">
       <div className="flex border-b border-coal/10">
-        {[1, 2, 3].map((s) => (
+        {[1, 2, 3, 4].map((s) => (
           <div
             key={s}
-            className={`flex-1 px-4 py-3 font-mono text-[11px] uppercase tracking-wider ${
+            className={`flex-1 px-2 py-3 text-center font-mono text-[10px] uppercase tracking-wider sm:px-4 sm:text-[11px] ${
               step === s ? 'bg-coal text-white' : 'text-coal-mute'
             }`}
           >
-            {s === 1 ? 'Seller' : s === 2 ? 'Asset' : 'Review'}
+            {s === 1 ? 'Seller' : s === 2 ? 'Asset' : s === 3 ? 'Evidence' : 'Review'}
           </div>
         ))}
       </div>
@@ -138,13 +148,67 @@ export default function SellWizard() {
         )}
         {step === 3 && (
           <>
+            <p className="text-sm text-coal-soft">
+              Evidence pack required for public listing. Links must be real diligence artefacts
+              (Stripe dashboard share, bank CSV host, live product).
+            </p>
+            <Field
+              label="Revenue proof URL"
+              value={form.evidenceRevenueUrl}
+              onChange={(v) => setForm({ ...form, evidenceRevenueUrl: v })}
+              ltr
+              type="url"
+            />
+            <Field
+              label="Live product URL"
+              value={form.evidenceProductUrl}
+              onChange={(v) => setForm({ ...form, evidenceProductUrl: v })}
+              ltr
+              type="url"
+            />
+            <label className="block">
+              <span className="mb-1.5 block font-mono text-[10px] uppercase tracking-wider text-coal-mute">
+                Evidence notes
+              </span>
+              <textarea
+                className="input-field"
+                rows={3}
+                value={form.evidenceNotes}
+                onChange={(e) => setForm({ ...form, evidenceNotes: e.target.value })}
+              />
+            </label>
+            <label className="flex items-start gap-2 text-xs leading-relaxed text-coal-soft">
+              <input
+                type="checkbox"
+                className="mt-0.5 accent-[#FF3B00]"
+                checked={evidenceUiAttested}
+                onChange={(e) => setEvidenceUiAttested(e.target.checked)}
+              />
+              <span>I attest the product UI/UX matches the listing screenshots and live URL.</span>
+            </label>
+            <label className="flex items-start gap-2 text-xs leading-relaxed text-coal-soft">
+              <input
+                type="checkbox"
+                className="mt-0.5 accent-[#FF3B00]"
+                checked={swornEvidence}
+                onChange={(e) => setSwornEvidence(e.target.checked)}
+              />
+              <span>
+                Sworn declaration: revenue and product evidence are accurate under England &amp;
+                Wales law. False evidence = removal + fee survival.
+              </span>
+            </label>
+          </>
+        )}
+        {step === 4 && (
+          <>
             <label className="block">
               <span className="mb-1.5 block font-mono text-[10px] uppercase tracking-wider text-coal-mute">
                 {fa ? 'یادداشت برای بررسی' : 'Notes for reviewers'}
               </span>
               <textarea
                 className="input-field"
-                rows={5}
+                rows={4}
                 value={form.notes}
                 onChange={(e) => setForm({ ...form, notes: e.target.value })}
               />
@@ -155,6 +219,11 @@ export default function SellWizard() {
               </p>
               <p className="mt-1 font-mono text-xs">
                 MRR {form.mrr || '—'} · Ask {form.askingPrice || '—'}
+              </p>
+              <p className="mt-2 font-mono text-[10px]" dir="ltr">
+                Evidence: {form.evidenceRevenueUrl ? 'revenue✓' : 'revenue✗'}{' '}
+                {form.evidenceProductUrl ? 'product✓' : 'product✗'}{' '}
+                {evidenceUiAttested ? 'ui✓' : 'ui✗'} {swornEvidence ? 'sworn✓' : 'sworn✗'}
               </p>
             </div>
             <label className="flex items-start gap-2 text-xs leading-relaxed text-coal-soft">
@@ -210,7 +279,12 @@ export default function SellWizard() {
               onClick={next}
               disabled={
                 (step === 1 && (!form.name || !form.email)) ||
-                (step === 2 && !form.product)
+                (step === 2 && !form.product) ||
+                (step === 3 &&
+                  (!form.evidenceRevenueUrl ||
+                    !form.evidenceProductUrl ||
+                    !evidenceUiAttested ||
+                    !swornEvidence))
               }
             >
               Continue
@@ -224,7 +298,7 @@ export default function SellWizard() {
                 status === 'loading' || !acceptedSellerTerms || !acceptedNonCircumvention
               }
             >
-              {status === 'loading' ? '…' : fa ? 'ارسال برای بررسی' : 'Submit for review'}
+              {status === 'loading' ? '…' : fa ? 'ارسال با مدرک' : 'Submit with evidence'}
             </button>
           )}
         </div>

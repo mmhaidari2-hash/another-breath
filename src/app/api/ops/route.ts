@@ -30,6 +30,22 @@ export async function POST(req: Request) {
   const { kind, id, action } = parsed.data;
 
   if (kind === 'verify' && action === 'VERIFY') {
+    const listing = await prisma.listing.findUnique({ where: { id } });
+    if (!listing) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    const packOk =
+      listing.swornEvidence &&
+      listing.evidenceRevenueUrl &&
+      listing.evidenceProductUrl &&
+      listing.evidenceUi;
+    if (!packOk) {
+      return NextResponse.json(
+        {
+          error:
+            'Evidence pack incomplete — need revenue URL, product URL, UI attestation, sworn declaration before VERIFY.',
+        },
+        { status: 400 }
+      );
+    }
     await prisma.listing.update({
       where: { id },
       data: {
@@ -39,7 +55,7 @@ export async function POST(req: Request) {
         evidenceProduct: true,
         evidenceUi: true,
         verificationNotes:
-          'Manual Phase-1 verification complete. Evidence reviewed by Cladak ops (England).',
+          'Ops verified seller evidence pack (England). Revenue + product URLs reviewed; sworn declaration on file.',
       },
     });
     await writeAudit({
@@ -54,9 +70,18 @@ export async function POST(req: Request) {
   }
 
   if (kind === 'introduce' && action === 'INTRODUCE') {
-    await prisma.lead.update({
+    const lead = await prisma.lead.update({
       where: { id },
       data: { status: 'INTRODUCED', introducedAt: new Date() },
+      include: { listing: { include: { seller: true } } },
+    });
+    const { notifyIntro } = await import('@/lib/email');
+    await notifyIntro({
+      buyerEmail: lead.buyerEmail,
+      buyerName: lead.buyerName,
+      sellerEmail: lead.listing.seller.email,
+      listingTitle: lead.listing.title,
+      leadId: lead.id,
     });
     await writeAudit({
       action: 'LEAD_INTRODUCED',

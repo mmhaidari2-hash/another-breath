@@ -3,6 +3,7 @@ import { prisma } from '@/lib/db';
 import { leadFormSchema } from '@/lib/validators';
 import { checkRateLimit } from '@/lib/rate-limit';
 import { hashIp, writeAudit } from '@/lib/audit';
+import { notifyIntro } from '@/lib/email';
 
 export async function POST(req: Request) {
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
@@ -40,6 +41,7 @@ export async function POST(req: Request) {
       verificationStatus: true,
       sellerId: true,
       askingPrice: true,
+      seller: { select: { email: true } },
     },
   });
 
@@ -81,6 +83,16 @@ export async function POST(req: Request) {
     userAgent: ua,
   });
 
+  if (autoIntro) {
+    await notifyIntro({
+      buyerEmail: lead.buyerEmail,
+      buyerName: lead.buyerName,
+      sellerEmail: listing.seller.email,
+      listingTitle: listing.title,
+      leadId: lead.id,
+    });
+  }
+
   return NextResponse.json(
     {
       success: true,
@@ -88,7 +100,7 @@ export async function POST(req: Request) {
       status: lead.status,
       askingPrice: listing.askingPrice,
       message: autoIntro
-        ? 'Intro automated. Complete the deal to pay the success fee — accounts purge after payment.'
+        ? 'Intro automated + email sent. Pay success fee via Stripe to close & purge.'
         : 'Request queued. Seller contact is mediated by Cladak.',
     },
     { status: 201 }

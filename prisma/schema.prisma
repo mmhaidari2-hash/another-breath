@@ -1,4 +1,4 @@
-// Cladak — Phase 1 schema (SQLite) auth + audit + agreements
+// Cladak — Phase 1+ schema (SQLite) auth + audit + automation rails
 
 generator client {
   provider = "prisma-client-js"
@@ -45,10 +45,14 @@ model Listing {
   businessModel   String?
   gallery         String?
 
-  // Evidence flags reviewed manually (not live Stripe/GA APIs)
-  evidenceRevenue Boolean @default(false)
-  evidenceProduct Boolean @default(false)
-  evidenceUi      Boolean @default(false)
+  // Diligence evidence (seller-attested links — not live Stripe/GA scrape)
+  evidenceRevenue    Boolean @default(false)
+  evidenceProduct    Boolean @default(false)
+  evidenceUi         Boolean @default(false)
+  evidenceRevenueUrl String?
+  evidenceProductUrl String?
+  evidenceNotes      String?
+  swornEvidence      Boolean @default(false)
 
   sellerId String
   seller   User   @relation(fields: [sellerId], references: [id])
@@ -63,7 +67,8 @@ model Listing {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  leads Lead[]
+  leads       Lead[]
+  escrowCases EscrowCase[]
 
   @@index([verificationStatus, category])
   @@index([featured])
@@ -102,6 +107,8 @@ model Lead {
   userAgent                String?
 
   createdAt DateTime @default(now())
+
+  escrowCases EscrowCase[]
 
   @@index([listingId])
   @@index([buyerEmail])
@@ -157,15 +164,19 @@ model AuditEvent {
 }
 
 model PlatformConfig {
-  id                   String  @id @default("default")
-  successFeeMinPercent Float   @default(3)
-  successFeeMaxPercent Float   @default(5)
-  supportEmail         String  @default("support@cladak.com")
-  governingLaw         String  @default("England and Wales")
-  nonCircumventionDays Int     @default(730)
-  autoIntroduceLeads   Boolean @default(true)
-  autoVerifyOnSubmit   Boolean @default(true)
-  purgeAccountsOnClose Boolean @default(true)
+  id                         String  @id @default("default")
+  successFeeMinPercent       Float   @default(3)
+  successFeeMaxPercent       Float   @default(5)
+  supportEmail               String  @default("support@cladak.com")
+  governingLaw               String  @default("England and Wales")
+  nonCircumventionDays       Int     @default(730)
+  autoIntroduceLeads         Boolean @default(true)
+  // Blind auto-verify OFF — verify only when evidence pack is complete
+  autoVerifyOnSubmit         Boolean @default(false)
+  verifyWhenEvidenceComplete Boolean @default(true)
+  purgeAccountsOnClose       Boolean @default(true)
+  escrowPartnerName          String  @default("Licensed escrow partner")
+  escrowPartnerUrl           String  @default("https://www.escrow.com")
 }
 
 // Anonymous fee receipts only — no buyer/seller PII after purge
@@ -179,4 +190,45 @@ model FeeLedger {
   createdAt       DateTime @default(now())
 
   @@index([createdAt])
+}
+
+// Cladak never holds funds — partner escrow case tracking only
+model EscrowCase {
+  id          String   @id @default(cuid())
+  listingId   String
+  listing     Listing  @relation(fields: [listingId], references: [id])
+  leadId      String?
+  lead        Lead?    @relation(fields: [leadId], references: [id])
+  amountGbp   Float
+  partnerName String
+  partnerUrl  String?
+  // REQUESTED | REFERRED | FUNDED | RELEASED | CANCELLED
+  status      String   @default("REQUESTED")
+  buyerEmail  String
+  sellerEmail String
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([status, createdAt])
+  @@index([listingId])
+  @@index([leadId])
+}
+
+// Automated notifications — sent via Resend when configured, else queued
+model EmailOutbox {
+  id        String   @id @default(cuid())
+  toEmail   String
+  subject   String
+  bodyText  String
+  template  String
+  // QUEUED | SENT | FAILED
+  status    String   @default("QUEUED")
+  error     String?
+  meta      String?
+  createdAt DateTime @default(now())
+  sentAt    DateTime?
+
+  @@index([status, createdAt])
+  @@index([template])
 }

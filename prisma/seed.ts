@@ -381,6 +381,12 @@ async function main() {
       evidenceRevenue: item.mrr != null,
       evidenceProduct: true,
       evidenceUi: true,
+      evidenceRevenueUrl: item.mrr
+        ? `https://dashboard.stripe.com/test/revenue/${item.slug}`
+        : null,
+      evidenceProductUrl: item.websiteUrl || `https://example.com/${item.slug}`,
+      swornEvidence: true,
+      evidenceNotes: 'Seed evidence pack for demo listings.',
       sellerId: seller.id,
     };
 
@@ -400,16 +406,22 @@ async function main() {
       successFeeMaxPercent: 5,
       nonCircumventionDays: 730,
       autoIntroduceLeads: true,
-      autoVerifyOnSubmit: true,
+      autoVerifyOnSubmit: false,
+      verifyWhenEvidenceComplete: true,
       purgeAccountsOnClose: true,
+      escrowPartnerName: 'Escrow.com',
+      escrowPartnerUrl: 'https://www.escrow.com',
     },
     create: {
       id: 'default',
       supportEmail: 'support@cladak.com',
       governingLaw: 'England and Wales',
       autoIntroduceLeads: true,
-      autoVerifyOnSubmit: true,
+      autoVerifyOnSubmit: false,
+      verifyWhenEvidenceComplete: true,
       purgeAccountsOnClose: true,
+      escrowPartnerName: 'Escrow.com',
+      escrowPartnerUrl: 'https://www.escrow.com',
     },
   });
 

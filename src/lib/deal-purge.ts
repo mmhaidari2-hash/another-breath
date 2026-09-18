@@ -74,6 +74,7 @@ export async function completeDealAndPurge(input: {
     },
   });
 
+  await prisma.escrowCase.deleteMany({ where: { listingId } });
   await prisma.lead.deleteMany({ where: { listingId } });
   await prisma.listing.delete({ where: { id: listingId } });
   await prisma.sellerInquiry.deleteMany({
