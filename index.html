@@ -3,76 +3,114 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="generator" content="Another Breath v6.0-ClassA">
-<title>Another Breath — Your breath shapes the art</title>
-<meta name="description" content="Transform your breathing pattern into a unique generative artwork. Half of every pledge supports children in need.">
-<meta property="og:title" content="Another Breath"><meta property="og:description" content="Your breath pattern shapes the artwork. Half goes to charity.">
+<meta name="generator" content="Another Breath v7.0-Premium">
+<title>Another Breath — Biological Art from Your Breath</title>
+<meta name="description" content="Your breath becomes a one-of-one biological artwork. Live waveform, deterministic bio-art, and collector editions that fund children in need.">
+<meta property="og:title" content="Another Breath"><meta property="og:description" content="Biological 1/1 art shaped by your breath. Half of every collect supports children.">
 <meta property="og:url" content="https://mmhaidari2-hash.github.io/another-breath/">
 <meta property="og:type" content="website"><meta property="og:image" content="https://mmhaidari2-hash.github.io/another-breath/og.png">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌬️</text></svg>">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet"/>
 <style>
-:root,[data-theme="london-mist"]{--bg:#080c14;--surface:rgba(255,255,255,.03);--border:rgba(255,255,255,.08);--t1:#eef2f7;--t2:rgba(238,242,247,.72);--t3:rgba(238,242,247,.45);--accent:#7ec8e3;--glow:rgba(126,200,227,.35);--gold:#e8c87a;--err:#ff8a8a;--mist1:rgba(126,200,227,.08);--mist2:rgba(200,160,255,.05);--art-p:#7ec8e3;--art-s:#a0d8ef;--art-t:#5b9bb5;--theme-name:"London Mist"}
-[data-theme="persian-garden"]{--bg:#0a1214;--surface:rgba(255,255,255,.04);--border:rgba(232,200,122,.15);--t1:#f5f5f0;--t2:rgba(245,245,240,.75);--t3:rgba(245,245,240,.45);--accent:#40e0d0;--glow:rgba(64,224,208,.35);--gold:#e8c87a;--err:#ff8a8a;--mist1:rgba(64,224,208,.08);--mist2:rgba(232,200,122,.06);--art-p:#40e0d0;--art-s:#e8c87a;--art-t:#20b2aa;--theme-name:"Persian Garden"}
-[data-theme="desert-night"]{--bg:#120e08;--surface:rgba(255,255,255,.03);--border:rgba(210,180,140,.15);--t1:#f4ead5;--t2:rgba(244,234,213,.75);--t3:rgba(244,234,213,.45);--accent:#d4af37;--glow:rgba(212,175,55,.35);--gold:#d4af37;--err:#ff8a8a;--mist1:rgba(212,175,55,.08);--mist2:rgba(210,180,140,.05);--art-p:#d4af37;--art-s:#cd853f;--art-t:#8b6508;--theme-name:"Desert Night"}
+:root,[data-theme="london-mist"]{--bg:#060a12;--surface:rgba(255,255,255,.035);--border:rgba(255,255,255,.1);--t1:#eef2f7;--t2:rgba(238,242,247,.7);--t3:rgba(238,242,247,.42);--accent:#7ec8e3;--glow:rgba(126,200,227,.32);--gold:#e8c87a;--err:#ff8a8a;--mist1:rgba(126,200,227,.09);--mist2:rgba(180,140,255,.05);--art-p:#7ec8e3;--art-s:#a0d8ef;--art-t:#5b9bb5;--theme-name:"London Mist";--chart:#7ec8e3}
+[data-theme="persian-garden"]{--bg:#071012;--surface:rgba(255,255,255,.04);--border:rgba(232,200,122,.16);--t1:#f5f5f0;--t2:rgba(245,245,240,.72);--t3:rgba(245,245,240,.42);--accent:#40e0d0;--glow:rgba(64,224,208,.32);--gold:#e8c87a;--err:#ff8a8a;--mist1:rgba(64,224,208,.09);--mist2:rgba(232,200,122,.06);--art-p:#40e0d0;--art-s:#e8c87a;--art-t:#20b2aa;--theme-name:"Persian Garden";--chart:#40e0d0}
+[data-theme="desert-night"]{--bg:#100c06;--surface:rgba(255,255,255,.035);--border:rgba(210,180,140,.16);--t1:#f4ead5;--t2:rgba(244,234,213,.72);--t3:rgba(244,234,213,.42);--accent:#d4af37;--glow:rgba(212,175,55,.32);--gold:#d4af37;--err:#ff8a8a;--mist1:rgba(212,175,55,.09);--mist2:rgba(210,180,140,.05);--art-p:#d4af37;--art-s:#cd853f;--art-t:#8b6508;--theme-name:"Desert Night";--chart:#d4af37}
 *{margin:0;padding:0;box-sizing:border-box}:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
-body{background:var(--bg);color:var(--t1);font-family:'Inter',system-ui,sans-serif;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;overflow-x:hidden;-webkit-font-smoothing:antialiased;transition:background 1s ease,color .5s}
+body{background:var(--bg);color:var(--t1);font-family:'DM Sans',system-ui,sans-serif;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;overflow-x:hidden;-webkit-font-smoothing:antialiased;transition:background 1s ease,color .5s}
 html[lang="fa"] body,html[lang="ar"] body{font-family:'Vazirmatn',system-ui,sans-serif}
-html[dir="rtl"] .step,html[dir="rtl"] .pledge-box{text-align:right}
+html[dir="rtl"] .step,html[dir="rtl"] .pledge-box,html[dir="rtl"] .tier,html[dir="rtl"] .vital{text-align:right}
 html[dir="rtl"] .trust-bar{flex-direction:row-reverse}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 .hidden{display:none!important}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
 .bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.bg::before{content:'';position:absolute;inset:-60%;width:220%;height:220%;background:radial-gradient(ellipse at 25% 35%,var(--mist1) 0%,transparent 55%),radial-gradient(ellipse at 75% 65%,var(--mist2) 0%,transparent 55%);animation:drift 30s ease-in-out infinite alternate;transition:background 1s ease}
+.bg::before{content:'';position:absolute;inset:-60%;width:220%;height:220%;background:radial-gradient(ellipse at 25% 35%,var(--mist1) 0%,transparent 55%),radial-gradient(ellipse at 75% 65%,var(--mist2) 0%,transparent 55%);animation:drift 30s ease-in-out infinite alternate}
 @keyframes drift{to{transform:translate(3%,2%) rotate(1.5deg)}}
 .particle{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.5) 0%,rgba(255,255,255,0) 70%);animation:floatBreath linear infinite;pointer-events:none}
 @keyframes floatBreath{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:.7;transform:translateY(88vh) translateX(var(--dx,20px)) scale(1)}50%{opacity:.5;transform:translateY(40vh) translateX(calc(var(--dx,20px)*-.5)) scale(1.3)}100%{transform:translateY(-10vh) translateX(calc(var(--dx,20px)*-1)) scale(.4);opacity:0}}
 .wind-lines{position:absolute;inset:0;pointer-events:none;overflow:hidden;opacity:.3}
 .wind-line{position:absolute;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:windSway 8s ease-in-out infinite;width:200px;opacity:.2}
 @keyframes windSway{0%,100%{transform:translateX(-100px) scaleX(.8);opacity:.2}50%{transform:translateX(calc(100vw + 100px)) scaleX(1.2);opacity:.6}}
-.container{width:100%;max-width:800px;padding:2rem;position:relative;z-index:1}
-.hero{text-align:center;padding:4rem 0}
-.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:300;margin-bottom:1rem;background:linear-gradient(135deg,var(--t1),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero p{color:var(--t2);font-size:1.15rem;max-width:600px;margin:0 auto 2rem;line-height:1.6}
-.btn{padding:.8rem 2rem;border-radius:50px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-size:1rem;cursor:pointer;transition:all .3s;font-family:inherit;font-weight:500}
-.btn:hover,.btn:focus-visible{background:var(--accent);color:var(--bg);box-shadow:0 0 20px var(--glow)}
+.container{width:100%;max-width:880px;padding:2rem;position:relative;z-index:1}
+.hero{text-align:center;padding:3.5rem 0 2rem}
+.hero .eyebrow{font-size:.75rem;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin-bottom:1.25rem;opacity:.85}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,6vw,4rem);font-weight:300;margin-bottom:1rem;letter-spacing:.02em;background:linear-gradient(135deg,var(--t1) 20%,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{color:var(--t2);font-size:1.1rem;max-width:540px;margin:0 auto 2rem;line-height:1.65}
+.btn{padding:.85rem 1.75rem;border-radius:999px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-size:.95rem;cursor:pointer;transition:all .3s;font-family:inherit;font-weight:500}
+.btn:hover,.btn:focus-visible{background:var(--accent);color:var(--bg);box-shadow:0 0 24px var(--glow)}
 .btn-primary{background:var(--accent);color:var(--bg)}.btn-primary:hover,.btn-primary:focus-visible{background:transparent;color:var(--accent)}
+.btn-ghost{border-color:var(--border);color:var(--t2)}.btn-ghost:hover{border-color:var(--accent);color:var(--accent);background:transparent;box-shadow:none}
 .btn:disabled{opacity:.5;cursor:not-allowed}
-.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2rem;margin:4rem 0}
-.step{text-align:center;padding:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:16px;transition:transform .3s,border-color .3s}
-.step:hover{transform:translateY(-4px);border-color:var(--accent)}
-.step-icon{font-size:2.5rem;margin-bottom:1rem}.step h3{margin-bottom:.5rem;color:var(--accent)}.step p{color:var(--t3);font-size:.9rem;line-height:1.5}
-.trust-bar{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;padding:2rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin:2rem 0;color:var(--t2);font-size:.9rem}
-.pledge-box{text-align:center;padding:3rem 2rem;background:var(--surface);border:1px solid var(--border);border-radius:24px;margin:4rem 0;position:relative;overflow:hidden}
-.pledge-box::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,var(--glow),transparent 70%);opacity:.3;pointer-events:none}
-.pledge-box h2{font-family:'Cormorant Garamond',serif;font-size:2.5rem;margin-bottom:1rem;position:relative}
-.pledge-box>p{color:var(--t2);margin-bottom:2rem;position:relative;line-height:1.6}
-.faq{margin:4rem 0}.faq-item{border-bottom:1px solid var(--border);padding:1rem 0;cursor:pointer}
-.faq-q{display:flex;justify-content:space-between;align-items:center;font-weight:500;color:var(--t1)}
+.cta-row{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.25rem;margin:3rem 0}
+.step{text-align:center;padding:1.35rem 1rem}
+.step-num{font-family:'Cormorant Garamond',serif;font-size:1.75rem;color:var(--accent);margin-bottom:.5rem;opacity:.9}
+.step h3{margin-bottom:.4rem;font-size:1rem;font-weight:500}.step p{color:var(--t3);font-size:.88rem;line-height:1.5}
+.trust-bar{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;padding:1.5rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin:1.5rem 0;color:var(--t2);font-size:.88rem}
+.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:3rem 0 1rem}
+.tier{padding:1.5rem;border:1px solid var(--border);border-radius:20px;background:var(--surface);position:relative;overflow:hidden}
+.tier.featured{border-color:var(--accent);box-shadow:0 0 40px var(--glow)}
+.tier.featured::before{content:attr(data-badge);position:absolute;top:12px;inset-inline-end:12px;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.tier h3{font-family:'Cormorant Garamond',serif;font-size:1.5rem;margin-bottom:.35rem}
+.tier .price{font-size:1.35rem;color:var(--accent);margin-bottom:.75rem;font-weight:500}
+.tier p{color:var(--t3);font-size:.88rem;line-height:1.55;margin-bottom:1.25rem;min-height:3.2em}
+.tier ul{list-style:none;margin-bottom:1.25rem}
+.tier li{color:var(--t2);font-size:.85rem;padding:.3rem 0;border-bottom:1px solid transparent}
+.tier li::before{content:"· ";color:var(--accent)}
+.pledge-box{text-align:center;padding:2.5rem 1.5rem;margin:2rem 0 3rem}
+.pledge-box h2{font-family:'Cormorant Garamond',serif;font-size:2rem;margin-bottom:.75rem}
+.pledge-box>p{color:var(--t2);margin-bottom:0;line-height:1.6;max-width:520px;margin-inline:auto}
+.faq{margin:2rem 0 4rem}.faq-item{border-bottom:1px solid var(--border);padding:1rem 0;cursor:pointer}
+.faq-q{display:flex;justify-content:space-between;align-items:center;font-weight:500;color:var(--t1);gap:1rem}
 .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease;color:var(--t2);font-size:.95rem;line-height:1.6}
-.faq-item.active .faq-a{max-height:300px;padding-top:.75rem}
+.faq-item.active .faq-a{max-height:320px;padding-top:.75rem}
 .faq-item.active .faq-q span:last-child{transform:rotate(45deg)}.faq-q span:last-child{transition:transform .3s;font-size:1.5rem;color:var(--accent)}
 footer{text-align:center;padding:2rem;color:var(--t3);font-size:.85rem;margin-top:auto;border-top:1px solid var(--border);width:100%}
 .lang-select{background:var(--surface);color:var(--t1);border:1px solid var(--border);padding:.5rem .75rem;border-radius:8px;cursor:pointer;font-family:inherit}
-#app-view{position:fixed;inset:0;z-index:10;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;overflow-y:auto}
-#canvas-wrap{position:relative;width:90vw;max-width:500px;aspect-ratio:1;border-radius:24px;overflow:hidden;box-shadow:0 0 40px var(--glow);background:#000}
+#app-view,#result-view{position:fixed;inset:0;z-index:10;background:var(--bg);display:flex;flex-direction:column;align-items:center;overflow-y:auto}
+#app-view{justify-content:center;padding:1.5rem}
+#canvas-wrap{position:relative;width:min(90vw,420px);aspect-ratio:1;border-radius:24px;overflow:hidden;box-shadow:0 0 48px var(--glow);background:#000}
 canvas{width:100%;height:100%;display:block}
-.breath-meta{text-align:center;margin:1.5rem 0;font-family:monospace;color:var(--t2);font-size:.9rem;letter-spacing:.5px}
-.controls{display:flex;gap:1rem;margin-top:1rem;flex-wrap:wrap;justify-content:center}
-.status-bar{color:var(--t2);font-size:.9rem;margin-top:1rem;text-align:center;min-height:1.5em}
-.modal{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.85);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:2rem;overflow-y:auto}
-.modal-content{background:var(--bg);border:1px solid var(--border);border-radius:24px;padding:2rem;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
+.viz-ring{position:absolute;inset:10%;border-radius:50%;border:2px solid var(--accent);opacity:.2;transition:transform .1s,opacity .3s;pointer-events:none}
+.chart-panel{width:min(90vw,420px);margin-top:1.25rem}
+.chart-frame{border:1px solid var(--border);border-radius:16px;background:rgba(0,0,0,.35);padding:.75rem 1rem .5rem;overflow:hidden}
+.chart-label{display:flex;justify-content:space-between;align-items:center;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:.4rem}
+#breath-chart{width:100%;height:88px;display:block}
+.live-vitals{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-top:.75rem}
+.vital-mini{text-align:center;padding:.55rem .35rem;border:1px solid var(--border);border-radius:12px;background:var(--surface)}
+.vital-mini .k{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t3)}
+.vital-mini .v{font-family:ui-monospace,monospace;font-size:.95rem;color:var(--accent);margin-top:.2rem}
+.breath-meta{text-align:center;margin:1rem 0 .5rem;font-family:ui-monospace,monospace;color:var(--t2);font-size:.85rem;letter-spacing:.4px}
+.controls{display:flex;gap:.75rem;margin-top:1rem;flex-wrap:wrap;justify-content:center}
+.status-bar{color:var(--t2);font-size:.9rem;margin-top:.75rem;text-align:center;min-height:1.5em}
+.modal{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.85);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:1.5rem;overflow-y:auto}
+.modal-content{background:var(--bg);border:1px solid var(--border);border-radius:24px;padding:2rem;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
 .modal h2{margin-bottom:1rem;font-family:'Cormorant Garamond',serif;font-size:1.75rem}
 .modal p{color:var(--t2);line-height:1.6;margin-bottom:1rem}
 .qa-list{list-style:none;margin:1rem 0}.qa-list li{display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem;color:var(--t2)}
 .qa-list input[type="checkbox"]{width:18px;height:18px;accent-color:var(--accent);cursor:pointer}
-.nft-cert{font-family:monospace;background:var(--surface);border:1px dashed var(--accent);padding:1.25rem;border-radius:12px;margin:1.25rem 0;text-align:center;color:var(--accent);word-break:break-all;font-size:.85rem;line-height:1.6}
-.nft-cert strong{color:var(--gold);display:block;margin-bottom:.5rem;font-size:1rem}
+.nft-cert{font-family:ui-monospace,monospace;background:var(--surface);border:1px dashed var(--accent);padding:1.25rem;border-radius:12px;margin:1.25rem auto;text-align:center;color:var(--accent);word-break:break-all;font-size:.82rem;line-height:1.6;max-width:520px}
+.nft-cert strong{color:var(--gold);display:block;margin-bottom:.5rem;font-size:1rem;font-family:'Cormorant Garamond',serif;letter-spacing:.04em}
 .msg-toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--accent);color:var(--t1);padding:1rem 1.5rem;border-radius:12px;backdrop-filter:blur(12px);z-index:200;max-width:90%;text-align:center;box-shadow:0 0 30px var(--glow)}
-.viz-ring{position:absolute;inset:10%;border-radius:50%;border:2px solid var(--accent);opacity:.2;transition:transform .1s,opacity .3s;pointer-events:none}
-header.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;gap:1rem;flex-wrap:wrap}
-@media(max-width:480px){.container{padding:1rem}.hero{padding:2rem 0}.pledge-box{padding:2rem 1rem}.trust-bar{gap:1rem;font-size:.8rem}}
+header.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;gap:1rem;flex-wrap:wrap}
+.result-inner{width:100%;max-width:920px;padding:2.5rem 1.25rem 3.5rem;margin:0 auto}
+.result-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:1.75rem;align-items:start;margin-top:1.5rem}
+@media(max-width:780px){.result-grid{grid-template-columns:1fr}}
+.result-art{border-radius:24px;overflow:hidden;box-shadow:0 0 48px var(--glow);background:#000;aspect-ratio:1}
+.vitals-panel h3,.collect-panel h3{font-family:'Cormorant Garamond',serif;font-size:1.45rem;margin-bottom:1rem}
+.vitals-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.65rem;margin-bottom:1rem}
+.vital{padding:.85rem;border:1px solid var(--border);border-radius:14px;background:var(--surface)}
+.vital .k{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--t3)}
+.vital .v{font-size:1.15rem;margin-top:.25rem;color:var(--t1);font-variant-numeric:tabular-nums}
+#result-chart{width:100%;height:110px;display:block;border-radius:12px;background:rgba(0,0,0,.35);border:1px solid var(--border)}
+.collect-panel{margin-top:1.25rem;padding:1.25rem;border:1px solid var(--border);border-radius:18px;background:var(--surface)}
+.collect-panel p{color:var(--t2);font-size:.9rem;line-height:1.55;margin-bottom:1rem}
+.price-pills{display:flex;flex-direction:column;gap:.55rem;margin-bottom:1rem}
+.price-pill{display:flex;justify-content:space-between;align-items:center;gap:.75rem;padding:.85rem 1rem;border:1px solid var(--border);border-radius:14px;background:rgba(0,0,0,.2);cursor:pointer;transition:border-color .25s,box-shadow .25s;font:inherit;color:inherit;width:100%;text-align:inherit}
+.price-pill:hover,.price-pill.active{border-color:var(--accent);box-shadow:0 0 20px var(--glow)}
+.price-pill .name{font-weight:500}.price-pill .amt{color:var(--accent);font-variant-numeric:tabular-nums;white-space:nowrap}
+.half-note{font-size:.8rem;color:var(--t3);margin-top:.75rem;line-height:1.45}
+@media(max-width:480px){.container{padding:1rem}.hero{padding:2rem 0}.live-vitals{grid-template-columns:repeat(3,1fr)}.vital-mini .v{font-size:.8rem}}
 </style>
 </head>
 <body>
@@ -85,66 +123,147 @@ header.top{display:flex;justify-content:space-between;align-items:center;margin-
       <option value="fa">فارسی</option>
       <option value="ar">العربية</option>
     </select>
-    <button class="btn" id="btn-qa" data-i18n="qaTitle">Manual QA</button>
+    <button class="btn btn-ghost" id="btn-qa" data-i18n="qaTitle">Manual QA</button>
   </header>
 
   <section class="hero">
+    <p class="eyebrow" data-i18n="eyebrow">Biological 1/1 Art</p>
     <h1 data-i18n="title">Another Breath</h1>
-    <p data-i18n="heroSub">Your breath pattern shapes the artwork. Half of every pledge supports children in need.</p>
-    <button class="btn btn-primary" id="btn-start" data-i18n="start">Start Breathing</button>
+    <p data-i18n="heroSub">Your breath becomes a one-of-one artwork — waveform, rhythm, and biometrics rendered as collectible bio-art. Half of every collect supports children in need.</p>
+    <div class="cta-row">
+      <button class="btn btn-primary" id="btn-start" data-i18n="start">Start Breathing</button>
+      <button class="btn btn-ghost" id="btn-scroll-collect" data-i18n="seeEditions">See Editions</button>
+    </div>
   </section>
 
   <section class="steps" aria-label="How it works">
-    <div class="step"><div class="step-icon" aria-hidden="true">🌬️</div><h3 data-i18n="step1T">1. Breathe</h3><p data-i18n="step1D">Calibrate and breathe naturally. No audio leaves your device.</p></div>
-    <div class="step"><div class="step-icon" aria-hidden="true">🎨</div><h3 data-i18n="step2T">2. Generate</h3><p data-i18n="step2D">Your breath becomes a deterministic artwork with a unique ID.</p></div>
-    <div class="step"><div class="step-icon" aria-hidden="true">🤝</div><h3 data-i18n="step3T">3. Give Half</h3><p data-i18n="step3D">Half of your pledge goes directly to children in need.</p></div>
+    <div class="step"><div class="step-num">01</div><h3 data-i18n="step1T">Capture</h3><p data-i18n="step1D">Calibrate, then breathe. A live waveform charts your flow. No audio leaves your device.</p></div>
+    <div class="step"><div class="step-num">02</div><h3 data-i18n="step2T">Compose</h3><p data-i18n="step2D">Rhythm, intensity, and timbre become a deterministic biological artwork with a unique ID.</p></div>
+    <div class="step"><div class="step-num">03</div><h3 data-i18n="step3T">Collect</h3><p data-i18n="step3D">Keep the digital original, become a patron, or request a museum-grade print. Half goes to children.</p></div>
   </section>
 
   <div class="trust-bar" role="list">
     <span role="listitem">🔒 <span data-i18n="trust1">Privacy-first</span></span>
     <span role="listitem">⚡ <span data-i18n="trust2">Local processing</span></span>
-    <span role="listitem">🤝 <span data-i18n="trust3">Transparent pledge</span></span>
+    <span role="listitem">◇ <span data-i18n="trust3">1/1 deterministic</span></span>
+    <span role="listitem">🤝 <span data-i18n="trust4">50% to charity</span></span>
   </div>
 
+  <section id="editions" class="tiers" aria-label="Editions">
+    <article class="tier">
+      <h3 data-i18n="tier1T">Digital Collect</h3>
+      <div class="price" data-i18n="tier1P">$29</div>
+      <p data-i18n="tier1D">High-res PNG, certificate, and your breath vitals locked to the piece.</p>
+      <ul>
+        <li data-i18n="tier1a">4K download</li>
+        <li data-i18n="tier1b">Authenticity ID</li>
+        <li data-i18n="tier1c">Waveform snapshot</li>
+      </ul>
+      <button class="btn" data-tier="collect" data-i18n="tier1Btn">Collect Digital</button>
+    </article>
+    <article class="tier featured" data-badge="Patron">
+      <h3 data-i18n="tier2T">Patron Edition</h3>
+      <div class="price" data-i18n="tier2P">$99</div>
+      <p data-i18n="tier2D">Named patronage, public ledger credit, and priority for seasonal drop reports.</p>
+      <ul>
+        <li data-i18n="tier2a">Everything in Digital</li>
+        <li data-i18n="tier2b">Patron name on report</li>
+        <li data-i18n="tier2c">Charity impact share</li>
+      </ul>
+      <button class="btn btn-primary" data-tier="patron" data-i18n="tier2Btn">Become Patron</button>
+    </article>
+    <article class="tier">
+      <h3 data-i18n="tier3T">Studio Print</h3>
+      <div class="price" data-i18n="tier3P">from $240</div>
+      <p data-i18n="tier3D">Archival pigment print of your bio-art, signed certificate, global shipping.</p>
+      <ul>
+        <li data-i18n="tier3a">Archival paper</li>
+        <li data-i18n="tier3b">Signed cert</li>
+        <li data-i18n="tier3c">Worldwide ship</li>
+      </ul>
+      <button class="btn" data-tier="print" data-i18n="tier3Btn">Request Print</button>
+    </article>
+  </section>
+
   <section class="pledge-box">
-    <h2 data-i18n="pledgeT">The Pledge</h2>
-    <p data-i18n="pledgeD">Half of every contribution supports verified child-focused charities. Infrastructure is transparent. Reports are public.</p>
-    <button class="btn btn-primary" id="btn-give" data-i18n="giveBtn">Give Now</button>
+    <h2 data-i18n="pledgeT">Half Is the Point</h2>
+    <p data-i18n="pledgeD">Every paid collect splits 50/50: infrastructure to keep the studio alive, and verified child-focused charities. Quarterly reports stay public.</p>
   </section>
 
   <section class="faq" aria-label="FAQ">
     <div class="faq-item" tabindex="0" role="button" aria-expanded="false"><div class="faq-q"><span data-i18n="faq1Q">Is this a medical device?</span><span aria-hidden="true">+</span></div><div class="faq-a" data-i18n="faq1A">No. Another Breath is a creative, artistic experience. We make no medical or therapeutic claims.</div></div>
-    <div class="faq-item" tabindex="0" role="button" aria-expanded="false"><div class="faq-q"><span data-i18n="faq2Q">How is the art generated?</span><span aria-hidden="true">+</span></div><div class="faq-a" data-i18n="faq2A">Locally in your browser. Acoustic features of your breath become a deterministic seed. Same breath = same art, forever.</div></div>
-    <div class="faq-item" tabindex="0" role="button" aria-expanded="false"><div class="faq-q"><span data-i18n="faq3Q">Where does the money go?</span><span aria-hidden="true">+</span></div><div class="faq-a" data-i18n="faq3A">Half covers infrastructure. Half goes to verified charities. Reports are published quarterly.</div></div>
+    <div class="faq-item" tabindex="0" role="button" aria-expanded="false"><div class="faq-q"><span data-i18n="faq2Q">How is the art generated?</span><span aria-hidden="true">+</span></div><div class="faq-a" data-i18n="faq2A">Locally in your browser. Your live breath waveform and acoustic features become a deterministic seed and visual DNA. Same breath signature = same art, forever.</div></div>
+    <div class="faq-item" tabindex="0" role="button" aria-expanded="false"><div class="faq-q"><span data-i18n="faq3Q">How do you make money globally?</span><span aria-hidden="true">+</span></div><div class="faq-a" data-i18n="faq3A">Digital collects, patronage, and studio prints via Stripe Payment Links. Half funds charity. Connect your payment URLs in CONFIG to go live in any country Stripe supports.</div></div>
   </section>
 </main>
 
 <footer>
-  <p>&copy; 2026 Another Breath · <span data-i18n="tagline">Your breath shapes the art</span></p>
+  <p>&copy; 2026 Another Breath · <span data-i18n="tagline">Your breath shapes the art</span> · v7.0</p>
 </footer>
 
 <section id="app-view" class="hidden" role="dialog" aria-label="Breath Capture" aria-modal="true">
   <div id="canvas-wrap"><canvas id="art-canvas" width="500" height="500"></canvas><div class="viz-ring" id="viz-ring"></div></div>
+  <div class="chart-panel">
+    <div class="chart-frame">
+      <div class="chart-label"><span data-i18n="liveWave">Live breath wave</span><span id="chart-hz">— Hz</span></div>
+      <canvas id="breath-chart" width="840" height="176"></canvas>
+    </div>
+    <div class="live-vitals">
+      <div class="vital-mini"><div class="k" data-i18n="vRms">Flow</div><div class="v" id="live-flow">—</div></div>
+      <div class="vital-mini"><div class="k" data-i18n="vCent">Timbre</div><div class="v" id="live-cent">—</div></div>
+      <div class="vital-mini"><div class="k" data-i18n="vPeaks">Peaks</div><div class="v" id="live-peaks">0</div></div>
+    </div>
+  </div>
   <div class="breath-meta"><span id="breath-id">—</span> · <span id="theme-name-meta">London Mist</span></div>
   <div class="status-bar" id="status-bar" aria-live="polite" data-i18n="calibrating">Calibrating ambient noise...</div>
   <div class="controls">
-    <button class="btn" id="btn-stop" data-i18n="stop">Stop & Generate</button>
-    <button class="btn" id="btn-close-app" data-i18n="back">Back</button>
+    <button class="btn btn-primary" id="btn-stop" data-i18n="stop">Stop & Generate</button>
+    <button class="btn btn-ghost" id="btn-close-app" data-i18n="back">Back</button>
   </div>
 </section>
 
-<section id="result-view" class="hidden" style="position:fixed;inset:0;z-index:10;background:var(--bg);overflow-y:auto">
-  <div class="container" style="padding-top:3rem;padding-bottom:3rem;text-align:center">
-    <h2 style="font-family:'Cormorant Garamond',serif;font-size:2rem;margin-bottom:1rem" data-i18n="resultTitle">Your Breath, Immortalized</h2>
-    <div id="canvas-wrap-result" style="margin:2rem auto;width:90vw;max-width:500px;aspect-ratio:1;border-radius:24px;overflow:hidden;box-shadow:0 0 40px var(--glow);background:#000"><canvas id="art-canvas-result" width="500" height="500"></canvas></div>
-    <div class="nft-cert" id="nft-cert">
-      <strong data-i18n="certTitle">Certificate of Authenticity · 1/1</strong>
-      <div id="cert-body">—</div>
-    </div>
-    <div class="controls">
-      <button class="btn btn-primary" id="btn-give-result" data-i18n="giveBtn">Give Now (Half)</button>
-      <button class="btn" id="btn-download" data-i18n="download">Download PNG</button>
-      <button class="btn" id="btn-again" data-i18n="again">Breathe Again</button>
+<section id="result-view" class="hidden" role="dialog" aria-label="Result">
+  <div class="result-inner">
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,4vw,2.4rem);text-align:center;font-weight:300" data-i18n="resultTitle">Your Breath, Immortalized</h2>
+    <p style="text-align:center;color:var(--t2);max-width:520px;margin:.75rem auto 0;line-height:1.55" data-i18n="resultSub">A biological one-of-one composed from your waveform. Collect it, or breathe again.</p>
+    <div class="result-grid">
+      <div>
+        <div class="result-art"><canvas id="art-canvas-result" width="1024" height="1024"></canvas></div>
+        <div class="nft-cert" id="nft-cert">
+          <strong data-i18n="certTitle">Certificate of Authenticity · 1/1</strong>
+          <div id="cert-body">—</div>
+        </div>
+      </div>
+      <div>
+        <div class="vitals-panel">
+          <h3 data-i18n="vitalsTitle">Breath Vitals</h3>
+          <div class="vitals-grid">
+            <div class="vital"><div class="k" data-i18n="mDur">Duration</div><div class="v" id="m-dur">—</div></div>
+            <div class="vital"><div class="k" data-i18n="mInt">Intensity</div><div class="v" id="m-int">—</div></div>
+            <div class="vital"><div class="k" data-i18n="mRhythm">Rhythm</div><div class="v" id="m-rhythm">—</div></div>
+            <div class="vital"><div class="k" data-i18n="mStab">Stability</div><div class="v" id="m-stab">—</div></div>
+            <div class="vital"><div class="k" data-i18n="mFlow">Flow</div><div class="v" id="m-flow">—</div></div>
+            <div class="vital"><div class="k" data-i18n="mPeaks">Peaks</div><div class="v" id="m-peaks">—</div></div>
+          </div>
+          <canvas id="result-chart" width="840" height="220"></canvas>
+        </div>
+        <div class="collect-panel">
+          <h3 data-i18n="collectTitle">Collect this piece</h3>
+          <p data-i18n="collectD">Choose an edition. Half of every payment supports verified child-focused charities.</p>
+          <div class="price-pills" role="listbox" aria-label="Editions">
+            <button type="button" class="price-pill active" data-tier="collect"><span class="name" data-i18n="tier1T">Digital Collect</span><span class="amt" data-i18n="tier1P">$29</span></button>
+            <button type="button" class="price-pill" data-tier="patron"><span class="name" data-i18n="tier2T">Patron Edition</span><span class="amt" data-i18n="tier2P">$99</span></button>
+            <button type="button" class="price-pill" data-tier="print"><span class="name" data-i18n="tier3T">Studio Print</span><span class="amt" data-i18n="tier3P">from $240</span></button>
+          </div>
+          <button class="btn btn-primary" id="btn-checkout" style="width:100%" data-i18n="checkout">Checkout</button>
+          <p class="half-note" data-i18n="halfNote">50% charity · 50% studio · Stripe-ready globally</p>
+        </div>
+        <div class="controls" style="margin-top:1.25rem">
+          <button class="btn" id="btn-download" data-i18n="download">Download PNG</button>
+          <button class="btn btn-ghost" id="btn-share" data-i18n="share">Share</button>
+          <button class="btn btn-ghost" id="btn-again" data-i18n="again">Breathe Again</button>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -152,9 +271,9 @@ header.top{display:flex;justify-content:space-between;align-items:center;margin-
 <div id="modal-onboarding" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="onb-title">
   <div class="modal-content">
     <h2 id="onb-title" data-i18n="onbTitle">Before we begin</h2>
-    <p data-i18n="onbBody">We need microphone access to detect your breath. No audio is ever recorded, stored, or transmitted. Everything happens locally in your browser.</p>
-    <div style="display:flex;gap:1rem;justify-content:flex-end;flex-wrap:wrap">
-      <button class="btn" id="btn-onb-skip" data-i18n="skip">Skip</button>
+    <p data-i18n="onbBody">We need microphone access to detect your breath and draw the live waveform. No audio is ever recorded, stored, or transmitted. Everything happens locally in your browser.</p>
+    <div class="controls">
+      <button class="btn btn-ghost" id="btn-onb-skip" data-i18n="skip">Skip</button>
       <button class="btn btn-primary" id="btn-onb-cont" data-i18n="continue">Continue</button>
     </div>
   </div>
@@ -168,117 +287,164 @@ header.top{display:flex;justify-content:space-between;align-items:center;margin-
       <li><input type="checkbox" id="qa1"><label for="qa1" data-i18n="qa1">Microphone permission granted</label></li>
       <li><input type="checkbox" id="qa2"><label for="qa2" data-i18n="qa2">2s noise calibration completed</label></li>
       <li><input type="checkbox" id="qa3"><label for="qa3" data-i18n="qa3">Breath detected via RMS/centroid</label></li>
-      <li><input type="checkbox" id="qa4"><label for="qa4" data-i18n="qa4">Multi-factor noise rejection works</label></li>
+      <li><input type="checkbox" id="qa4"><label for="qa4" data-i18n="qa4">Live waveform chart draws</label></li>
       <li><input type="checkbox" id="qa5"><label for="qa5" data-i18n="qa5">Artwork generated deterministically</label></li>
       <li><input type="checkbox" id="qa6"><label for="qa6" data-i18n="qa6">Breath ID stable across reloads of same breath</label></li>
-      <li><input type="checkbox" id="qa7"><label for="qa7" data-i18n="qa7">NFT certificate visible on result</label></li>
-      <li><input type="checkbox" id="qa8"><label for="qa8" data-i18n="qa8">Give button shows pending message when placeholder</label></li>
+      <li><input type="checkbox" id="qa7"><label for="qa7" data-i18n="qa7">Vitals + result chart visible</label></li>
+      <li><input type="checkbox" id="qa8"><label for="qa8" data-i18n="qa8">Checkout shows pending when payment links are placeholders</label></li>
       <li><input type="checkbox" id="qa9"><label for="qa9" data-i18n="qa9">RTL correct for fa/ar</label></li>
       <li><input type="checkbox" id="qa10"><label for="qa10" data-i18n="qa10">AudioContext cleanup on destroy</label></li>
     </ul>
-    <div style="display:flex;justify-content:flex-end;margin-top:1.5rem"><button class="btn btn-primary" id="btn-qa-close" data-i18n="close">Close</button></div>
+    <button class="btn" id="btn-qa-close" data-i18n="close">Close</button>
   </div>
 </div>
 
 <script>
 /* ============================================================
-   Another Breath · v6.0-ClassA
-   Architecture frozen. BreathEngine · ArtworkGenerator · UI
+   Another Breath · v7.0-Premium
+   BreathEngine · WaveformChart · BioArtGenerator · Collect
    ============================================================ */
 
 const CONFIG = {
-  DONATION_URL: "PLACEHOLDER", // replace with real URL; no other change needed
+  // Replace with real Stripe Payment Links (or any checkout URLs) to go live worldwide
+  PAYMENT_LINKS: {
+    collect: "PLACEHOLDER",
+    patron: "PLACEHOLDER",
+    print: "PLACEHOLDER"
+  },
+  DONATION_URL: "PLACEHOLDER",
   CALIBRATION_MS: 2000,
   MIN_BREATH_MS: 8000,
   RMS_GATE_MULT: 2.2,
   CENTROID_MIN: 180,
   CENTROID_MAX: 1400,
-  VARIANCE_FLOOR: 0.0005
+  CHART_WINDOW: 240
 };
 
 const I18N = {
   en: {
-    title: "Another Breath", heroSub: "Your breath pattern shapes the artwork. Half of every pledge supports children in need.",
-    start: "Start Breathing", stop: "Stop & Generate", back: "Back", again: "Breathe Again", download: "Download PNG",
-    step1T: "1. Breathe", step1D: "Calibrate and breathe naturally. No audio leaves your device.",
-    step2T: "2. Generate", step2D: "Your breath becomes a deterministic artwork with a unique ID.",
-    step3T: "3. Give Half", step3D: "Half of your pledge goes directly to children in need.",
-    trust1: "Privacy-first", trust2: "Local processing", trust3: "Transparent pledge",
-    pledgeT: "The Pledge", pledgeD: "Half of every contribution supports verified child-focused charities. Infrastructure is transparent. Reports are public.",
-    giveBtn: "Give Now", resultTitle: "Your Breath, Immortalized", certTitle: "Certificate of Authenticity · 1/1",
+    title: "Another Breath", eyebrow: "Biological 1/1 Art",
+    heroSub: "Your breath becomes a one-of-one artwork — waveform, rhythm, and biometrics rendered as collectible bio-art. Half of every collect supports children in need.",
+    start: "Start Breathing", stop: "Stop & Generate", back: "Back", again: "Breathe Again", download: "Download PNG", share: "Share",
+    seeEditions: "See Editions", checkout: "Checkout",
+    step1T: "Capture", step1D: "Calibrate, then breathe. A live waveform charts your flow. No audio leaves your device.",
+    step2T: "Compose", step2D: "Rhythm, intensity, and timbre become a deterministic biological artwork with a unique ID.",
+    step3T: "Collect", step3D: "Keep the digital original, become a patron, or request a museum-grade print. Half goes to children.",
+    trust1: "Privacy-first", trust2: "Local processing", trust3: "1/1 deterministic", trust4: "50% to charity",
+    pledgeT: "Half Is the Point", pledgeD: "Every paid collect splits 50/50: infrastructure to keep the studio alive, and verified child-focused charities. Quarterly reports stay public.",
+    giveBtn: "Give Now", resultTitle: "Your Breath, Immortalized", resultSub: "A biological one-of-one composed from your waveform. Collect it, or breathe again.",
+    certTitle: "Certificate of Authenticity · 1/1",
     faq1Q: "Is this a medical device?", faq1A: "No. Another Breath is a creative, artistic experience. We make no medical or therapeutic claims.",
-    faq2Q: "How is the art generated?", faq2A: "Locally in your browser. Acoustic features of your breath become a deterministic seed. Same breath = same art, forever.",
-    faq3Q: "Where does the money go?", faq3A: "Half covers infrastructure. Half goes to verified charities. Reports are published quarterly.",
-    onbTitle: "Before we begin", onbBody: "We need microphone access to detect your breath. No audio is ever recorded, stored, or transmitted. Everything happens locally.",
+    faq2Q: "How is the art generated?", faq2A: "Locally in your browser. Your live breath waveform and acoustic features become a deterministic seed and visual DNA. Same breath signature = same art, forever.",
+    faq3Q: "How do you make money globally?", faq3A: "Digital collects, patronage, and studio prints via Stripe Payment Links. Half funds charity. Connect your payment URLs in CONFIG to go live in any country Stripe supports.",
+    onbTitle: "Before we begin", onbBody: "We need microphone access to detect your breath and draw the live waveform. No audio is ever recorded, stored, or transmitted. Everything happens locally.",
     skip: "Skip", continue: "Continue", close: "Close",
-    qaTitle: "Manual QA Checklist", qaIntro: "These are empty checkboxes. No automated tests are claimed.",
+    qaTitle: "Manual QA", qaIntro: "These are empty checkboxes. No automated tests are claimed.",
     qa1: "Microphone permission granted", qa2: "2s noise calibration completed", qa3: "Breath detected via RMS/centroid",
-    qa4: "Multi-factor noise rejection works", qa5: "Artwork generated deterministically", qa6: "Breath ID stable across reloads of same breath",
-    qa7: "NFT certificate visible on result", qa8: "Give button shows pending message when placeholder",
+    qa4: "Live waveform chart draws", qa5: "Artwork generated deterministically", qa6: "Breath ID stable across reloads of same breath",
+    qa7: "Vitals + result chart visible", qa8: "Checkout shows pending when payment links are placeholders",
     qa9: "RTL correct for fa/ar", qa10: "AudioContext cleanup on destroy",
     calibrating: "Calibrating ambient noise...", breathe: "Breathe naturally...", detecting: "Detecting breath flow...",
-    generating: "Generating artwork...", pendingMsg: "Payment gateway is being finalized. Thank you for your patience.",
-    tagline: "Your breath shapes the art"
+    generating: "Composing bio-art...", pendingMsg: "Payment links are not connected yet. Add Stripe URLs in CONFIG.PAYMENT_LINKS to go live.",
+    tagline: "Your breath shapes the art", liveWave: "Live breath wave",
+    vRms: "Flow", vCent: "Timbre", vPeaks: "Peaks",
+    vitalsTitle: "Breath Vitals", collectTitle: "Collect this piece", collectD: "Choose an edition. Half of every payment supports verified child-focused charities.",
+    halfNote: "50% charity · 50% studio · Stripe-ready globally",
+    mDur: "Duration", mInt: "Intensity", mRhythm: "Rhythm", mStab: "Stability", mFlow: "Flow", mPeaks: "Peaks",
+    tier1T: "Digital Collect", tier1P: "$29", tier1D: "High-res PNG, certificate, and your breath vitals locked to the piece.",
+    tier1a: "4K download", tier1b: "Authenticity ID", tier1c: "Waveform snapshot", tier1Btn: "Collect Digital",
+    tier2T: "Patron Edition", tier2P: "$99", tier2D: "Named patronage, public ledger credit, and priority for seasonal drop reports.",
+    tier2a: "Everything in Digital", tier2b: "Patron name on report", tier2c: "Charity impact share", tier2Btn: "Become Patron",
+    tier3T: "Studio Print", tier3P: "from $240", tier3D: "Archival pigment print of your bio-art, signed certificate, global shipping.",
+    tier3a: "Archival paper", tier3b: "Signed cert", tier3c: "Worldwide ship", tier3Btn: "Request Print",
+    shareOk: "Link copied.", shareFail: "Could not share from this browser."
   },
   fa: {
-    title: "نفسی دیگر", heroSub: "الگوی تنفس شما اثر هنری را شکل می‌دهد. نیمی از هر پیشکش برای کودکان نیازمند.",
-    start: "شروع تنفس", stop: "پایان و تولید", back: "بازگشت", again: "تنفس دوباره", download: "دانلود PNG",
-    step1T: "۱. نفس بکشید", step1D: "کالیبره کنید و طبیعی نفس بکشید. هیچ صدایی از دستگاه شما خارج نمی‌شود.",
-    step2T: "۲. تولید", step2D: "نفس شما به اثری هنری قطعی با شناسه‌ی یکتا تبدیل می‌شود.",
-    step3T: "۳. نیمی را هدیه دهید", step3D: "نیمی از پیشکش مستقیماً به کودکان نیازمند می‌رسد.",
-    trust1: "حریم‌محور", trust2: "پردازش محلی", trust3: "پیشکش شفاف",
-    pledgeT: "پیشکش", pledgeD: "نیمی از هر پرداخت برای خیریه‌های تأییدشده‌ی کودکان. زیرساخت شفاف، گزارش‌ها عمومی.",
-    giveBtn: "پرداخت", resultTitle: "نفس شما، جاودانه", certTitle: "گواهی اصالت · ۱ از ۱",
-    faq1Q: "آیا این یک وسیله‌ی پزشکی است؟", faq1A: "خیر. نفسی دیگر یک تجربه‌ی هنری خلاقانه است. هیچ ادعای پزشکی نمی‌کنیم.",
-    faq2Q: "اثر هنری چگونه تولید می‌شود؟", faq2A: "به‌صورت محلی در مرورگر شما. ویژگی‌های صوتی نفس شما به یک seed قطعی تبدیل می‌شوند. همان نفس = همان اثر، برای همیشه.",
-    faq3Q: "پول کجا می‌رود؟", faq3A: "نیمی برای زیرساخت، نیمی برای خیریه‌های تأییدشده. گزارش‌ها فصلی منتشر می‌شوند.",
-    onbTitle: "پیش از شروع", onbBody: "برای تشخیص تنفس به دسترسی میکروفون نیاز داریم. هیچ صدایی ضبط، ذخیره یا ارسال نمی‌شود. همه چیز محلی است.",
+    title: "نفسی دیگر", eyebrow: "هنر زیستی ۱ از ۱",
+    heroSub: "نفس شما به یک اثر هنری یکتا تبدیل می‌شود — موج، ریتم و بیومتریک به‌صورت بیوآرت کلکسیونری. نیمی از هر خرید برای کودکان نیازمند.",
+    start: "شروع تنفس", stop: "پایان و تولید", back: "بازگشت", again: "تنفس دوباره", download: "دانلود PNG", share: "اشتراک",
+    seeEditions: "نسخه‌ها", checkout: "پرداخت",
+    step1T: "ثبت", step1D: "کالیبره کنید و نفس بکشید. نمودار زنده جریان را نشان می‌دهد. هیچ صدایی از دستگاه خارج نمی‌شود.",
+    step2T: "ساخت", step2D: "ریتم، شدت و طنین به اثر زیستی قطعی با شناسه یکتا تبدیل می‌شود.",
+    step3T: "کلکسیون", step3D: "نسخه دیجیتال، پاترون، یا چاپ استودیویی. نیمی برای کودکان.",
+    trust1: "حریم‌محور", trust2: "پردازش محلی", trust3: "۱ از ۱ قطعی", trust4: "۵۰٪ خیریه",
+    pledgeT: "نیم، اصل ماجراست", pledgeD: "هر پرداخت ۵۰/۵۰ تقسیم می‌شود: زیرساخت استودیو و خیریه‌های تأییدشده‌ی کودکان. گزارش‌ها فصلی و عمومی.",
+    giveBtn: "پرداخت", resultTitle: "نفس شما، جاودانه", resultSub: "یک اثر زیستی یکتا از موج تنفس شما. کلکسیون کنید یا دوباره نفس بکشید.",
+    certTitle: "گواهی اصالت · ۱ از ۱",
+    faq1Q: "آیا این وسیله پزشکی است؟", faq1A: "خیر. نفسی دیگر یک تجربه‌ی هنری است. هیچ ادعای پزشکی نمی‌کنیم.",
+    faq2Q: "اثر چگونه ساخته می‌شود؟", faq2A: "محلی در مرورگر. موج زنده و ویژگی‌های صوتی نفس به seed و DNA بصری قطعی تبدیل می‌شوند. همان امضا = همان اثر.",
+    faq3Q: "چطور جهانی پول درمی‌آورد؟", faq3A: "کلکسیون دیجیتال، پاترون و چاپ استودیویی با لینک پرداخت Stripe. نیمی خیریه. لینک‌ها را در CONFIG بگذارید تا در کشورهای پشتیبانی‌شده زنده شود.",
+    onbTitle: "پیش از شروع", onbBody: "برای تشخیص تنفس و رسم موج زنده به میکروفون نیاز داریم. هیچ صدایی ضبط یا ارسال نمی‌شود.",
     skip: "رد شدن", continue: "ادامه", close: "بستن",
-    qaTitle: "چک‌لیست تست دستی", qaIntro: "این‌ها چک‌باکس خالی هستند. هیچ تست خودکاری ادعا نمی‌شود.",
-    qa1: "مجوز میکروفون داده شد", qa2: "کالیبراسیون ۲ ثانیه‌ای تمام شد", qa3: "تنفس با RMS/centroid تشخیص داده شد",
-    qa4: "حذف چندعاملی نویز کار می‌کند", qa5: "اثر قطعی تولید شد", qa6: "شناسه در بارگذاری مجدد پایدار است",
-    qa7: "گواهی NFT در نتیجه دیده می‌شود", qa8: "دکمه‌ی پرداخت در حالت placeholder پیام درست می‌دهد",
-    qa9: "راست‌چین برای fa/ar درست است", qa10: "AudioContext در destroy پاک می‌شود",
+    qaTitle: "چک‌لیست دستی", qaIntro: "چک‌باکس خالی. تست خودکار ادعا نمی‌شود.",
+    qa1: "مجوز میکروفون", qa2: "کالیبراسیون ۲ث", qa3: "تشخیص نفس",
+    qa4: "نمودار موج زنده", qa5: "اثر قطعی", qa6: "پایداری شناسه",
+    qa7: "ویتال + نمودار نتیجه", qa8: "پیام انتظار پرداخت",
+    qa9: "راست‌چین fa/ar", qa10: "پاکسازی AudioContext",
     calibrating: "کالیبره‌سازی نویز محیط...", breathe: "طبیعی نفس بکشید...", detecting: "تشخیص جریان تنفس...",
-    generating: "در حال تولید اثر...", pendingMsg: "درگاه پرداخت در حال نهایی‌شدن است. سپاس از شکیبایی شما.",
-    tagline: "نفس شما اثر را می‌سازد"
+    generating: "در حال ساخت بیوآرت...", pendingMsg: "لینک پرداخت هنوز وصل نیست. برای فروش جهانی، Stripe را در CONFIG.PAYMENT_LINKS بگذارید.",
+    tagline: "نفس شما اثر را می‌سازد", liveWave: "موج زنده تنفس",
+    vRms: "جریان", vCent: "طنین", vPeaks: "قله",
+    vitalsTitle: "ویتال تنفس", collectTitle: "کلکسیون این اثر", collectD: "نسخه را انتخاب کنید. نیمی از هر پرداخت برای خیریه‌های کودکان.",
+    halfNote: "۵۰٪ خیریه · ۵۰٪ استودیو · آماده‌ی Stripe",
+    mDur: "مدت", mInt: "شدت", mRhythm: "ریتم", mStab: "پایداری", mFlow: "جریان", mPeaks: "قله‌ها",
+    tier1T: "کلکسیون دیجیتال", tier1P: "$29", tier1D: "PNG باکیفیت، گواهی، و ویتال قفل‌شده روی اثر.",
+    tier1a: "دانلود ۴K", tier1b: "شناسه اصالت", tier1c: "اسنپ‌شات موج", tier1Btn: "خرید دیجیتال",
+    tier2T: "نسخه پاترون", tier2P: "$99", tier2D: "حمایت نام‌دار، اعتبار در گزارش عمومی، اولویت در دراپ‌های فصلی.",
+    tier2a: "همه‌ی دیجیتال", tier2b: "نام در گزارش", tier2c: "سهم اثر خیریه", tier2Btn: "پاترون شوید",
+    tier3T: "چاپ استودیو", tier3P: "از $240", tier3D: "چاپ پیگمنت آرشیوی، گواهی امضا، ارسال جهانی.",
+    tier3a: "کاغذ آرشیوی", tier3b: "گواهی امضا", tier3c: "ارسال جهانی", tier3Btn: "درخواست چاپ",
+    shareOk: "لینک کپی شد.", shareFail: "اشتراک در این مرورگر ممکن نشد."
   },
   ar: {
-    title: "نَفَسٌ آخر", heroSub: "نمط أنفاسك يشكّل العمل الفني. نصف كل تبرع للأطفال المحتاجين.",
-    start: "ابدأ التنفس", stop: "إيقاف وتوليد", back: "رجوع", again: "تنفس مرة أخرى", download: "تحميل PNG",
-    step1T: "١. تنفس", step1D: "عاير وتنفس بشكل طبيعي. لا يغادر أي صوت جهازك.",
-    step2T: "٢. توليد", step2D: "نفسك يتحول إلى عمل فني حتمي بمعرف فريد.",
-    step3T: "٣. أعطِ النصف", step3D: "نصف تبرعك يذهب مباشرة للأطفال المحتاجين.",
-    trust1: "الخصوصية أولاً", trust2: "معالجة محلية", trust3: "تبرع شفاف",
-    pledgeT: "التبرع", pledgeD: "نصف كل مساهمة لجمعيات أطفال موثقة. البنية التحتية شفافة والتقارير عامة.",
-    giveBtn: "تبرع الآن", resultTitle: "نفسك، خالد", certTitle: "شهادة الأصالة · ١ من ١",
-    faq1Q: "هل هذا جهاز طبي؟", faq1A: "لا. إنه تجربة فنية إبداعية. لا ندعي أي ادعاءات طبية.",
-    faq2Q: "كيف يتم توليد الفن؟", faq2A: "محلياً في متصفحك. خصائص صوتك تصبح بذرة حتمية. نفس الأنفاس = نفس العمل، للأبد.",
-    faq3Q: "أين يذهب المال؟", faq3A: "النصف للبنية التحتية والنصف للجمعيات. التقارير فصلية.",
-    onbTitle: "قبل أن نبدأ", onbBody: "نحتاج إلى إذن الميكروفون. لا يتم تسجيل أو إرسال أي صوت. كل شيء محلي.",
+    title: "نَفَسٌ آخر", eyebrow: "فن بيولوجي ١/١",
+    heroSub: "نفسك يتحول إلى عمل فني فريد — موجة وإيقاع وبيانات حيوية كفن بيولوجي قابل للجمع. نصف كل شراء للأطفال المحتاجين.",
+    start: "ابدأ التنفس", stop: "إيقاف وتوليد", back: "رجوع", again: "تنفس مرة أخرى", download: "تحميل PNG", share: "مشاركة",
+    seeEditions: "الإصدارات", checkout: "الدفع",
+    step1T: "التقاط", step1D: "عاير ثم تنفس. موجة حية ترسم تدفقك. لا يغادر أي صوت جهازك.",
+    step2T: "تأليف", step2D: "الإيقاع والشدة والطابع يصبحان عملاً بيولوجياً حتمياً بمعرف فريد.",
+    step3T: "جمع", step3D: "رقمي أو راعٍ أو طبعة استوديو. النصف للأطفال.",
+    trust1: "الخصوصية أولاً", trust2: "معالجة محلية", trust3: "١/١ حتمي", trust4: "٥٠٪ للجمعيات",
+    pledgeT: "النصف هو الجوهر", pledgeD: "كل دفعة تنقسم ٥٠/٥٠: البنية التحتية والجمعيات الموثقة للأطفال. تقارير فصلية عامة.",
+    giveBtn: "تبرع الآن", resultTitle: "نفسك، خالد", resultSub: "عمل بيولوجي فريد من موجة تنفسك. اجمعه أو تنفس مجدداً.",
+    certTitle: "شهادة الأصالة · ١ من ١",
+    faq1Q: "هل هذا جهاز طبي؟", faq1A: "لا. تجربة فنية إبداعية بلا ادعاءات طبية.",
+    faq2Q: "كيف يُولَّد الفن؟", faq2A: "محلياً. الموجة الحية وخصائص الصوت تصبح بذرة وDNA بصري حتمي.",
+    faq3Q: "كيف يحقق دخلاً عالمياً؟", faq3A: "جمع رقمي ورعاية وطبعات عبر روابط Stripe. ضع الروابط في CONFIG للتفعيل عالمياً.",
+    onbTitle: "قبل أن نبدأ", onbBody: "نحتاج الميكروفون لرسم الموجة الحية. لا يُسجَّل أو يُرسل أي صوت.",
     skip: "تخطي", continue: "متابعة", close: "إغلاق",
-    qaTitle: "قائمة فحص يدوي", qaIntro: "هذه مربعات فارغة. لا ندعي أي اختبارات آلية.",
-    qa1: "تم منح إذن الميكروفون", qa2: "اكتملت المعايرة لمدة ثانيتين", qa3: "تم الكشف عن التنفس عبر RMS/centroid",
-    qa4: "رفض الضوضاء متعدد العوامل يعمل", qa5: "تم توليد العمل بشكل حتمي", qa6: "المعرف مستقر عند إعادة التحميل",
-    qa7: "شهادة NFT مرئية", qa8: "زر التبرع يعرض رسالة الانتظار عند العنصر النائب",
-    qa9: "RTL صحيح لـ fa/ar", qa10: "تنظيف AudioContext عند التدمير",
+    qaTitle: "فحص يدوي", qaIntro: "مربعات فارغة بلا اختبارات آلية.",
+    qa1: "إذن الميكروفون", qa2: "معايرة ثانيتين", qa3: "كشف التنفس",
+    qa4: "رسم الموجة الحية", qa5: "توليد حتمي", qa6: "ثبات المعرف",
+    qa7: "الحيوية + مخطط النتيجة", qa8: "رسالة انتظار الدفع",
+    qa9: "RTL لـ fa/ar", qa10: "تنظيف AudioContext",
     calibrating: "جاري معايرة الضوضاء...", breathe: "تنفس بشكل طبيعي...", detecting: "جاري اكتشاف التدفق...",
-    generating: "جاري توليد العمل...", pendingMsg: "بوابة الدفع قيد الانتهاء. شكراً لصبرك.",
-    tagline: "نفسك يشكّل الفن"
+    generating: "جاري تأليف الفن الحيوي...", pendingMsg: "روابط الدفع غير متصلة بعد. أضف روابط Stripe في CONFIG.PAYMENT_LINKS.",
+    tagline: "نفسك يشكّل الفن", liveWave: "موجة التنفس الحية",
+    vRms: "تدفق", vCent: "طابع", vPeaks: "قمم",
+    vitalsTitle: "حيوية النفس", collectTitle: "اجمع هذه القطعة", collectD: "اختر إصداراً. نصف كل دفعة للجمعيات.",
+    halfNote: "٥٠٪ جمعيات · ٥٠٪ استوديو · جاهز لـ Stripe",
+    mDur: "المدة", mInt: "الشدة", mRhythm: "الإيقاع", mStab: "الاستقرار", mFlow: "التدفق", mPeaks: "القمم",
+    tier1T: "جمع رقمي", tier1P: "$29", tier1D: "PNG عالي الدقة وشهادة وحيوية مقفلة على القطعة.",
+    tier1a: "تحميل 4K", tier1b: "معرف أصالة", tier1c: "لقطة موجة", tier1Btn: "جمع رقمي",
+    tier2T: "إصدار الراعي", tier2P: "$99", tier2D: "رعاية باسمك ورصيد في التقرير العام.",
+    tier2a: "كل الرقمي", tier2b: "الاسم في التقرير", tier2c: "حصة الأثر", tier2Btn: "كن راعياً",
+    tier3T: "طبعة الاستوديو", tier3P: "من $240", tier3D: "طباعة صبغية أرشيفية وشهادة موقعة وشحن عالمي.",
+    tier3a: "ورق أرشيفي", tier3b: "شهادة موقعة", tier3c: "شحن عالمي", tier3Btn: "اطلب طبعة",
+    shareOk: "تم نسخ الرابط.", shareFail: "تعذرت المشاركة من هذا المتصفح."
   }
 };
 
 const THEME_MAP = { en: "london-mist", fa: "persian-garden", ar: "desert-night" };
 const THEME_NAMES = { "london-mist": "London Mist", "persian-garden": "Persian Garden", "desert-night": "Desert Night" };
 
-/* ---------- State ---------- */
 const state = {
   lang: "en", theme: "london-mist", ctx: null, analyser: null, stream: null, rafId: null,
   startTime: 0, features: [], noiseProfile: null, isRunning: false,
-  breathSeed: null, breathId: null, currentArt: null, ctxRegistry: []
+  breathSeed: null, breathId: null, currentArt: null, feats: null, quantized: null,
+  selectedTier: "collect", livePeaks: 0, ctxRegistry: []
 };
 
-/* ---------- i18n ---------- */
 function applyLang(lang) {
   state.lang = lang;
   document.documentElement.lang = lang;
@@ -292,16 +458,17 @@ function applyLang(lang) {
   });
   document.getElementById("theme-name-meta").textContent = THEME_NAMES[theme];
   document.getElementById("lang-select").value = lang;
+  const featured = document.querySelector(".tier.featured");
+  if (featured) featured.setAttribute("data-badge", I18N[lang].tier2T.split(" ")[0] || "Patron");
 }
 
-/* ---------- Adaptive particles ---------- */
 function buildParticles() {
   const layer = document.getElementById("bg-layer");
   layer.querySelectorAll(".particle, .wind-line").forEach(n => n.remove());
   const cores = navigator.hardwareConcurrency || 4;
   const area = window.innerWidth * window.innerHeight;
-  const particleCount = Math.max(8, Math.min(40, Math.floor(area / 25000) + cores));
-  const windCount = Math.max(3, Math.min(15, Math.floor(cores * 1.5)));
+  const particleCount = Math.max(8, Math.min(36, Math.floor(area / 28000) + cores));
+  const windCount = Math.max(3, Math.min(12, Math.floor(cores * 1.4)));
   for (let i = 0; i < particleCount; i++) {
     const p = document.createElement("div");
     p.className = "particle";
@@ -323,14 +490,12 @@ function buildParticles() {
   layer.appendChild(wl);
 }
 
-/* ---------- Hashing: djb2 ---------- */
 function djb2(str) {
   let h = 5381;
   for (let i = 0; i < str.length; i++) h = ((h << 5) + h) + str.charCodeAt(i);
   return h >>> 0;
 }
 
-/* ---------- PRNG: mulberry32 ---------- */
 function mulberry32(seed) {
   return function() {
     seed |= 0; seed = seed + 0x6D2B79F5 | 0;
@@ -339,6 +504,61 @@ function mulberry32(seed) {
     return ((t ^ t >>> 14) >>> 0) / 4294967296;
   };
 }
+
+/* ---------- Waveform chart ---------- */
+const WaveformChart = {
+  drawLive(canvas, series) {
+    const ctx = canvas.getContext("2d");
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = "rgba(0,0,0,0.15)";
+    ctx.fillRect(0, 0, W, H);
+    // baseline
+    ctx.strokeStyle = "rgba(255,255,255,0.08)";
+    ctx.beginPath();
+    ctx.moveTo(0, H / 2);
+    ctx.lineTo(W, H / 2);
+    ctx.stroke();
+    if (!series.length) return;
+    const slice = series.slice(-CONFIG.CHART_WINDOW);
+    const maxR = Math.max(0.01, ...slice.map(s => s.rms));
+    const accent = getComputedStyle(document.documentElement).getPropertyValue("--chart").trim() || "#7ec8e3";
+    // fill
+    ctx.beginPath();
+    slice.forEach((s, i) => {
+      const x = (i / Math.max(1, slice.length - 1)) * W;
+      const y = H / 2 - (s.rms / maxR) * (H * 0.42);
+      if (i === 0) ctx.moveTo(x, H / 2); else ctx.lineTo(x, y);
+    });
+    ctx.lineTo(W, H / 2);
+    ctx.closePath();
+    ctx.fillStyle = accent + "33";
+    ctx.fill();
+    // stroke
+    ctx.beginPath();
+    slice.forEach((s, i) => {
+      const x = (i / Math.max(1, slice.length - 1)) * W;
+      const y = H / 2 - (s.rms / maxR) * (H * 0.42);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.strokeStyle = accent;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    // mirrored underside for organic feel
+    ctx.beginPath();
+    slice.forEach((s, i) => {
+      const x = (i / Math.max(1, slice.length - 1)) * W;
+      const y = H / 2 + (s.rms / maxR) * (H * 0.28);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.strokeStyle = accent + "55";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  },
+  drawResult(canvas, series) {
+    this.drawLive(canvas, series);
+  }
+};
 
 /* ---------- BreathEngine ---------- */
 const BreathEngine = {
@@ -358,6 +578,7 @@ const BreathEngine = {
       onStatus("breathe");
       state.startTime = performance.now();
       state.features = [];
+      state.livePeaks = 0;
       state.isRunning = true;
       this.loop();
     } catch (e) {
@@ -406,14 +627,32 @@ const BreathEngine = {
     let energy = 0;
     for (let i = 0; i < freq.length; i++) energy += freq[i];
     const t = performance.now() - state.startTime;
-    state.features.push({ t, rms, centroid, energy });
-    // Visualize ring
+    const sample = { t, rms, centroid, energy };
+    state.features.push(sample);
+
+    const isPeak = state.noiseProfile && rms > state.noiseProfile.floor && centroid >= CONFIG.CENTROID_MIN && centroid <= CONFIG.CENTROID_MAX;
+    if (isPeak) {
+      const last = state.features[state.features.length - 2];
+      const wasPeak = last && last.rms > state.noiseProfile.floor && last.centroid >= CONFIG.CENTROID_MIN && last.centroid <= CONFIG.CENTROID_MAX;
+      if (!wasPeak) state.livePeaks++;
+    }
+
     const ring = document.getElementById("viz-ring");
     if (ring) {
-      const scale = Math.min(1.4, 1 + rms * 10);
+      const scale = Math.min(1.45, 1 + rms * 10);
       ring.style.transform = `scale(${scale})`;
-      ring.style.opacity = Math.min(0.6, rms * 5);
+      ring.style.opacity = Math.min(0.65, rms * 5);
     }
+
+    WaveformChart.drawLive(document.getElementById("breath-chart"), state.features);
+    document.getElementById("live-flow").textContent = (rms * 100).toFixed(1);
+    document.getElementById("live-cent").textContent = Math.round(centroid);
+    document.getElementById("live-peaks").textContent = String(state.livePeaks);
+    document.getElementById("chart-hz").textContent = Math.round(centroid) + " Hz";
+
+    // live preview bloom on art canvas
+    BioArtGenerator.renderPreview(document.getElementById("art-canvas"), state.features, state.theme);
+
     state.rafId = requestAnimationFrame(() => this.loop());
   },
   stop() {
@@ -436,33 +675,37 @@ const BreathEngine = {
     const avgRms = feats.reduce((a, b) => a + b.rms, 0) / feats.length;
     const maxRms = Math.max(...feats.map(f => f.rms));
     const intensity = maxRms;
-    // Peaks: moments where rms > noise floor * 1.5 AND centroid in human-breath band
     const peaks = feats.filter(f => f.rms > state.noiseProfile.floor && f.centroid >= CONFIG.CENTROID_MIN && f.centroid <= CONFIG.CENTROID_MAX);
-    // Rejector: if too few peaks or variance too low, likely noise
     if (peaks.length < 3 || duration < CONFIG.MIN_BREATH_MS / 1000) return null;
     const avgCentroid = feats.reduce((a, b) => a + b.centroid, 0) / feats.length;
-    const centroidVariance = feats.reduce((a, b) => a + (b.centroid - avgCentroid) ** 2, 0) / feats.length;
-    // Rhythm: intervals between peaks
-    const peakIndices = peaks.map(p => feats.indexOf(p));
+    const peakIndices = [];
+    for (let i = 0; i < feats.length; i++) {
+      const f = feats[i];
+      const on = f.rms > state.noiseProfile.floor && f.centroid >= CONFIG.CENTROID_MIN && f.centroid <= CONFIG.CENTROID_MAX;
+      const prev = feats[i - 1];
+      const prevOn = prev && prev.rms > state.noiseProfile.floor && prev.centroid >= CONFIG.CENTROID_MIN && prev.centroid <= CONFIG.CENTROID_MAX;
+      if (on && !prevOn) peakIndices.push(i);
+    }
     const intervals = [];
     for (let i = 1; i < peakIndices.length; i++) intervals.push(feats[peakIndices[i]].t - feats[peakIndices[i - 1]].t);
     const rhythm = intervals.length > 0 ? intervals.reduce((a, b) => a + b, 0) / intervals.length : 0;
-    // Stability: coefficient of variation of peaks
     const peakRms = peaks.map(p => p.rms);
     const peakAvg = peakRms.reduce((a, b) => a + b, 0) / peakRms.length;
     const peakVar = peakRms.reduce((a, b) => a + (b - peakAvg) ** 2, 0) / peakRms.length;
     const stability = peakAvg > 0 ? Math.sqrt(peakVar) / peakAvg : 1;
-    // Flow %: proportion of time above noise floor
     const aboveFloor = feats.filter(f => f.rms > state.noiseProfile.floor).length;
     const flow = aboveFloor / feats.length;
+    const waveform = feats.filter((_, i) => i % Math.max(1, Math.floor(feats.length / 64)) === 0).map(f => Math.round(f.rms * 10000) / 10000);
     return {
       duration: Math.round(duration * 100) / 100,
       intensity: Math.round(intensity * 10000) / 10000,
-      peaks: peaks.length,
+      peaks: peakIndices.length || peaks.length,
       rhythm: Math.round(rhythm),
       stability: Math.round(stability * 1000) / 1000,
       flow: Math.round(flow * 100) / 100,
-      centroid: Math.round(avgCentroid)
+      centroid: Math.round(avgCentroid),
+      avgRms: Math.round(avgRms * 10000) / 10000,
+      waveform
     };
   },
   quantize(f) {
@@ -486,94 +729,153 @@ const BreathEngine = {
   }
 };
 
-/* ---------- ArtworkGenerator (cultural hue palette) ---------- */
-const ArtworkGenerator = {
-  render(canvas, seed, theme) {
+/* ---------- Bio-art: waveform DNA + biomarkers ---------- */
+const BioArtGenerator = {
+  palettes: {
+    "london-mist": ["#7ec8e3", "#a0d8ef", "#5b9bb5", "#c8e6f0", "#3a7ca5", "#e8f4fa"],
+    "persian-garden": ["#40e0d0", "#e8c87a", "#20b2aa", "#d4a85a", "#66cdaa", "#f0e6c8"],
+    "desert-night": ["#d4af37", "#cd853f", "#8b6508", "#f4c430", "#b8860b", "#f5deb3"]
+  },
+  renderPreview(canvas, features, theme) {
+    if (!features.length) return;
+    const ctx = canvas.getContext("2d");
+    const W = canvas.width, H = canvas.height;
+    ctx.fillStyle = "rgba(0,0,0,0.18)";
+    ctx.fillRect(0, 0, W, H);
+    const palette = this.palettes[theme] || this.palettes["london-mist"];
+    const slice = features.slice(-90);
+    const maxR = Math.max(0.01, ...slice.map(s => s.rms));
+    const cx = W / 2, cy = H / 2;
+    ctx.beginPath();
+    slice.forEach((s, i) => {
+      const a = (i / slice.length) * Math.PI * 2 - Math.PI / 2;
+      const r = 70 + (s.rms / maxR) * 110;
+      const x = cx + Math.cos(a) * r;
+      const y = cy + Math.sin(a) * r;
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.closePath();
+    ctx.strokeStyle = palette[0] + "aa";
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  },
+  render(canvas, seed, theme, feats) {
     const rng = mulberry32(seed);
     const ctx = canvas.getContext("2d");
     const W = canvas.width, H = canvas.height;
-    ctx.fillStyle = "#000";
+    const palette = this.palettes[theme] || this.palettes["london-mist"];
+    const f = feats || { intensity: 0.05, peaks: 8, rhythm: 1200, stability: 0.4, flow: 0.5, centroid: 500, waveform: [] };
+
+    // deep field
+    ctx.fillStyle = "#030508";
     ctx.fillRect(0, 0, W, H);
-    // Cultural palettes
-    const palettes = {
-      "london-mist": ["#7ec8e3", "#a0d8ef", "#5b9bb5", "#c8e6f0", "#3a7ca5"],
-      "persian-garden": ["#40e0d0", "#e8c87a", "#20b2aa", "#d4a85a", "#66cdaa"],
-      "desert-night": ["#d4af37", "#cd853f", "#8b6508", "#f4c430", "#b8860b"]
-    };
-    const palette = palettes[theme] || palettes["london-mist"];
-    // Background glow
-    const grd = ctx.createRadialGradient(W / 2, H / 2, 50, W / 2, H / 2, W / 1.5);
-    grd.addColorStop(0, palette[0] + "55");
-    grd.addColorStop(0.5, palette[2] + "22");
-    grd.addColorStop(1, "transparent");
-    ctx.fillStyle = grd;
+    const g0 = ctx.createRadialGradient(W * 0.5, H * 0.48, 20, W * 0.5, H * 0.5, W * 0.72);
+    g0.addColorStop(0, palette[0] + "40");
+    g0.addColorStop(0.45, palette[2] + "18");
+    g0.addColorStop(1, "transparent");
+    ctx.fillStyle = g0;
     ctx.fillRect(0, 0, W, H);
-    // Central breath form
-    const layers = 8 + Math.floor(rng() * 6);
+
+    const layers = 10 + Math.min(10, Math.floor(f.peaks / 2));
+    const wobbleAmp = 12 + f.stability * 40;
+    const harm = 2 + Math.floor((f.centroid % 800) / 160);
+    const wave = (f.waveform && f.waveform.length > 8) ? f.waveform : null;
+
+    // orbital breath membranes driven by biomarkers
     for (let l = 0; l < layers; l++) {
-      const points = 32 + Math.floor(rng() * 20);
-      const baseR = 60 + l * 18 + rng() * 20;
+      const points = 48 + Math.floor(rng() * 24);
+      const baseR = 55 + l * (14 + f.flow * 10);
       ctx.beginPath();
       for (let i = 0; i <= points; i++) {
         const a = (i / points) * Math.PI * 2;
-        const wobble = (rng() - 0.5) * (20 + l * 4);
-        const r = baseR + wobble + Math.sin(a * (3 + rng() * 4)) * 15;
+        const wi = wave ? wave[i % wave.length] : 0;
+        const breathMod = wi * 180;
+        const wobble = Math.sin(a * harm + l * 0.35) * (wobbleAmp * (0.4 + rng() * 0.3));
+        const r = baseR + wobble + breathMod + (rng() - 0.5) * 6;
         const x = W / 2 + Math.cos(a) * r;
-        const y = H / 2 + Math.sin(a) * r;
+        const y = H / 2 + Math.sin(a) * r * (0.92 + f.flow * 0.12);
         if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
       }
       ctx.closePath();
       const c = palette[l % palette.length];
-      ctx.strokeStyle = c + (40 + Math.floor(rng() * 80)).toString(16).padStart(2, "0");
-      ctx.lineWidth = 0.5 + rng() * 1.5;
+      ctx.strokeStyle = c + (28 + Math.floor(rng() * 70)).toString(16).padStart(2, "0");
+      ctx.lineWidth = 0.4 + rng() * (1.2 + f.intensity * 8);
       ctx.stroke();
     }
-    // Breath particles
-    const particles = 80 + Math.floor(rng() * 120);
+
+    // literal waveform ribbon across the piece
+    if (wave) {
+      const maxW = Math.max(...wave, 0.001);
+      ctx.beginPath();
+      for (let i = 0; i < wave.length; i++) {
+        const x = (i / (wave.length - 1)) * W * 0.82 + W * 0.09;
+        const y = H * 0.78 - (wave[i] / maxW) * H * 0.18;
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = palette[1] + "cc";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.beginPath();
+      for (let i = 0; i < wave.length; i++) {
+        const x = (i / (wave.length - 1)) * W * 0.82 + W * 0.09;
+        const y = H * 0.78 + (wave[i] / maxW) * H * 0.08;
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = palette[0] + "55";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // aerosol particles — density from intensity & flow
+    const particles = 90 + Math.floor(f.intensity * 2500) + Math.floor(f.flow * 80);
     for (let i = 0; i < particles; i++) {
       const a = rng() * Math.PI * 2;
-      const r = rng() * W / 2;
+      const r = Math.pow(rng(), 0.65) * W * 0.48;
       const x = W / 2 + Math.cos(a) * r;
-      const y = H / 2 + Math.sin(a) * r;
-      const s = 0.5 + rng() * 3;
-      ctx.fillStyle = palette[Math.floor(rng() * palette.length)] + "bb";
+      const y = H / 2 + Math.sin(a) * r * 0.95;
+      const s = 0.4 + rng() * (2.2 + f.intensity * 20);
+      ctx.fillStyle = palette[Math.floor(rng() * palette.length)] + "b0";
       ctx.beginPath();
       ctx.arc(x, y, s, 0, Math.PI * 2);
       ctx.fill();
     }
-    // Flowing curves
-    ctx.lineWidth = 0.8;
-    for (let i = 0; i < 12; i++) {
+
+    // rhythm arcs — spacing from inter-peak rhythm
+    const arcs = 4 + Math.min(8, Math.floor((f.rhythm || 1000) / 400));
+    for (let i = 0; i < arcs; i++) {
+      const radius = 90 + i * (28 + f.flow * 20);
       ctx.beginPath();
-      ctx.strokeStyle = palette[Math.floor(rng() * palette.length)] + "66";
-      const sx = rng() * W, sy = rng() * H;
-      ctx.moveTo(sx, sy);
-      ctx.bezierCurveTo(
-        sx + (rng() - 0.5) * 300, sy + (rng() - 0.5) * 300,
-        sx + (rng() - 0.5) * 300, sy + (rng() - 0.5) * 300,
-        rng() * W, rng() * H
-      );
+      const start = rng() * Math.PI * 2;
+      const span = 0.6 + rng() * 1.8;
+      ctx.arc(W / 2, H / 2, radius, start, start + span);
+      ctx.strokeStyle = palette[(i + 2) % palette.length] + "66";
+      ctx.lineWidth = 0.7 + rng();
       ctx.stroke();
     }
-    // Signature dot cluster
-    for (let i = 0; i < 20; i++) {
+
+    // signature nucleus
+    for (let i = 0; i < 28; i++) {
       ctx.fillStyle = palette[1];
       ctx.beginPath();
-      ctx.arc(W / 2 + (rng() - 0.5) * 40, H / 2 + (rng() - 0.5) * 40, 1 + rng() * 2, 0, Math.PI * 2);
+      ctx.arc(W / 2 + (rng() - 0.5) * 50, H / 2 + (rng() - 0.5) * 50, 1 + rng() * 2.5, 0, Math.PI * 2);
       ctx.fill();
     }
+
+    // micro ID mark
+    ctx.fillStyle = palette[0] + "88";
+    ctx.font = `${Math.max(10, W / 70)}px monospace`;
+    ctx.textAlign = "right";
+    ctx.fillText("AB · BIOART", W - W * 0.06, H - H * 0.05);
   }
 };
 
 /* ---------- UI ---------- */
 const UI = {
   init() {
-    // Language detection
     const navLang = (navigator.language || "en").slice(0, 2);
     const initial = ["fa", "ar"].includes(navLang) ? navLang : "en";
     applyLang(initial);
     buildParticles();
-    // Events
     document.getElementById("lang-select").addEventListener("change", e => applyLang(e.target.value));
     document.getElementById("btn-start").addEventListener("click", () => this.startSession());
     document.getElementById("btn-stop").addEventListener("click", () => this.finishSession());
@@ -585,6 +887,9 @@ const UI = {
     });
     document.getElementById("btn-qa").addEventListener("click", () => this.showModal("modal-qa"));
     document.getElementById("btn-qa-close").addEventListener("click", () => this.hideModal("modal-qa"));
+    document.getElementById("btn-scroll-collect").addEventListener("click", () => {
+      document.getElementById("editions").scrollIntoView({ behavior: "smooth" });
+    });
     document.querySelectorAll(".faq-item").forEach(it => {
       it.addEventListener("click", () => {
         it.classList.toggle("active");
@@ -592,26 +897,40 @@ const UI = {
       });
       it.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); it.click(); } });
     });
-    document.getElementById("btn-give").addEventListener("click", () => this.handleGive());
-    document.getElementById("btn-give-result").addEventListener("click", () => this.handleGive());
+    document.querySelectorAll("[data-tier]").forEach(el => {
+      el.addEventListener("click", () => {
+        const tier = el.getAttribute("data-tier");
+        if (!tier) return;
+        state.selectedTier = tier;
+        document.querySelectorAll(".price-pill").forEach(p => p.classList.toggle("active", p.getAttribute("data-tier") === tier));
+        if (el.tagName === "BUTTON" && el.closest(".tiers")) this.checkout(tier);
+      });
+    });
+    document.getElementById("btn-checkout").addEventListener("click", () => this.checkout(state.selectedTier));
     document.getElementById("btn-download").addEventListener("click", () => this.downloadArt());
+    document.getElementById("btn-share").addEventListener("click", () => this.share());
     document.getElementById("btn-again").addEventListener("click", () => {
       document.getElementById("result-view").classList.add("hidden");
+      document.getElementById("landing").classList.remove("hidden");
       document.getElementById("landing").scrollIntoView({ behavior: "smooth" });
     });
     window.addEventListener("resize", buildParticles);
-    if (CONFIG.DONATION_URL === "PLACEHOLDER") {
-      console.warn("[Another Breath] DONATION_URL is still a placeholder.");
+    if (Object.values(CONFIG.PAYMENT_LINKS).every(v => !v || v.includes("PLACEHOLDER"))) {
+      console.warn("[Another Breath] Connect CONFIG.PAYMENT_LINKS (Stripe) to enable global checkout.");
     }
   },
   showModal(id) { document.getElementById(id).classList.remove("hidden"); },
   hideModal(id) { document.getElementById(id).classList.add("hidden"); },
-  handleGive() {
-    if (CONFIG.DONATION_URL === "PLACEHOLDER" || !CONFIG.DONATION_URL || CONFIG.DONATION_URL.includes("PLACEHOLDER")) {
+  isPlaceholder(url) { return !url || url.includes("PLACEHOLDER"); },
+  checkout(tier) {
+    const url = CONFIG.PAYMENT_LINKS[tier] || CONFIG.DONATION_URL;
+    if (this.isPlaceholder(url)) {
       this.showToast(I18N[state.lang].pendingMsg);
-    } else {
-      window.open(CONFIG.DONATION_URL, "_blank", "noopener");
+      return;
     }
+    const sep = url.includes("?") ? "&" : "?";
+    const withMeta = `${url}${sep}client_reference_id=${encodeURIComponent(state.breathId || "preview")}&utm_content=${encodeURIComponent(tier)}`;
+    window.open(withMeta, "_blank", "noopener");
   },
   showToast(msg) {
     const existing = document.querySelector(".msg-toast");
@@ -623,12 +942,12 @@ const UI = {
     document.body.appendChild(t);
     setTimeout(() => t.remove(), 4500);
   },
-  startSession() {
-    this.showModal("modal-onboarding");
-  },
+  startSession() { this.showModal("modal-onboarding"); },
   async runSession() {
     document.getElementById("landing").classList.add("hidden");
+    document.getElementById("result-view").classList.add("hidden");
     document.getElementById("app-view").classList.remove("hidden");
+    document.getElementById("breath-id").textContent = "—";
     const status = document.getElementById("status-bar");
     await BreathEngine.start(k => {
       status.textContent = I18N[state.lang][k] || k;
@@ -648,23 +967,34 @@ const UI = {
     }
     state.breathId = ident.id;
     state.breathSeed = ident.seed;
+    state.feats = feats;
+    state.quantized = quantized;
     document.getElementById("breath-id").textContent = ident.id;
-    // Render to app canvas (preview)
-    const previewCanvas = document.getElementById("art-canvas");
-    ArtworkGenerator.render(previewCanvas, ident.seed, state.theme);
-    // Render final high-res
+
     const finalCanvas = document.getElementById("art-canvas-result");
     finalCanvas.width = 1024; finalCanvas.height = 1024;
-    ArtworkGenerator.render(finalCanvas, ident.seed, state.theme);
-    // NFT cert
-    const certBody = document.getElementById("cert-body");
-    certBody.innerHTML = `${ident.id} · 1/1 · ${THEME_NAMES[state.theme]}<br>Seed: ${ident.seed}<br>Features: ${quantized ? JSON.stringify(quantized) : "—"}`;
-    // Switch view
+    BioArtGenerator.render(finalCanvas, ident.seed, state.theme, feats);
+    BioArtGenerator.render(document.getElementById("art-canvas"), ident.seed, state.theme, feats);
+
+    document.getElementById("m-dur").textContent = feats.duration + "s";
+    document.getElementById("m-int").textContent = feats.intensity.toFixed(4);
+    document.getElementById("m-rhythm").textContent = feats.rhythm + "ms";
+    document.getElementById("m-stab").textContent = feats.stability.toFixed(3);
+    document.getElementById("m-flow").textContent = Math.round(feats.flow * 100) + "%";
+    document.getElementById("m-peaks").textContent = String(feats.peaks);
+
+    WaveformChart.drawResult(document.getElementById("result-chart"), state.features);
+
+    document.getElementById("cert-body").innerHTML =
+      `${ident.id} · 1/1 · ${THEME_NAMES[state.theme]}<br>` +
+      `Seed: ${ident.seed}<br>` +
+      `DNA: ${JSON.stringify(quantized)}`;
+
     setTimeout(() => {
       document.getElementById("app-view").classList.add("hidden");
       document.getElementById("result-view").classList.remove("hidden");
       BreathEngine.destroy();
-    }, 600);
+    }, 500);
   },
   closeApp() {
     BreathEngine.destroy();
@@ -675,9 +1005,24 @@ const UI = {
   downloadArt() {
     const c = document.getElementById("art-canvas-result");
     const link = document.createElement("a");
-    link.download = `${state.breathId || "breath"}-${state.theme}.png`;
+    link.download = `${state.breathId || "breath"}-${state.theme}-bioart.png`;
     link.href = c.toDataURL("image/png");
     link.click();
+  },
+  async share() {
+    const text = `${state.breathId || "Another Breath"} — biological 1/1 art`;
+    const url = location.href.split("#")[0];
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: "Another Breath", text, url });
+      } else {
+        await navigator.clipboard.writeText(`${text}\n${url}`);
+        this.showToast(I18N[state.lang].shareOk);
+      }
+    } catch (e) {
+      if (e && e.name === "AbortError") return;
+      this.showToast(I18N[state.lang].shareFail);
+    }
   }
 };
 
