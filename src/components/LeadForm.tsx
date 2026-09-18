@@ -3,16 +3,18 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useLang } from '@/components/LanguageProvider';
+import CompleteDealPanel from '@/components/CompleteDealPanel';
 
 export default function LeadForm({
   listingId,
   listingTitle,
+  askingPrice,
 }: {
   listingId: string;
   listingTitle: string;
+  askingPrice?: number;
 }) {
-  const { t, lang } = useLang();
-  const fa = lang === 'fa';
+  const { t } = useLang();
   const [buyerName, setBuyerName] = useState('');
   const [buyerEmail, setBuyerEmail] = useState('');
   const [budget, setBudget] = useState('');
@@ -21,11 +23,12 @@ export default function LeadForm({
   const [acceptedNonCircumvention, setAcceptedNonCircumvention] = useState(false);
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [error, setError] = useState<string | null>(null);
+  const [leadId, setLeadId] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!acceptedTerms || !acceptedNonCircumvention) {
-      setError(fa ? 'قبول شرایط و منع دورزدن الزامی است' : 'Terms and non-circumvention are required');
+      setError('Terms and non-circumvention are required');
       return;
     }
     setStatus('loading');
@@ -46,6 +49,7 @@ export default function LeadForm({
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? 'Error');
+      setLeadId(data.leadId);
       setStatus('success');
     } catch (err: unknown) {
       setStatus('error');
@@ -53,15 +57,18 @@ export default function LeadForm({
     }
   };
 
-  if (status === 'success') {
+  if (status === 'success' && leadId) {
     return (
       <div className="border border-signal/40 bg-signal/10 p-4 text-sm text-coal">
-        {t.leadSuccess}
+        <p>{t.leadSuccess}</p>
         <span className="mt-1 block font-display text-lg font-bold">{listingTitle}</span>
         <p className="mt-2 text-xs text-coal-soft">
-          {fa
-            ? 'تماس با فروشنده فقط از طریق کلادک انجام می‌شود. دورزدن پلتفرم ممنوع است.'
-            : 'Seller contact is mediated by Cladak. Circumvention is prohibited.'}
+          Intro is automated. When the deal closes, confirm the success fee — buyer and seller
+          accounts are then purged. Only an anonymous fee receipt remains.
+        </p>
+        <CompleteDealPanel leadId={leadId} defaultPrice={askingPrice} />
+        <p className="mt-3 text-xs text-coal-mute">
+          See <Link href="/closing" className="underline">Closing protocol</Link>.
         </p>
       </div>
     );
@@ -133,7 +140,7 @@ export default function LeadForm({
           required
         />
         <span>
-          {fa ? 'شرایط استفاده و کارمزد را می‌پذیرم.' : 'I accept the Terms and fee schedule.'}{' '}
+          I accept the Terms and fee schedule.{' '}
           <Link href="/legal/terms" className="text-signal underline" target="_blank">
             Terms
           </Link>
@@ -149,9 +156,7 @@ export default function LeadForm({
           required
         />
         <span>
-          {fa
-            ? 'متعهد می‌شوم خارج از کلادک با فروشنده معامله نکنم (Non-Circumvention).'
-            : 'I agree not to circumvent Cladak and deal off-platform (Non-Circumvention).'}{' '}
+          I agree not to circumvent Cladak and deal off-platform (Non-Circumvention).{' '}
           <Link href="/legal/non-circumvention" className="text-signal underline" target="_blank">
             Policy
           </Link>

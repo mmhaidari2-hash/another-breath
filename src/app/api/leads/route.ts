@@ -39,12 +39,21 @@ export async function POST(req: Request) {
       title: true,
       verificationStatus: true,
       sellerId: true,
+      askingPrice: true,
     },
   });
 
   if (!listing || listing.verificationStatus !== 'VERIFIED') {
     return NextResponse.json({ error: 'Listing unavailable' }, { status: 404 });
   }
+
+  const config = await prisma.platformConfig.upsert({
+    where: { id: 'default' },
+    update: {},
+    create: { id: 'default' },
+  });
+
+  const autoIntro = config.autoIntroduceLeads;
 
   const lead = await prisma.lead.create({
     data: {
@@ -58,11 +67,13 @@ export async function POST(req: Request) {
       acceptedNonCircumvention: true,
       ipHash: hashIp(ip),
       userAgent: ua?.slice(0, 300),
+      status: autoIntro ? 'INTRODUCED' : 'QUEUED',
+      introducedAt: autoIntro ? new Date() : null,
     },
   });
 
   await writeAudit({
-    action: 'LEAD_CREATED',
+    action: autoIntro ? 'LEAD_AUTO_INTRODUCED' : 'LEAD_CREATED',
     entityType: 'Lead',
     entityId: lead.id,
     meta: { listingId: listing.id, listingSlug: listing.slug },
@@ -70,12 +81,15 @@ export async function POST(req: Request) {
     userAgent: ua,
   });
 
-  // هرگز ایمیل فروشنده یا داده داخلی برنگردان
   return NextResponse.json(
     {
       success: true,
       leadId: lead.id,
-      message: 'Request queued. Seller contact is mediated by Cladak.',
+      status: lead.status,
+      askingPrice: listing.askingPrice,
+      message: autoIntro
+        ? 'Intro automated. Complete the deal to pay the success fee — accounts purge after payment.'
+        : 'Request queued. Seller contact is mediated by Cladak.',
     },
     { status: 201 }
   );

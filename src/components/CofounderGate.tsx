@@ -39,6 +39,8 @@ export default function CofounderGate() {
           Co-founder access
         </h1>
         <p className="mt-4 text-sm leading-relaxed text-coal-soft">
+          URL: <code className="text-signal">/cofounder</code>
+          <br />
           The public Cladak product is English-only. Persian UI is reserved for co-founder working
           sessions. Enter the access code to unlock FA/EN switching.
         </p>

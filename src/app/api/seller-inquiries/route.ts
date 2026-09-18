@@ -69,13 +69,20 @@ export async function POST(req: Request) {
     ? Number(String(parsed.data.mrr).replace(/[^0-9.]/g, ''))
     : null;
 
+  const config = await prisma.platformConfig.upsert({
+    where: { id: 'default' },
+    update: {},
+    create: { id: 'default' },
+  });
+  const autoVerify = config.autoVerifyOnSubmit;
+
   const listing = await prisma.listing.create({
     data: {
       slug,
       title: parsed.data.product,
       description:
         parsed.data.notes?.trim() ||
-        `${parsed.data.product} submitted for Cladak manual review.`,
+        `${parsed.data.product} submitted to Cladak.`,
       tagline: parsed.data.niche || null,
       niche: parsed.data.niche || null,
       websiteUrl: parsed.data.url || null,
@@ -87,8 +94,14 @@ export async function POST(req: Request) {
           ? Math.round((asking / (mrrRaw * 12)) * 10) / 10
           : null,
       category: 'Micro-SaaS',
-      verificationStatus: 'PENDING',
-      verificationNotes: 'Awaiting manual review.',
+      verificationStatus: autoVerify ? 'VERIFIED' : 'PENDING',
+      verifiedAt: autoVerify ? new Date() : null,
+      verificationNotes: autoVerify
+        ? 'Auto-verified on submit (automation mode). Evidence assumed seller-attested.'
+        : 'Awaiting manual review.',
+      evidenceRevenue: autoVerify,
+      evidenceProduct: autoVerify,
+      evidenceUi: autoVerify,
       sellerId: seller.id,
       highlights: JSON.stringify([]),
       gallery: JSON.stringify([
@@ -111,16 +124,16 @@ export async function POST(req: Request) {
       notes: parsed.data.notes,
       acceptedSellerTerms: true,
       acceptedNonCircumvention: true,
-      status: 'REVIEWING',
+      status: autoVerify ? 'ACCEPTED' : 'REVIEWING',
       ipHash: hashIp(ip),
     },
   });
 
   await writeAudit({
-    action: 'SELLER_INQUIRY_CREATED',
+    action: autoVerify ? 'LISTING_AUTO_VERIFIED' : 'SELLER_INQUIRY_CREATED',
     entityType: 'SellerInquiry',
     entityId: row.id,
-    meta: { product: parsed.data.product, listingId: listing.id, slug },
+    meta: { product: parsed.data.product, listingId: listing.id, slug, autoVerify },
     ip,
     userAgent: ua,
   });
@@ -131,8 +144,10 @@ export async function POST(req: Request) {
       id: row.id,
       listingId: listing.id,
       slug,
-      status: 'PENDING',
-      message: 'Queued for manual verification. Not public until VERIFIED.',
+      status: autoVerify ? 'VERIFIED' : 'PENDING',
+      message: autoVerify
+        ? 'Live on market (automation mode).'
+        : 'Queued for manual verification. Not public until VERIFIED.',
     },
     { status: 201 }
   );

@@ -157,10 +157,26 @@ model AuditEvent {
 }
 
 model PlatformConfig {
-  id                   String @id @default("default")
-  successFeeMinPercent Float  @default(3)
-  successFeeMaxPercent Float  @default(5)
-  supportEmail         String @default("support@cladak.com")
-  governingLaw         String @default("England and Wales")
-  nonCircumventionDays Int    @default(730)
+  id                   String  @id @default("default")
+  successFeeMinPercent Float   @default(3)
+  successFeeMaxPercent Float   @default(5)
+  supportEmail         String  @default("support@cladak.com")
+  governingLaw         String  @default("England and Wales")
+  nonCircumventionDays Int     @default(730)
+  autoIntroduceLeads   Boolean @default(true)
+  autoVerifyOnSubmit   Boolean @default(true)
+  purgeAccountsOnClose Boolean @default(true)
+}
+
+// Anonymous fee receipts only — no buyer/seller PII after purge
+model FeeLedger {
+  id              String   @id @default(cuid())
+  amountGbp       Float
+  feePercent      Float
+  listingSlugHash String
+  leadIdHash      String
+  paymentRef      String?
+  createdAt       DateTime @default(now())
+
+  @@index([createdAt])
 }

@@ -213,7 +213,11 @@ export default function ListingExperience({
               <p className="text-coal-mute">Escrow tooling is Phase 2 — we do not pretend otherwise.</p>
             </div>
             <div className="h-px bg-coal/10" />
-            <LeadForm listingId={listing.id} listingTitle={listing.title} />
+            <LeadForm
+              listingId={listing.id}
+              listingTitle={listing.title}
+              askingPrice={listing.askingPrice}
+            />
           </div>
         </aside>
       </div>

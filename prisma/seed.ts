@@ -399,11 +399,17 @@ async function main() {
       successFeeMinPercent: 3,
       successFeeMaxPercent: 5,
       nonCircumventionDays: 730,
+      autoIntroduceLeads: true,
+      autoVerifyOnSubmit: true,
+      purgeAccountsOnClose: true,
     },
     create: {
       id: 'default',
       supportEmail: 'support@cladak.com',
       governingLaw: 'England and Wales',
+      autoIntroduceLeads: true,
+      autoVerifyOnSubmit: true,
+      purgeAccountsOnClose: true,
     },
   });
 

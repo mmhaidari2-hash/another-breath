@@ -54,17 +54,16 @@ export default function SellWizard() {
     return (
       <div className="border border-coal bg-stone-raised p-8 shadow-hard">
         <p className="eyebrow">Submitted</p>
-        <h2 className="mt-3 font-display text-4xl font-bold">In manual review queue</h2>
+        <h2 className="mt-3 font-display text-4xl font-bold">Submitted</h2>
         <p className="mt-3 text-coal-soft">
-          A PENDING listing was created. It stays private until Ops marks it VERIFIED. Open Studio to
-          track status.
+          Automation mode: assets go live when auto-verify is on. Track anything left in Studio.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Link href="/studio" className="btn-primary">
-            Open Studio
+          <Link href="/marketplace" className="btn-primary">
+            Open market
           </Link>
-          <Link href="/login" className="btn-ghost">
-            Sign in
+          <Link href="/studio" className="btn-ghost">
+            Studio
           </Link>
         </div>
       </div>
