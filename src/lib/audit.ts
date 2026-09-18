@@ -2,8 +2,17 @@ import { createHash } from 'crypto';
 import { prisma } from '@/lib/db';
 
 export function hashIp(ip: string): string {
-  const salt = process.env.AUDIT_SALT || 'cladak-dev-salt';
-  return createHash('sha256').update(`${salt}:${ip}`).digest('hex').slice(0, 32);
+  const salt = process.env.AUDIT_SALT;
+  if (!salt) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('AUDIT_SALT must be set in production');
+    }
+    // Dev-only fallback — never ship production without AUDIT_SALT
+  }
+  return createHash('sha256')
+    .update(`${salt || 'cladak-dev-salt'}:${ip}`)
+    .digest('hex')
+    .slice(0, 32);
 }
 
 export async function writeAudit(input: {

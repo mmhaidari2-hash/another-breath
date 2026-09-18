@@ -24,9 +24,9 @@ export const STATUS_LABELS: Record<
   QuestionStatus,
   { fa: string; en: string }
 > = {
-  live: { fa: 'داره', en: 'Live' },
-  added: { fa: 'الان اضافه شد', en: 'Added' },
-  phase2: { fa: 'فاز ۲', en: 'Phase 2' },
+  live: { fa: 'فعال در محصول', en: 'In product' },
+  added: { fa: 'پوشش داده شده', en: 'Covered' },
+  phase2: { fa: 'نقشه راه', en: 'Roadmap' },
   owner: { fa: 'تصمیم مالک', en: 'Owner call' },
 };
 
@@ -677,8 +677,8 @@ export const KEY_QUESTIONS: KeyQuestion[] = [
       en: 'Cookies and tracking?',
     },
     a: {
-      fa: 'Cookie notice حداقلی؛ بدون tracker شخص ثالث اجباری در فاز۱.',
-      en: 'Minimal cookie notice; no mandatory third-party trackers in Phase 1.',
+      fa: 'نوتیس کوکی ضروری در محصول؛ بدون ترکر شخص ثالث اجباری در فاز۱.',
+      en: 'Essential cookie notice in product; no mandatory third-party trackers in Phase 1.',
     },
     href: '/legal/cookies',
   },

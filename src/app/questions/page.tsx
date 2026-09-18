@@ -20,12 +20,11 @@ export default function QuestionsPage() {
           50 key questions
         </h1>
         <p className="mt-4 max-w-2xl text-coal-soft">
-          Investor · Buyer · Seller · Auditor — every answer mapped to what Cladak has live,
-          what we just added, or what we honestly defer to Phase 2.
+          Investor · Buyer · Seller · Auditor — every answer mapped to what Cladak has in product,
+          what is covered by policy, or what we honestly put on the roadmap.
         </p>
         <p className="mt-2 font-mono text-[11px] text-coal-mute">
-          {KEY_QUESTIONS.length} questions · source of truth also in{' '}
-          <code>docs/50-key-questions.md</code>
+          {KEY_QUESTIONS.length} questions · linked to live product pages
         </p>
         <QuestionsDesk />
       </div>

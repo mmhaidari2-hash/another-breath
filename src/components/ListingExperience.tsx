@@ -186,12 +186,13 @@ export default function ListingExperience({
                 </p>
               )}
             </div>
-            <div className="space-y-2 border border-coal/10 bg-stone-soft p-4 text-xs leading-relaxed text-coal-soft">
-              <p className="font-semibold text-coal">Process (Phase 1)</p>
-              <p>1. Accept Terms + Non-Circumvention</p>
-              <p>2. Request contact — seller email stays private</p>
-              <p>3. Cladak introduces parties; success fee applies</p>
-              <p>4. Escrow / closing tools: Phase 2</p>
+            <div className="space-y-2 border border-signal/30 bg-signal/5 p-4 text-xs leading-relaxed text-coal-soft">
+              <p className="font-semibold text-coal">Anti-circumvention (Phase 1)</p>
+              <p>1. Accept Terms + Non-Circumvention — required</p>
+              <p>2. Request intro — seller email stays private forever on Cladak</p>
+              <p>3. Cladak mediates contact; success fee (3–5%) applies</p>
+              <p>4. Closing off-platform after intro still owes the fee</p>
+              <p className="text-coal-mute">Escrow tooling is Phase 2 — we do not pretend otherwise.</p>
             </div>
             <div className="h-px bg-coal/10" />
             <LeadForm listingId={listing.id} listingTitle={listing.title} />
