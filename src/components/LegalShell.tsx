@@ -36,6 +36,9 @@ export default function LegalShell({
           <Link href="/legal/cookies" className="hover:text-signal">
             Cookies
           </Link>
+          <Link href="/legal/data-request" className="hover:text-signal">
+            Data Rights
+          </Link>
         </nav>
       </div>
     </main>

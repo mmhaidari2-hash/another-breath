@@ -111,6 +111,20 @@ model SellerInquiry {
   createdAt            DateTime @default(now())
 }
 
+// درخواست دسترسی / حذف داده (GDPR-style Phase 1 intake)
+model DataRightsRequest {
+  id          String   @id @default(cuid())
+  email       String
+  fullName    String
+  requestType String // ACCESS | DELETE | CORRECT
+  details     String?
+  ipHash      String?
+  createdAt   DateTime @default(now())
+
+  @@index([email])
+  @@index([createdAt])
+}
+
 // ممیزی: هر رویداد حساس (بدون ذخیره IP خام)
 model AuditEvent {
   id         String   @id @default(cuid())

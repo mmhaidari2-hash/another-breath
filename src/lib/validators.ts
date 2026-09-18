@@ -29,3 +29,10 @@ export const sellerInquirySchema = z.object({
   acceptedSellerTerms: z.literal(true),
   acceptedNonCircumvention: z.literal(true),
 });
+
+export const dataRightsSchema = z.object({
+  fullName: z.string().trim().min(2).max(100),
+  email: z.string().trim().email(),
+  requestType: z.enum(['ACCESS', 'DELETE', 'CORRECT']),
+  details: z.string().trim().max(2000).optional(),
+});

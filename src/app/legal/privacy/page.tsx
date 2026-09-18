@@ -18,8 +18,12 @@ export default function PrivacyPage() {
       <p>We do not sell personal data. We do not run third-party ad trackers in Phase 1.</p>
       <h2 className="font-display text-xl font-bold text-coal">Your rights</h2>
       <p>
-        Request access or deletion via support@cladak.local. We respond within a reasonable period.
-        Full GDPR tooling arrives with authenticated accounts (Phase 2).
+        Request access, correction, or deletion via the{' '}
+        <a href="/legal/data-request" className="text-signal underline">
+          Data Rights form
+        </a>{' '}
+        or support@cladak.local. We respond within a reasonable period. Authenticated self-serve
+        GDPR tooling arrives with accounts (Phase 2).
       </p>
       <h2 className="font-display text-xl font-bold text-coal">Security</h2>
       <p>
