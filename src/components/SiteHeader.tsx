@@ -6,7 +6,7 @@ import { useLang } from '@/components/LanguageProvider';
 import { cn } from '@/lib/utils';
 
 export default function SiteHeader() {
-  const { t, lang, setLang } = useLang();
+  const { t, lang, setLang, cofounder } = useLang();
   const pathname = usePathname();
 
   return (
@@ -42,26 +42,49 @@ export default function SiteHeader() {
               pathname.startsWith('/trust') ? 'text-signal' : 'text-coal-soft hover:text-coal'
             )}
           >
-            {t.navTrust}
+            Trust
+          </Link>
+          <Link
+            href="/studio"
+            className={cn(
+              'hidden px-3 py-2 text-sm font-medium sm:inline',
+              pathname.startsWith('/studio') ? 'text-signal' : 'text-coal-soft hover:text-coal'
+            )}
+          >
+            Studio
+          </Link>
+          <Link
+            href="/closing"
+            className={cn(
+              'hidden px-3 py-2 text-sm font-medium lg:inline',
+              pathname.startsWith('/closing') ? 'text-signal' : 'text-coal-soft hover:text-coal'
+            )}
+          >
+            Closing
           </Link>
 
-          <div className="mx-1 flex border border-coal/15 font-mono text-[11px] font-semibold">
-            <button
-              type="button"
-              onClick={() => setLang('fa')}
-              className={cn('px-2.5 py-1.5', lang === 'fa' ? 'bg-coal text-white' : 'bg-stone-raised')}
-            >
-              FA
-            </button>
-            <button
-              type="button"
-              onClick={() => setLang('en')}
-              className={cn('px-2.5 py-1.5', lang === 'en' ? 'bg-coal text-white' : 'bg-stone-raised')}
-            >
-              EN
-            </button>
-          </div>
+          {cofounder && (
+            <div className="mx-1 flex border border-coal/15 font-mono text-[11px] font-semibold">
+              <button
+                type="button"
+                onClick={() => setLang('fa')}
+                className={cn('px-2.5 py-1.5', lang === 'fa' ? 'bg-coal text-white' : 'bg-stone-raised')}
+              >
+                FA
+              </button>
+              <button
+                type="button"
+                onClick={() => setLang('en')}
+                className={cn('px-2.5 py-1.5', lang === 'en' ? 'bg-coal text-white' : 'bg-stone-raised')}
+              >
+                EN
+              </button>
+            </div>
+          )}
 
+          <Link href="/login" className="hidden px-3 py-2 text-sm text-coal-soft hover:text-coal sm:inline">
+            Sign in
+          </Link>
           <Link href="/sell" className="btn-primary !px-3.5 !py-2 text-xs sm:text-sm">
             {t.navSell}
           </Link>

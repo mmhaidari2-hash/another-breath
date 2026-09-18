@@ -153,6 +153,24 @@ export default function ListingExperience({
             </section>
           )}
 
+          <section className="border border-coal/12 bg-stone-raised p-6">
+            <p className="eyebrow">Evidence reviewed</p>
+            <div className="mt-4 flex flex-wrap gap-2 font-mono text-[11px]">
+              <span className={`border px-2 py-1 ${listing.evidenceRevenue ? 'border-signal text-signal' : 'border-coal/20 text-coal-mute'}`}>
+                Revenue {listing.evidenceRevenue ? 'checked' : 'n/a'}
+              </span>
+              <span className={`border px-2 py-1 ${listing.evidenceProduct ? 'border-signal text-signal' : 'border-coal/20 text-coal-mute'}`}>
+                Product {listing.evidenceProduct ? 'checked' : 'pending'}
+              </span>
+              <span className={`border px-2 py-1 ${listing.evidenceUi ? 'border-signal text-signal' : 'border-coal/20 text-coal-mute'}`}>
+                UI {listing.evidenceUi ? 'checked' : 'pending'}
+              </span>
+            </div>
+            <p className="mt-3 text-xs text-coal-mute">
+              Manual Phase-1 review — not a live bank feed.
+            </p>
+          </section>
+
           {listing.verificationNotes && (
             <section className="border border-coal bg-coal p-6 text-white">
               <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-signal">

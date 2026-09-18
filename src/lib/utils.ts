@@ -13,7 +13,7 @@ export function formatCurrency(value: number, currency: string = 'GBP', locale =
   }).format(value);
 }
 
-export function formatDate(date: Date | string, locale = 'fa-IR') {
+export function formatDate(date: Date | string, locale = 'en-GB') {
   return new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(date));
 }
 
@@ -44,6 +44,9 @@ export type ListingDTO = {
   customersApprox?: number | null;
   reasonForSale?: string | null;
   demoPolicy?: string | null;
+  evidenceRevenue?: boolean;
+  evidenceProduct?: boolean;
+  evidenceUi?: boolean;
   highlights?: string[];
   gallery?: GalleryFrame[];
   mrrHistory?: MrrPoint[];
@@ -73,6 +76,9 @@ export function parseListing(l: {
   customersApprox?: number | null;
   reasonForSale?: string | null;
   demoPolicy?: string | null;
+  evidenceRevenue?: boolean;
+  evidenceProduct?: boolean;
+  evidenceUi?: boolean;
   highlights?: string | null;
   gallery?: string | null;
   mrrHistory?: string | null;
@@ -110,6 +116,9 @@ export function parseListing(l: {
     customersApprox: l.customersApprox ?? null,
     reasonForSale: l.reasonForSale ?? null,
     demoPolicy: l.demoPolicy ?? 'INTRO_ONLY',
+    evidenceRevenue: l.evidenceRevenue ?? false,
+    evidenceProduct: l.evidenceProduct ?? false,
+    evidenceUi: l.evidenceUi ?? false,
     highlights: safe<string[]>(l.highlights, []),
     gallery: safe<GalleryFrame[]>(l.gallery, []),
     mrrHistory: safe<MrrPoint[]>(l.mrrHistory, []),

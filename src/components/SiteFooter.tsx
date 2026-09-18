@@ -22,6 +22,12 @@ export default function SiteFooter() {
           <Link href="/questions" className="hover:text-white">
             50 Qs
           </Link>
+          <Link href="/closing" className="hover:text-white">
+            Closing
+          </Link>
+          <Link href="/studio" className="hover:text-white">
+            Studio
+          </Link>
           <Link href="/legal/terms" className="hover:text-white">
             Terms
           </Link>

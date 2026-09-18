@@ -17,12 +17,11 @@ export default async function HomePage() {
   const dtos = listings.map(parseListing);
   const featured = dtos.filter((l) => l.featured);
   const verifiedCount = dtos.length;
-  const totalAsking = dtos.reduce((s, l) => s + l.askingPrice, 0);
 
   return (
     <main>
       <Hero listings={dtos} />
-      <MarketSearch verifiedCount={verifiedCount} totalAsking={totalAsking} />
+      <MarketSearch verifiedCount={verifiedCount} />
       <FeaturedLane listings={featured} />
       <HomeStrip listings={dtos} />
       <HowItWorks />

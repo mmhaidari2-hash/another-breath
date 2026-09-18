@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { hashPassword } from '../src/lib/auth';
 
 const prisma = new PrismaClient();
 
@@ -9,7 +10,7 @@ function history(base: number, months = 12) {
     const d = new Date(2026, 8, 1);
     d.setMonth(d.getMonth() - i);
     const label = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-    const step = 1.035 + ((base % 7) * 0.004);
+    const step = 1.035 + (base % 7) * 0.004;
     v = Math.round(v * step);
     if (i === 0) v = base;
     out.push({ month: label, mrr: v });
@@ -21,18 +22,18 @@ const LISTINGS = [
   {
     slug: 'seatline',
     title: 'Seatline',
-    tagline: 'رزرو نوبت برای کلینیک‌های کوچک',
+    tagline: 'Appointment booking for small clinics',
     niche: 'Scheduling',
     techStack: 'Laravel, Vue, MySQL',
     foundedYear: 2022,
     featured: true,
     businessModel: 'SaaS subscription',
     customersApprox: 48,
-    reasonForSale: 'تمرکز بنیان‌گذار روی محصول بعدی؛ انتقال کامل با پشتیبانی ۳۰ روزه.',
+    reasonForSale: 'Founder focusing on the next product; full handover with 30-day support.',
     highlights: [
-      'چند کلینیک فعال با پرداخت ماهانه',
-      'یادآوری SMS و تقویم چندکاربره',
-      'کدبیس قابل‌استقرار روی Railway',
+      'Multiple active clinics on monthly plans',
+      'SMS reminders and multi-staff calendar',
+      'Deployable codebase on Railway-class hosts',
     ],
     gallery: [
       { label: 'Dashboard', tone: '#0B0C0F' },
@@ -40,243 +41,243 @@ const LISTINGS = [
       { label: 'Calendar', tone: '#12241C' },
     ],
     description:
-      'سیستم رزرو نوبت آنلاین برای کلینیک و سالن. تقویم چندکاربره، یادآوری SMS، صفحه عمومی برند، گزارش حضور.\n\nیکی از بالغ‌ترین دارایی‌های این مجموعه از نظر درآمد و ثبات. انتقال شامل ریپو، دامنه (در صورت توافق)، و یک جلسه تحویل.',
+      'Online booking for clinics and salons. Multi-staff calendar, SMS reminders, branded public page, attendance reports.\n\nOne of the more mature assets in this set on revenue stability. Transfer includes repo, optional domain, and a handover session.',
     websiteUrl: 'https://example.com/seatline',
     mrr: 890,
     askingPrice: 18500,
     grade: 'A',
     score: 88,
     verificationNotes:
-      'بررسی دستی: درآمد ماهانه و تعداد کلینیک‌های فعال تأیید شد. MRR از فاکتور/داشبورد نمونه استخراج شد.',
+      'Manual review: monthly revenue and active clinic count corroborated from sample invoices / dashboard exports.',
   },
   {
     slug: 'parcelkit',
     title: 'ParcelKit',
-    tagline: 'ردیابی مرسوله برای فروشگاه‌های کوچک',
+    tagline: 'Shipment tracking for small ecommerce shops',
     niche: 'E-commerce Ops',
     techStack: 'Node, React, PostgreSQL',
     foundedYear: 2023,
     featured: true,
     businessModel: 'SaaS + usage',
     customersApprox: 36,
-    reasonForSale: 'بنیان‌گذار تمام‌وقت روی محصول دیگری است.',
-    highlights: ['اتصال چند سرویس پستی', 'اعلان واتساپ/ایمیل', 'مشتریان واقعی در بازار فارسی'],
+    reasonForSale: 'Founder is full-time on another product.',
+    highlights: ['Multi-carrier connections', 'WhatsApp/email alerts', 'Real paying shops'],
     gallery: [
       { label: 'Shipments', tone: '#101820' },
       { label: 'Tracking', tone: '#1C2430' },
       { label: 'Alerts', tone: '#142018' },
     ],
     description:
-      'داشبورد و پلاگین ردیابی مرسوله برای فروشگاه‌های آنلاین کوچک. اتصال چند سرویس پستی، اعلان مشتری، صفحه وضعیت برند.',
+      'Dashboard and plugin for small online shops. Multi-carrier tracking, customer alerts, branded status pages.',
     websiteUrl: 'https://example.com/parcelkit',
     mrr: 680,
     askingPrice: 14500,
     grade: 'A',
     score: 86,
-    verificationNotes: 'بررسی دستی: لاگین دمو + نمونه‌ی تراکنش ماهانه.',
+    verificationNotes: 'Manual review: demo login + sample monthly transaction export.',
   },
   {
     slug: 'briefbay',
     title: 'BriefBay',
-    tagline: 'جمع‌آوری بریف مشتری برای آژانس‌ها',
+    tagline: 'Structured client briefs for agencies',
     niche: 'Agency Ops',
     techStack: 'Next.js, Postgres, Resend',
     foundedYear: 2022,
     featured: true,
     businessModel: 'SaaS subscription',
     customersApprox: 22,
-    reasonForSale: 'خروج استراتژیک برای تمرکز روی consulting.',
-    highlights: ['فرم بریف ساخت‌یافته', 'آرشیو پروژه', 'اعلان تیم'],
+    reasonForSale: 'Strategic exit to focus on consulting.',
+    highlights: ['Structured brief forms', 'Project archive', 'Team alerts'],
     gallery: [
       { label: 'Briefs', tone: '#12141A' },
       { label: 'Projects', tone: '#1A1E28' },
       { label: 'Team', tone: '#161C22' },
     ],
     description:
-      'فرم بریف ساخت‌یافته، آرشیو پروژه، اعلان تیم. جایگزین پراکندگی ایمیل برای آژانس‌های ۲ تا ۱۵ نفره.',
+      'Structured briefs, project archive, team notifications. Replaces email chaos for 2–15 person agencies.',
     websiteUrl: 'https://example.com/briefbay',
     mrr: 610,
     askingPrice: 13200,
     grade: 'A',
     score: 84,
-    verificationNotes: 'بررسی دستی: دمو + اسکرین درآمد ماهانه.',
+    verificationNotes: 'Manual review: product demo + monthly revenue screenshot.',
   },
   {
     slug: 'fluxnote',
     title: 'FluxNote',
-    tagline: 'یادداشت تیمی با همگام‌سازی آفلاین',
+    tagline: 'Team notes with offline sync',
     niche: 'Productivity',
     techStack: 'Next.js, SQLite, Tailwind',
     foundedYear: 2024,
     featured: true,
     businessModel: 'SaaS subscription',
     customersApprox: 19,
-    reasonForSale: 'زمان بنیان‌گذار محدود شده.',
-    highlights: ['آفلاین-first', 'Markdown search', 'اشتراک لینک محدود'],
+    reasonForSale: 'Founder time constrained.',
+    highlights: ['Offline-first', 'Markdown search', 'Limited link sharing'],
     gallery: [
       { label: 'Editor', tone: '#0E1218' },
       { label: 'Sync', tone: '#182028' },
       { label: 'Share', tone: '#101818' },
     ],
     description:
-      'ابزار یادداشت تیمی برای استارتاپ‌های کوچک. همگام‌سازی آفلاین، اشتراک لینک محدود، جستجوی سریع markdown.',
+      'Team notes for small startups. Offline sync, limited link sharing, fast markdown search.',
     websiteUrl: 'https://example.com/fluxnote',
     mrr: 420,
     askingPrice: 9500,
     grade: 'B',
     score: 72,
-    verificationNotes: 'بررسی دستی: اسکرین‌شات داشبورد درآمد و دمو محصول.',
+    verificationNotes: 'Manual review: revenue dashboard screenshot + product demo.',
   },
   {
     slug: 'inkledger',
     title: 'InkLedger',
-    tagline: 'صورتحساب ساده برای فریلنسرها',
+    tagline: 'Simple invoicing for freelancers',
     niche: 'Finance',
     techStack: 'Rails, Hotwire, Postgres',
     foundedYear: 2023,
     featured: false,
     businessModel: 'SaaS subscription',
     customersApprox: 41,
-    reasonForSale: 'اولویت شخصی عوض شده.',
-    highlights: ['فاکتور سریع', 'یادآوری خودکار', 'بدون پیچیدگی حسابداری'],
+    reasonForSale: 'Personal priorities shifted.',
+    highlights: ['Fast invoices', 'Auto reminders', 'No accounting bloat'],
     gallery: [
       { label: 'Invoices', tone: '#141210' },
       { label: 'Payments', tone: '#1C1814' },
       { label: 'Reminders', tone: '#181410' },
     ],
-    description: 'صدور فاکتور، پیگیری پرداخت، یادآوری خودکار برای فریلنسر تک‌نفره.',
+    description: 'Invoicing, payment tracking, and reminders for solo freelancers.',
     websiteUrl: 'https://example.com/inkledger',
     mrr: 540,
     askingPrice: 11000,
     grade: 'B',
     score: 74,
-    verificationNotes: 'بررسی دستی: Stripe فقط‌خواندنی نمونه + UI.',
+    verificationNotes: 'Manual review: sample read-only Stripe export + UI walkthrough.',
   },
   {
     slug: 'guestfolio',
     title: 'Guestfolio',
-    tagline: 'پورتفولیوی مهمان برای اقامتگاه‌ها',
+    tagline: 'Digital guest guides for stays',
     niche: 'Hospitality',
     techStack: 'Next.js, Sanity, Stripe',
     foundedYear: 2023,
     featured: false,
     businessModel: 'SaaS subscription',
     customersApprox: 27,
-    reasonForSale: 'فروش برای نقدینگی روی پروژه بعدی.',
-    highlights: ['صفحه برند اقامتگاه', 'ویرایش آسان', 'اشتراک ماهانه'],
+    reasonForSale: 'Liquidity for the next project.',
+    highlights: ['Branded stay pages', 'Easy editing', 'Monthly subscriptions'],
     gallery: [
       { label: 'Guide', tone: '#101618' },
       { label: 'Editor', tone: '#161C20' },
       { label: 'Guest', tone: '#121A16' },
     ],
-    description: 'صفحه راهنمای دیجیتال برای اقامتگاه و بوم‌گردی.',
+    description: 'Digital guest guides for boutique stays and rural lodging.',
     websiteUrl: 'https://example.com/guestfolio',
     mrr: 470,
     askingPrice: 9800,
     grade: 'B',
     score: 70,
-    verificationNotes: 'بررسی دستی: چند صفحه زنده + درآمد اشتراک.',
+    verificationNotes: 'Manual review: live pages + subscription revenue sample.',
   },
   {
     slug: 'routepulse',
     title: 'RoutePulse',
-    tagline: 'مانیتورینگ آپتایم با هشدار تلگرام',
+    tagline: 'Uptime monitoring with Telegram alerts',
     niche: 'DevTools',
     techStack: 'Go, Redis, React',
     foundedYear: 2023,
     featured: false,
     businessModel: 'SaaS subscription',
     customersApprox: 33,
-    reasonForSale: 'نگهداری کم‌حجم است؛ فروش برای تمرکز روی infra دیگر.',
-    highlights: ['هشدار تلگرام', 'چک API/وب', 'داشبورد ساده'],
+    reasonForSale: 'Low-maintenance cashflow; selling to focus on other infra.',
+    highlights: ['Telegram alerts', 'Web/API checks', 'Simple dashboard'],
     gallery: [
       { label: 'Monitors', tone: '#0C1418' },
       { label: 'Incidents', tone: '#141C22' },
       { label: 'Alerts', tone: '#101818' },
     ],
-    description: 'چک آپتایم وب‌سایت و API با هشدار تلگرام/ایمیل.',
+    description: 'Website and API uptime checks with Telegram/email alerts.',
     websiteUrl: 'https://example.com/routepulse',
     mrr: 390,
     askingPrice: 8200,
     grade: 'B',
     score: 71,
-    verificationNotes: 'بررسی دستی: مانیتورینگ زنده و لاگ هشدار نمونه.',
+    verificationNotes: 'Manual review: live monitors + sample alert logs.',
   },
   {
     slug: 'formora',
     title: 'Formora',
-    tagline: 'فرم چندمرحله‌ای بدون کدنویسی',
+    tagline: 'Multi-step forms without code',
     niche: 'Forms',
     techStack: 'Next.js, Prisma, Vercel',
     foundedYear: 2024,
     featured: false,
     businessModel: 'SaaS subscription',
     customersApprox: 15,
-    reasonForSale: 'رشد کندتر از هدف؛ فروش برای تمرکز روی B2B دیگر.',
-    highlights: ['منطق شرطی', 'وب‌هوک', 'خروجی Sheets'],
+    reasonForSale: 'Growth slower than target; selling to focus on another B2B bet.',
+    highlights: ['Conditional logic', 'Webhooks', 'Sheets export'],
     gallery: [
       { label: 'Builder', tone: '#12141C' },
       { label: 'Logic', tone: '#181A24' },
       { label: 'Responses', tone: '#141820' },
     ],
-    description: 'سازنده فرم چندمرحله‌ای با منطق شرطی و وب‌هوک.',
+    description: 'Multi-step form builder with conditional logic and webhooks.',
     websiteUrl: 'https://example.com/formora',
     mrr: 310,
     askingPrice: 7200,
     grade: 'B',
     score: 68,
-    verificationNotes: 'بررسی دستی: دمو محصول و لیست مشترکین نمونه.',
+    verificationNotes: 'Manual review: product demo + sample subscriber list.',
   },
   {
     slug: 'clipstack',
     title: 'ClipStack',
-    tagline: 'کتابخانه کلیپ کوتاه برای سازندگان',
+    tagline: 'Short-clip library for creators',
     niche: 'Creator Tools',
     techStack: 'SvelteKit, R2, Cloudflare',
     foundedYear: 2024,
     featured: false,
     businessModel: 'SaaS subscription',
     customersApprox: 11,
-    reasonForSale: 'early-stage؛ مناسب خریدار operator.',
-    highlights: ['برچسب‌گذاری کلیپ', 'لینک خصوصی', 'جستجوی سریع'],
+    reasonForSale: 'Early-stage; fits an operator buyer.',
+    highlights: ['Clip tagging', 'Private links', 'Fast search'],
     gallery: [
       { label: 'Library', tone: '#101014' },
       { label: 'Tags', tone: '#16161C' },
       { label: 'Share', tone: '#121218' },
     ],
-    description: 'آپلود، برچسب‌گذاری و جستجوی کلیپ کوتاه. رشد درآمد محدود.',
+    description: 'Upload, tag, and search short clips. Limited revenue growth to date.',
     websiteUrl: 'https://example.com/clipstack',
     mrr: 260,
     askingPrice: 5800,
     grade: 'C',
     score: 58,
-    verificationNotes: 'بررسی دستی: محصول کار می‌کند؛ رشد درآمد محدود گزارش شد.',
+    verificationNotes: 'Manual review: product works; revenue growth reported as limited.',
   },
   {
     slug: 'another-breath',
     title: 'Another Breath',
-    tagline: 'هنر مولد از الگوی تنفس — با پیشکش خیریه',
+    tagline: 'Generative art from breath patterns — with a charity pledge',
     niche: 'Creative',
     techStack: 'Vanilla JS, Web Audio, Canvas',
     foundedYear: 2025,
     featured: false,
     businessModel: 'Product asset / impact',
     customersApprox: null,
-    reasonForSale: 'فروش دارایی محصول برای تمرکز روی کلادک.',
-    highlights: ['پردازش محلی صوت', 'اثر قطعی با Breath ID', 'مدل پیشکش شفاف'],
+    reasonForSale: 'Selling the product asset to focus on Cladak.',
+    highlights: ['Local audio processing', 'Deterministic Breath ID art', 'Transparent pledge model'],
     gallery: [
       { label: 'Breath', tone: '#0A1018' },
       { label: 'Canvas', tone: '#101820' },
       { label: 'Cert', tone: '#0E1614' },
     ],
     description:
-      'تجربه وب که الگوی تنفس را به اثر هنری قطعی تبدیل می‌کند. بدون MRR اشتراکی؛ ارزش‌گذاری روی دارایی محصول و برند.',
+      'Web experience that turns a breath pattern into deterministic generative art. No subscription MRR; priced as a product/brand asset.',
     websiteUrl: 'https://mmhaidari2-hash.github.io/another-breath/',
     mrr: null,
     askingPrice: 4500,
     grade: 'B',
     score: 66,
-    verificationNotes: 'بررسی دستی: دمو عمومی زنده است. بدون MRR.',
+    verificationNotes: 'Manual review: public demo is live. No MRR.',
   },
 ];
 
@@ -288,20 +289,62 @@ async function main() {
       category: 'Micro-SaaS',
       version: 1,
       criteria: JSON.stringify([
-        { key: 'verified_mrr_growth', label: 'رشد درآمد ماهانه (تأییدشده)', weight: 30 },
-        { key: 'churn_rate', label: 'نرخ ریزش کاربر', weight: 20 },
-        { key: 'traffic_trend_6mo', label: 'روند بازدید ۶ ماه اخیر', weight: 20 },
-        { key: 'ui_ux_review_score', label: 'بررسی دستی UI/UX', weight: 15 },
-        { key: 'time_on_market', label: 'مدت زمان فعالیت محصول', weight: 15 },
+        { key: 'verified_mrr_growth', label: 'Verified MRR growth', weight: 30 },
+        { key: 'churn_rate', label: 'Churn rate', weight: 20 },
+        { key: 'traffic_trend_6mo', label: 'Traffic trend (6 mo)', weight: 20 },
+        { key: 'ui_ux_review_score', label: 'Manual UI/UX review', weight: 15 },
+        { key: 'time_on_market', label: 'Time on market', weight: 15 },
       ]),
       gradeBands: JSON.stringify({ A: 85, B: 65, C: 40 }),
     },
   });
 
+  const sellerPass = hashPassword('SellerPass123!');
+  const adminPass = hashPassword('AdminPass123!');
+
   const seller = await prisma.user.upsert({
-    where: { email: 'seller@cladak.local' },
-    update: { name: 'مالک مجموعه' },
-    create: { email: 'seller@cladak.local', name: 'مالک مجموعه', role: 'SELLER' },
+    where: { email: 'seller@cladak.com' },
+    update: {
+      name: 'Portfolio Seller',
+      role: 'SELLER',
+      passwordHash: sellerPass,
+    },
+    create: {
+      email: 'seller@cladak.com',
+      name: 'Portfolio Seller',
+      role: 'SELLER',
+      passwordHash: sellerPass,
+    },
+  });
+
+  await prisma.user.upsert({
+    where: { email: 'ops@cladak.com' },
+    update: {
+      name: 'Cladak Ops',
+      role: 'ADMIN',
+      passwordHash: adminPass,
+    },
+    create: {
+      email: 'ops@cladak.com',
+      name: 'Cladak Ops',
+      role: 'ADMIN',
+      passwordHash: adminPass,
+    },
+  });
+
+  await prisma.user.upsert({
+    where: { email: 'cofounder@cladak.com' },
+    update: {
+      name: 'Co-founder',
+      role: 'COFOUNDER',
+      passwordHash: hashPassword('CofounderPass123!'),
+    },
+    create: {
+      email: 'cofounder@cladak.com',
+      name: 'Co-founder',
+      role: 'COFOUNDER',
+      passwordHash: hashPassword('CofounderPass123!'),
+    },
   });
 
   for (const item of LISTINGS) {
@@ -335,6 +378,9 @@ async function main() {
       category: 'Micro-SaaS',
       verificationStatus: 'VERIFIED',
       verifiedAt: new Date(),
+      evidenceRevenue: item.mrr != null,
+      evidenceProduct: true,
+      evidenceUi: true,
       sellerId: seller.id,
     };
 
@@ -345,13 +391,23 @@ async function main() {
     });
   }
 
-  console.log(`✅ Seeded ${LISTINGS.length} rich verified listings.`);
-
   await prisma.platformConfig.upsert({
     where: { id: 'default' },
-    update: {},
-    create: { id: 'default' },
+    update: {
+      supportEmail: 'support@cladak.com',
+      governingLaw: 'England and Wales',
+      successFeeMinPercent: 3,
+      successFeeMaxPercent: 5,
+      nonCircumventionDays: 730,
+    },
+    create: {
+      id: 'default',
+      supportEmail: 'support@cladak.com',
+      governingLaw: 'England and Wales',
+    },
   });
+
+  console.log(`Seeded ${LISTINGS.length} English verified listings + auth users.`);
 }
 
 main()

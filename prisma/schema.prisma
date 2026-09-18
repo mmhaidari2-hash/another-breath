@@ -1,4 +1,4 @@
-// کلادک — Phase 1+ schema (SQLite) with audit + agreements
+// Cladak — Phase 1 schema (SQLite) auth + audit + agreements
 
 generator client {
   provider = "prisma-client-js"
@@ -10,12 +10,13 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(cuid())
-  email     String    @unique
-  name      String
-  role      String    @default("BUYER")
-  createdAt DateTime  @default(now())
-  listings  Listing[]
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String
+  role         String    @default("BUYER") // BUYER | SELLER | ADMIN | COFOUNDER
+  passwordHash String?
+  createdAt    DateTime  @default(now())
+  listings     Listing[]
 }
 
 model Listing {
@@ -25,7 +26,7 @@ model Listing {
   description String
   category    String  @default("Micro-SaaS")
   websiteUrl  String?
-  // PUBLIC = show URL · INTRO_ONLY = hide until platform intro (anti-circumvention)
+  // PUBLIC = show URL · INTRO_ONLY = hide until platform intro
   demoPolicy  String  @default("INTRO_ONLY")
   tagline     String?
   niche       String?
@@ -44,6 +45,11 @@ model Listing {
   businessModel   String?
   gallery         String?
 
+  // Evidence flags reviewed manually (not live Stripe/GA APIs)
+  evidenceRevenue Boolean @default(false)
+  evidenceProduct Boolean @default(false)
+  evidenceUi      Boolean @default(false)
+
   sellerId String
   seller   User   @relation(fields: [sellerId], references: [id])
 
@@ -61,6 +67,7 @@ model Listing {
 
   @@index([verificationStatus, category])
   @@index([featured])
+  @@index([sellerId])
 }
 
 model ScoringRubric {
@@ -84,6 +91,11 @@ model Lead {
   timeline   String?
   message    String?
 
+  // QUEUED | INTRODUCED | CLOSED_REPORTED
+  status        String  @default("QUEUED")
+  introducedAt  DateTime?
+  closedNote    String?
+
   acceptedTerms            Boolean @default(false)
   acceptedNonCircumvention Boolean @default(false)
   ipHash                   String?
@@ -93,25 +105,30 @@ model Lead {
 
   @@index([listingId])
   @@index([buyerEmail])
+  @@index([status])
 }
 
 model SellerInquiry {
-  id                   String   @id @default(cuid())
-  name                 String
-  email                String
-  product              String
-  mrr                  String?
-  url                  String?
-  niche                String?
-  askingPrice          String?
-  notes                String?
-  acceptedSellerTerms  Boolean  @default(false)
-  acceptedNonCircumvention Boolean @default(false)
-  ipHash               String?
-  createdAt            DateTime @default(now())
+  id                       String   @id @default(cuid())
+  name                     String
+  email                    String
+  product                  String
+  mrr                      String?
+  url                      String?
+  niche                    String?
+  askingPrice              String?
+  notes                    String?
+  acceptedSellerTerms      Boolean  @default(false)
+  acceptedNonCircumvention Boolean  @default(false)
+  // NEW | REVIEWING | ACCEPTED | DECLINED
+  status                   String   @default("NEW")
+  ipHash                   String?
+  createdAt                DateTime @default(now())
+
+  @@index([email])
+  @@index([status])
 }
 
-// درخواست دسترسی / حذف داده (GDPR-style Phase 1 intake)
 model DataRightsRequest {
   id          String   @id @default(cuid())
   email       String
@@ -125,7 +142,6 @@ model DataRightsRequest {
   @@index([createdAt])
 }
 
-// ممیزی: هر رویداد حساس (بدون ذخیره IP خام)
 model AuditEvent {
   id         String   @id @default(cuid())
   action     String
@@ -141,10 +157,10 @@ model AuditEvent {
 }
 
 model PlatformConfig {
-  id                    String @id @default("default")
-  successFeeMinPercent  Float  @default(3)
-  successFeeMaxPercent  Float  @default(5)
-  supportEmail          String @default("support@cladak.local")
-  governingLaw          String @default("To be set by platform owner")
-  nonCircumventionDays  Int    @default(730)
+  id                   String @id @default("default")
+  successFeeMinPercent Float  @default(3)
+  successFeeMaxPercent Float  @default(5)
+  supportEmail         String @default("support@cladak.com")
+  governingLaw         String @default("England and Wales")
+  nonCircumventionDays Int    @default(730)
 }

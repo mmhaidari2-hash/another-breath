@@ -56,8 +56,9 @@ export default async function TermsPage() {
       </p>
       <h2 className="font-display text-xl font-bold text-coal">8. Governing law</h2>
       <p>
-        Governing law / jurisdiction: <strong>{config.governingLaw}</strong>. Set this value in
-        PlatformConfig before production launch and have counsel review.
+        These Terms are governed by the laws of <strong>{config.governingLaw}</strong>. Courts of that
+        jurisdiction have exclusive venue, unless mandatory consumer law requires otherwise. Have
+        counsel confirm entity details before launch.
       </p>
       <p className="text-xs text-coal-mute">Last updated: 2026-09-18 · Not legal advice.</p>
     </LegalShell>
