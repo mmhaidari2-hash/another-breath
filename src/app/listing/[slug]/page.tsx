@@ -29,7 +29,7 @@ export default async function ListingDetailPage({
           href="/#listings"
           className="mb-8 inline-flex text-sm text-mist-muted transition hover:text-mist"
         >
-          ← بازگشت به فهرست
+          بازگشت به فهرست
         </Link>
 
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-5">
