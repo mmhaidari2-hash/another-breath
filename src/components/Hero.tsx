@@ -1,73 +1,85 @@
+'use client';
+
 import Link from 'next/link';
+import { useLang } from '@/components/LanguageProvider';
 
 export default function Hero() {
+  const { t } = useLang();
+
   return (
-    <section className="hero-plane relative min-h-[100svh] overflow-hidden pt-16">
-      {/* Full-bleed atmospheric visual plane */}
+    <section className="hero-mesh relative overflow-hidden border-b border-ink/8">
+      <div className="blueprint-grid pointer-events-none absolute inset-0" aria-hidden="true" />
+
+      {/* Full-bleed architectural visual plane */}
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div className="absolute -left-24 top-1/4 h-[42vmin] w-[42vmin] animate-breathe rounded-full bg-sea/20 blur-3xl" />
-        <div className="absolute -right-16 bottom-1/4 h-[50vmin] w-[50vmin] animate-drift rounded-full bg-bronze/15 blur-3xl" />
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-ink to-transparent" />
-        {/* Abstract product constellation */}
         <svg
-          className="absolute inset-0 h-full w-full opacity-[0.14]"
-          viewBox="0 0 1200 800"
+          className="absolute inset-y-0 end-0 h-full w-[58%] opacity-[0.55]"
+          viewBox="0 0 640 720"
           fill="none"
-          xmlns="http://www.w3.org/2000/svg"
         >
-          <path
-            d="M120 620 C280 480, 420 520, 560 400 S880 220, 1080 280"
-            stroke="#3d9b8f"
-            strokeWidth="1.2"
+          <rect
+            x="80"
+            y="90"
+            width="420"
+            height="520"
+            rx="28"
+            className="animate-floaty"
+            stroke="#1B3A5C"
+            strokeOpacity="0.35"
+            strokeWidth="1.5"
           />
           <path
-            d="M80 240 C260 300, 400 180, 620 260 S900 380, 1120 300"
-            stroke="#c4a574"
-            strokeWidth="1"
-            opacity="0.7"
+            d="M140 220 H440 M140 300 H400 M140 380 H420 M140 460 H360"
+            stroke="#0B6E4F"
+            strokeOpacity="0.45"
+            strokeWidth="2"
+            strokeLinecap="round"
+            className="animate-draw"
+            style={{ strokeDasharray: 240 }}
           />
-          <circle cx="560" cy="400" r="4" fill="#3d9b8f" />
-          <circle cx="280" cy="480" r="3" fill="#c4a574" />
-          <circle cx="880" cy="220" r="3.5" fill="#3d9b8f" />
-          <circle cx="620" cy="260" r="2.5" fill="#e8ebe6" />
+          <circle cx="470" cy="180" r="54" fill="#0B6E4F" fillOpacity="0.12" />
+          <circle cx="180" cy="520" r="36" fill="#1B3A5C" fillOpacity="0.1" />
+          <text
+            x="160"
+            y="190"
+            fill="#12141A"
+            fillOpacity="0.35"
+            fontFamily="Fraunces, Georgia, serif"
+            fontSize="28"
+          >
+            Micro-SaaS
+          </text>
         </svg>
       </div>
 
-      <div className="relative z-10 mx-auto flex min-h-[calc(100svh-4rem)] max-w-6xl flex-col justify-center px-4 py-20 sm:px-6">
+      <div className="relative mx-auto flex min-h-[calc(100svh-4.25rem)] max-w-shell flex-col justify-center px-4 py-20 sm:px-6">
         <p
-          className="animate-rise mb-5 font-display text-[clamp(3.5rem,12vw,8.5rem)] leading-[0.9] tracking-tight text-mist"
-          style={{ animationDelay: '0.05s' }}
+          className="animate-rise font-display text-[clamp(3.75rem,13vw,8.75rem)] leading-[0.88] tracking-[-0.03em] text-ink"
+          style={{ animationDelay: '40ms' }}
         >
           CLADAK
         </p>
-        <p
-          className="animate-rise mb-3 text-lg text-sea sm:text-xl"
-          style={{ animationDelay: '0.15s' }}
-        >
-          کلادک
+        <p className="animate-rise mt-3 text-lg font-medium text-forest" style={{ animationDelay: '120ms' }}>
+          {t.brandSub}
         </p>
         <h1
-          className="animate-rise max-w-2xl text-balance text-2xl font-medium leading-snug text-mist sm:text-3xl"
-          style={{ animationDelay: '0.25s' }}
+          className="animate-rise mt-8 max-w-2xl text-balance text-2xl font-semibold leading-snug text-ink sm:text-4xl"
+          style={{ animationDelay: '200ms' }}
         >
-          خرید و فروش Micro-SaaS تأییدشده — نه ادعا، نه آمار ساختگی.
+          {t.heroHeadline}
         </h1>
         <p
-          className="animate-rise mt-4 max-w-xl text-base leading-relaxed text-mist-muted sm:text-lg"
-          style={{ animationDelay: '0.35s' }}
+          className="animate-rise mt-5 max-w-xl text-base leading-relaxed text-ink-soft sm:text-lg"
+          style={{ animationDelay: '280ms' }}
         >
-          فقط محصولاتی که دستی بررسی شده‌اند در فهرست عمومی دیده می‌شوند. تازه شروع کرده‌ایم؛
-          شفاف می‌مانیم.
+          {t.heroSub}
         </p>
-        <div
-          className="animate-rise mt-10 flex flex-wrap gap-3"
-          style={{ animationDelay: '0.45s' }}
-        >
-          <Link href="/#listings" className="btn-primary">
-            مشاهده لیستینگ‌ها
+        <div className="animate-rise mt-10 flex flex-wrap gap-3" style={{ animationDelay: '360ms' }}>
+          <Link href="/marketplace" className="btn-primary">
+            {t.ctaBrowse}
           </Link>
-          <Link href="/sell" className="btn-ghost">
-            فروش محصول من
+          <Link href="/sell" className="btn-secondary">
+            {t.ctaSell}
           </Link>
         </div>
       </div>

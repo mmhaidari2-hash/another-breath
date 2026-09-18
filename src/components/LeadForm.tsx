@@ -1,13 +1,16 @@
 'use client';
 
 import { useState } from 'react';
+import { useLang } from '@/components/LanguageProvider';
 
-interface LeadFormProps {
+export default function LeadForm({
+  listingId,
+  listingTitle,
+}: {
   listingId: string;
   listingTitle: string;
-}
-
-export default function LeadForm({ listingId, listingTitle }: LeadFormProps) {
+}) {
+  const { t } = useLang();
   const [buyerName, setBuyerName] = useState('');
   const [buyerEmail, setBuyerEmail] = useState('');
   const [budget, setBudget] = useState('');
@@ -19,7 +22,6 @@ export default function LeadForm({ listingId, listingTitle }: LeadFormProps) {
     e.preventDefault();
     setStatus('loading');
     setError(null);
-
     try {
       const res = await fetch('/api/leads', {
         method: 'POST',
@@ -32,21 +34,20 @@ export default function LeadForm({ listingId, listingTitle }: LeadFormProps) {
           message,
         }),
       });
-
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? 'ارسال ناموفق بود');
-
+      if (!res.ok) throw new Error(data.error ?? 'Error');
       setStatus('success');
     } catch (err: unknown) {
       setStatus('error');
-      setError(err instanceof Error ? err.message : 'خطای ناشناخته');
+      setError(err instanceof Error ? err.message : 'Error');
     }
   };
 
   if (status === 'success') {
     return (
-      <div className="rounded-lg border border-sea/30 bg-sea/10 p-4 text-sm leading-relaxed text-mist">
-        درخواستت برای «{listingTitle}» ثبت شد. فروشنده مستقیماً باهات تماس می‌گیره.
+      <div className="rounded-xl border border-forest/25 bg-forest/10 p-4 text-sm leading-relaxed text-forest">
+        {t.leadSuccess}
+        <span className="mt-1 block font-medium text-ink">«{listingTitle}»</span>
       </div>
     );
   }
@@ -54,67 +55,60 @@ export default function LeadForm({ listingId, listingTitle }: LeadFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="buyerName" className="mb-1.5 block text-xs text-mist-muted">
-          نام کامل
+        <label htmlFor="buyerName" className="mb-1.5 block text-xs font-medium text-ink-faint">
+          {t.name}
         </label>
         <input
           id="buyerName"
           required
+          className="input-field"
           value={buyerName}
           onChange={(e) => setBuyerName(e.target.value)}
-          className="input-field"
-          autoComplete="name"
         />
       </div>
-
       <div>
-        <label htmlFor="buyerEmail" className="mb-1.5 block text-xs text-mist-muted">
-          ایمیل
+        <label htmlFor="buyerEmail" className="mb-1.5 block text-xs font-medium text-ink-faint">
+          {t.email}
         </label>
         <input
           id="buyerEmail"
           type="email"
           required
+          dir="ltr"
+          className="input-field"
           value={buyerEmail}
           onChange={(e) => setBuyerEmail(e.target.value)}
-          className="input-field"
-          autoComplete="email"
-          dir="ltr"
         />
       </div>
-
       <div>
-        <label htmlFor="budget" className="mb-1.5 block text-xs text-mist-muted">
-          بودجه‌ی تقریبی (اختیاری)
+        <label htmlFor="budget" className="mb-1.5 block text-xs font-medium text-ink-faint">
+          {t.budget}
         </label>
         <input
           id="budget"
           type="number"
           min="0"
+          dir="ltr"
+          className="input-field"
           value={budget}
           onChange={(e) => setBudget(e.target.value)}
-          className="input-field"
-          dir="ltr"
         />
       </div>
-
       <div>
-        <label htmlFor="message" className="mb-1.5 block text-xs text-mist-muted">
-          پیام (اختیاری)
+        <label htmlFor="message" className="mb-1.5 block text-xs font-medium text-ink-faint">
+          {t.message}
         </label>
         <textarea
           id="message"
           rows={3}
+          className="input-field"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="input-field resize-y"
         />
       </div>
-
-      {error && <p className="text-sm text-red-400">{error}</p>}
-
+      {error && <p className="text-sm text-red-600">{error}</p>}
       <button type="submit" disabled={status === 'loading'} className="btn-primary w-full">
-        {status === 'loading' ? 'در حال ارسال...' : 'درخواست تماس'}
+        {status === 'loading' ? t.sending : t.send}
       </button>
     </form>
   );

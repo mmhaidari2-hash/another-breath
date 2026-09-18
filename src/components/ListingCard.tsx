@@ -1,73 +1,81 @@
 import Link from 'next/link';
-import { formatCurrency } from '@/lib/utils';
+import { formatCurrency, type ListingDTO } from '@/lib/utils';
 
-interface ListingCardProps {
-  listing: {
-    id: string;
-    slug: string;
-    title: string;
-    description: string;
-    tagline?: string | null;
-    niche?: string | null;
-    askingPrice: number;
-    mrr: number | null;
-    grade: string | null;
-    verificationStatus: string;
-  };
-}
-
-const GRADE_TONE: Record<string, string> = {
-  A: 'text-sea border-sea/40 bg-sea/10',
-  B: 'text-bronze border-bronze/40 bg-bronze/10',
-  C: 'text-mist-muted border-line bg-white/[0.03]',
+const GRADE: Record<string, string> = {
+  A: 'border-forest/30 bg-forest/10 text-forest',
+  B: 'border-navy/25 bg-navy/10 text-navy',
+  C: 'border-ink/15 bg-ink/5 text-ink-soft',
 };
 
-export default function ListingCard({ listing }: ListingCardProps) {
+export default function ListingCard({
+  listing,
+  askingLabel,
+  mrrLabel,
+  verifiedLabel,
+  gradeLabel,
+}: {
+  listing: ListingDTO;
+  askingLabel: string;
+  mrrLabel: string;
+  verifiedLabel: string;
+  gradeLabel: string;
+}) {
   return (
     <Link
       href={`/listing/${listing.slug}`}
-      className="group relative block overflow-hidden rounded-xl border border-line bg-ink-raised/60 p-6 transition duration-300 hover:-translate-y-0.5 hover:border-sea/35 hover:shadow-aura"
+      className="group flex h-full flex-col rounded-2xl border border-ink/10 bg-paper-raised p-6 shadow-soft transition duration-300 hover:-translate-y-1 hover:border-forest/30 hover:shadow-lift"
     >
       <div className="mb-4 flex flex-wrap items-center gap-2">
         {listing.niche && (
-          <span className="text-[11px] uppercase tracking-[0.14em] text-mist-faint">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-faint">
             {listing.niche}
           </span>
         )}
         {listing.grade && (
           <span
-            className={`inline-flex rounded border px-2 py-0.5 text-[11px] font-medium ${
-              GRADE_TONE[listing.grade] ?? GRADE_TONE.C
+            className={`inline-flex rounded-md border px-2 py-0.5 text-[11px] font-semibold ${
+              GRADE[listing.grade] ?? GRADE.C
             }`}
           >
-            درجه {listing.grade}
+            {gradeLabel} {listing.grade}
           </span>
         )}
         {listing.verificationStatus === 'VERIFIED' && (
-          <span className="inline-flex rounded border border-sea/30 bg-sea/10 px-2 py-0.5 text-[11px] font-medium text-sea">
-            تأیید‌شده
+          <span className="inline-flex rounded-md border border-forest/25 bg-forest/10 px-2 py-0.5 text-[11px] font-semibold text-forest">
+            {verifiedLabel}
+          </span>
+        )}
+        {listing.featured && (
+          <span className="inline-flex rounded-md border border-navy/20 bg-navy/10 px-2 py-0.5 text-[11px] font-semibold text-navy">
+            ★
           </span>
         )}
       </div>
 
-      <h3 className="font-display text-2xl text-mist transition group-hover:text-white">
+      <h3 className="font-display text-[1.75rem] leading-none tracking-tight text-ink transition group-hover:text-forest">
         {listing.title}
       </h3>
-      <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-mist-muted">
+      <p className="mt-3 line-clamp-2 flex-1 text-sm leading-relaxed text-ink-soft">
         {listing.tagline || listing.description}
       </p>
 
-      <div className="mt-6 flex items-end justify-between gap-4 border-t border-line pt-4">
+      {listing.techStack && (
+        <p className="mt-4 text-xs text-ink-faint" dir="ltr">
+          {listing.techStack}
+        </p>
+      )}
+
+      <div className="mt-5 flex items-end justify-between gap-3 border-t border-ink/8 pt-4">
         <div>
-          <p className="text-[11px] uppercase tracking-wider text-mist-faint">قیمت درخواستی</p>
-          <p className="mt-0.5 text-lg font-semibold text-mist">
+          <p className="text-[11px] font-medium uppercase tracking-wider text-ink-faint">{askingLabel}</p>
+          <p className="mt-0.5 text-xl font-semibold text-ink">
             {formatCurrency(listing.askingPrice)}
           </p>
         </div>
         {listing.mrr !== null && (
-          <div className="text-left">
-            <p className="text-[11px] uppercase tracking-wider text-mist-faint">MRR</p>
-            <p className="mt-0.5 font-medium text-sea">{formatCurrency(listing.mrr)}</p>
+          <div className="text-end">
+            <p className="text-[11px] font-medium uppercase tracking-wider text-ink-faint">{mrrLabel}</p>
+            <p className="mt-0.5 font-semibold text-forest">{formatCurrency(listing.mrr)}</p>
           </div>
         )}
       </div>
