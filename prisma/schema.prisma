@@ -1,0 +1,81 @@
+// ═══════════════════════════════════════════════════════════════
+// کلادک — Phase 1 schema (SQLite-friendly: strings instead of enums)
+ // ═══════════════════════════════════════════════════════════════
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  // SELLER | BUYER | ADMIN
+  role      String   @default("BUYER")
+  createdAt DateTime @default(now())
+
+  listings Listing[]
+}
+
+model Listing {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  title       String
+  description String
+  category    String  @default("Micro-SaaS")
+  websiteUrl  String?
+  tagline     String?
+  niche       String?
+
+  mrr         Float?
+  askingPrice Float
+
+  sellerId String
+  seller   User   @relation(fields: [sellerId], references: [id])
+
+  // PENDING | VERIFIED | REJECTED
+  verificationStatus String  @default("PENDING")
+  verificationNotes  String?
+  verifiedAt         DateTime?
+
+  score Float?
+  grade String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  leads Lead[]
+
+  @@index([verificationStatus, category])
+}
+
+model ScoringRubric {
+  id         String   @id @default(cuid())
+  category   String   @unique
+  version    Int      @default(1)
+  criteria   String // JSON string for SQLite simplicity
+  gradeBands String // JSON string
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Lead {
+  id        String  @id @default(cuid())
+  listingId String
+  listing   Listing @relation(fields: [listingId], references: [id])
+
+  buyerName  String
+  buyerEmail String
+  budget     Float?
+  timeline   String?
+  message    String?
+
+  createdAt DateTime @default(now())
+
+  @@index([listingId])
+}
