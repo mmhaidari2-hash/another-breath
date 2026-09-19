@@ -36,12 +36,9 @@ npx prisma generate
 npx prisma db push
 npx prisma db seed
 
-echo "==> Build"
-npm run build
-
 echo ""
 echo "============================================"
-echo "  Cladak ready"
+echo "  Starting Cladak (dev server)"
 echo "  Open:  http://127.0.0.1:${PORT}"
 echo "  Owner: http://127.0.0.1:${PORT}/cofounder"
 echo "  Code:  cladak-cofounder"
@@ -49,4 +46,5 @@ echo "  Login: cofounder@cladak.com / CofounderPass123!"
 echo "============================================"
 echo ""
 
-exec npm run start -- -p "$PORT"
+# Dev server is more reliable for first desktop test (no separate build step)
+exec npx next dev -p "$PORT"

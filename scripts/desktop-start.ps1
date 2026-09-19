@@ -30,12 +30,9 @@ npx prisma generate
 npx prisma db push
 npx prisma db seed
 
-Write-Host "==> Build"
-npm run build
-
 Write-Host ""
 Write-Host "============================================"
-Write-Host "  Cladak ready"
+Write-Host "  Starting Cladak (dev server)"
 Write-Host "  Open:  http://127.0.0.1:$Port"
 Write-Host "  Owner: http://127.0.0.1:$Port/cofounder"
 Write-Host "  Code:  cladak-cofounder"
@@ -43,4 +40,5 @@ Write-Host "  Login: cofounder@cladak.com / CofounderPass123!"
 Write-Host "============================================"
 Write-Host ""
 
-npm run start -- -p $Port
+# Dev server is more reliable for first desktop test (no separate build step)
+npx next dev -p $Port
