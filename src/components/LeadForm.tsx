@@ -8,11 +8,11 @@ import CompleteDealPanel from '@/components/CompleteDealPanel';
 export default function LeadForm({
   listingId,
   listingTitle,
-  askingPrice,
+  askingPricePence,
 }: {
   listingId: string;
   listingTitle: string;
-  askingPrice?: number;
+  askingPricePence?: number;
 }) {
   const { t } = useLang();
   const [buyerName, setBuyerName] = useState('');
@@ -66,7 +66,7 @@ export default function LeadForm({
           Intro is automated. When the deal closes, confirm the success fee — buyer and seller
           accounts are then purged. Only an anonymous fee receipt remains.
         </p>
-        <CompleteDealPanel leadId={leadId} defaultPrice={askingPrice} />
+        <CompleteDealPanel leadId={leadId} defaultPricePence={askingPricePence} />
         <p className="mt-3 text-xs text-coal-mute">
           See <Link href="/closing" className="underline">Closing protocol</Link>.
         </p>

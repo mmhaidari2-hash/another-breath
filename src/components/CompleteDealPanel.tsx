@@ -1,16 +1,17 @@
 'use client';
 
 import { useState } from 'react';
+import { formatPence, penceToGbp } from '@/lib/money';
 
 export default function CompleteDealPanel({
   leadId,
-  defaultPrice,
+  defaultPricePence,
 }: {
   leadId: string;
-  defaultPrice?: number;
+  defaultPricePence?: number;
 }) {
   const [closePriceGbp, setClosePriceGbp] = useState(
-    defaultPrice ? String(defaultPrice) : ''
+    defaultPricePence ? String(penceToGbp(defaultPricePence)) : ''
   );
   const [status, setStatus] = useState<'idle' | 'loading' | 'done' | 'error'>('idle');
   const [message, setMessage] = useState<string | null>(null);
@@ -33,10 +34,14 @@ export default function CompleteDealPanel({
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Checkout failed');
       setCheckoutUrl(data.checkoutUrl);
+      const feeLabel =
+        typeof data.amountPence === 'number'
+          ? formatPence(data.amountPence)
+          : '—';
       setMessage(
         data.mode === 'stripe'
-          ? `Stripe Checkout ready — fee £${data.amountGbp}. Pay to auto-purge accounts.`
-          : `Demo checkout ready — fee £${data.amountGbp}. Open link to simulate payment + purge (set STRIPE_SECRET_KEY for live).`
+          ? `Stripe Checkout ready — fee ${feeLabel}. Pay to auto-purge accounts.`
+          : `Demo checkout ready — fee ${feeLabel}. Open link to simulate payment + purge (set STRIPE_SECRET_KEY for live).`
       );
       setStatus('done');
       if (data.checkoutUrl) {
@@ -56,7 +61,9 @@ export default function CompleteDealPanel({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           leadId,
-          amountGbp: Number(closePriceGbp) || defaultPrice || 0,
+          amountGbp:
+            Number(closePriceGbp) ||
+            (defaultPricePence != null ? penceToGbp(defaultPricePence) : 0),
         }),
       });
       const data = await res.json();
@@ -85,7 +92,7 @@ export default function CompleteDealPanel({
         className="input-field"
         type="number"
         min="1"
-        step="1"
+        step="0.01"
         required
         placeholder="Close price (GBP)"
         value={closePriceGbp}

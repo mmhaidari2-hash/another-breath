@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { dataRightsSchema } from '@/lib/validators';
-import { checkRateLimit } from '@/lib/rate-limit';
+import { checkRateLimitAsync, RL } from '@/lib/rate-limit';
 import { hashIp, writeAudit } from '@/lib/audit';
 
 export async function POST(req: Request) {
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
   const ua = req.headers.get('user-agent');
 
-  if (!checkRateLimit(`data-rights:${ip}`)) {
+  if (!(await checkRateLimitAsync(`data-rights:${ip}`, RL.dataRights))) {
     return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
   }
 

@@ -46,14 +46,14 @@ export default function MarketplaceBrowser({
     }
     if (niche !== 'all') rows = rows.filter((l) => l.niche === niche);
     if (grade !== 'all') rows = rows.filter((l) => l.grade === grade);
-    rows = rows.filter((l) => l.askingPrice <= maxPrice);
-    rows = rows.filter((l) => (l.mrr ?? 0) >= minMrr);
+    rows = rows.filter((l) => l.askingPricePence <= maxPrice * 100);
+    rows = rows.filter((l) => (l.mrrPence ?? 0) >= minMrr * 100);
     if (watchOnly) rows = rows.filter((l) => watch.includes(l.id));
 
     rows.sort((a, b) => {
-      if (sort === 'priceAsc') return a.askingPrice - b.askingPrice;
-      if (sort === 'priceDesc') return b.askingPrice - a.askingPrice;
-      if (sort === 'mrrDesc') return (b.mrr ?? -1) - (a.mrr ?? -1);
+      if (sort === 'priceAsc') return a.askingPricePence - b.askingPricePence;
+      if (sort === 'priceDesc') return b.askingPricePence - a.askingPricePence;
+      if (sort === 'mrrDesc') return (b.mrrPence ?? -1) - (a.mrrPence ?? -1);
       if (sort === 'multipleAsc') return (a.multiple ?? 999) - (b.multiple ?? 999);
       return +new Date(b.createdAt) - +new Date(a.createdAt);
     });
@@ -102,7 +102,7 @@ export default function MarketplaceBrowser({
           <label className="block">
             <span className="mb-1.5 flex justify-between text-xs text-coal-mute">
               <span>Max asking</span>
-              <span className="font-mono">{formatCurrency(maxPrice)}</span>
+              <span className="font-mono">{formatCurrency(maxPrice * 100)}</span>
             </span>
             <input
               type="range"
@@ -117,7 +117,7 @@ export default function MarketplaceBrowser({
           <label className="block">
             <span className="mb-1.5 flex justify-between text-xs text-coal-mute">
               <span>Min MRR</span>
-              <span className="font-mono">{formatCurrency(minMrr)}</span>
+              <span className="font-mono">{formatCurrency(minMrr * 100)}</span>
             </span>
             <input
               type="range"

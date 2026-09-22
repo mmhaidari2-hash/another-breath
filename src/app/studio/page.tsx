@@ -92,9 +92,9 @@ export default async function StudioPage() {
                     </p>
                   </div>
                   <div className="sm:col-span-3 text-sm text-coal-soft">
-                    {formatCurrency(l.askingPrice)}
-                    {l.mrr != null && (
-                      <span className="text-coal-mute"> · MRR {formatCurrency(l.mrr)}</span>
+                    {formatCurrency(l.askingPricePence)}
+                    {l.mrrPence != null && (
+                      <span className="text-coal-mute"> · MRR {formatCurrency(l.mrrPence)}</span>
                     )}
                   </div>
                   <div className="sm:col-span-4 space-y-1 text-xs text-coal-soft">

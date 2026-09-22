@@ -23,8 +23,8 @@ type ListingCard = {
   title: string;
   tagline: string | null;
   niche: string | null;
-  askingPrice: number;
-  mrr: number | null;
+  askingPricePence: number;
+  mrrPence: number | null;
   grade: string | null;
 };
 
@@ -108,11 +108,11 @@ export default function MarketScreen({ navigation }: Props) {
           >
             <View style={styles.cardTop}>
               <Text style={styles.title}>{item.title}</Text>
-              <Text style={styles.price}>{formatGbp(item.askingPrice)}</Text>
+              <Text style={styles.price}>{formatGbp(item.askingPricePence)}</Text>
             </View>
             <Text style={styles.meta}>
               {item.niche || 'Micro-SaaS'} · Grade {item.grade || '—'}
-              {item.mrr != null ? ` · MRR ${formatGbp(item.mrr)}` : ''}
+              {item.mrrPence != null ? ` · MRR ${formatGbp(item.mrrPence)}` : ''}
             </Text>
             {!!item.tagline && <Text style={styles.tagline}>{item.tagline}</Text>}
           </Pressable>

@@ -12,7 +12,7 @@ type ListingRow = {
   title: string;
   slug: string;
   verificationStatus: string;
-  askingPrice: number;
+  askingPricePence: number;
 };
 
 export default function StudioScreen({ navigation }: Props) {
@@ -55,7 +55,7 @@ export default function StudioScreen({ navigation }: Props) {
         >
           <Text style={styles.cardTitle}>{l.title}</Text>
           <Text style={styles.cardMeta}>
-            {l.verificationStatus} · £{l.askingPrice.toLocaleString('en-GB')}
+            {l.verificationStatus} · £{(l.askingPricePence / 100).toLocaleString('en-GB')}
           </Text>
         </Pressable>
       ))}

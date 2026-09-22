@@ -24,8 +24,8 @@ export default async function TermsPage() {
       </p>
       <h2 className="font-display text-xl font-bold text-coal">2. Fees</h2>
       <p>
-        Listing is free. A success fee of {config.successFeeMinPercent}–
-        {config.successFeeMaxPercent}% applies to closed transactions introduced through Cladak. See{' '}
+        Listing is free. A success fee of {config.successFeeMinBps / 100}–
+        {config.successFeeMaxBps / 100}% applies to closed transactions introduced through Cladak. See{' '}
         <a href="/legal/fees">Fees</a>.
       </p>
       <h2 className="font-display text-xl font-bold text-coal">3. Non-circumvention</h2>

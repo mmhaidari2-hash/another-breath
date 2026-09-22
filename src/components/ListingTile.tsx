@@ -35,12 +35,12 @@ export default function ListingTile({
       <div className="mt-6 flex items-end justify-between border-t border-coal/10 pt-4">
         <div>
           <p className="font-mono text-[10px] uppercase tracking-wider text-coal-mute">{askingLabel}</p>
-          <p className="text-xl font-semibold">{formatCurrency(listing.askingPrice)}</p>
+          <p className="text-xl font-semibold">{formatCurrency(listing.askingPricePence)}</p>
         </div>
-        {listing.mrr !== null && (
+        {listing.mrrPence !== null && (
           <div className="text-end">
             <p className="font-mono text-[10px] uppercase tracking-wider text-coal-mute">{mrrLabel}</p>
-            <p className="font-semibold text-signal">{formatCurrency(listing.mrr)}</p>
+            <p className="font-semibold text-signal">{formatCurrency(listing.mrrPence)}</p>
           </div>
         )}
       </div>

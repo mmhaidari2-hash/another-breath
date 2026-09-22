@@ -49,10 +49,10 @@ export async function api<T = unknown>(
   return data as T;
 }
 
-export function formatGbp(n: number) {
+export function formatGbp(pence: number) {
   return new Intl.NumberFormat('en-GB', {
     style: 'currency',
     currency: 'GBP',
-    maximumFractionDigits: 0,
-  }).format(n);
+    maximumFractionDigits: 2,
+  }).format(pence / 100);
 }

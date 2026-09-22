@@ -1,18 +1,19 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { sellerInquirySchema } from '@/lib/validators';
-import { checkRateLimit, RL } from '@/lib/rate-limit';
+import { checkRateLimitAsync, RL } from '@/lib/rate-limit';
 import { hashIp, writeAudit } from '@/lib/audit';
 import { getSession } from '@/lib/session';
 import { slugify } from '@/lib/utils';
 import { sendTransactional } from '@/lib/email';
 import { applyScoreToListing } from '@/lib/scoring';
+import { parseGbpToPence } from '@/lib/money';
 
 export async function POST(req: Request) {
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
   const ua = req.headers.get('user-agent');
 
-  if (!checkRateLimit(`seller:${ip}`, RL.seller)) {
+  if (!(await checkRateLimitAsync(`seller:${ip}`, RL.seller))) {
     return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
   }
 
@@ -65,12 +66,23 @@ export async function POST(req: Request) {
     slug = `${baseSlug}-${n++}`;
   }
 
-  const asking = parsed.data.askingPrice
-    ? Number(String(parsed.data.askingPrice).replace(/[^0-9.]/g, '')) || 0
-    : 0;
-  const mrrRaw = parsed.data.mrr
-    ? Number(String(parsed.data.mrr).replace(/[^0-9.]/g, ''))
-    : null;
+  let askingPricePence = 100_000; // £1,000 default
+  let mrrPence: number | null = null;
+  try {
+    if (parsed.data.askingPrice) {
+      const p = parseGbpToPence(parsed.data.askingPrice);
+      if (p > 0) askingPricePence = p;
+    }
+    if (parsed.data.mrr) {
+      const p = parseGbpToPence(parsed.data.mrr);
+      if (p > 0) mrrPence = p;
+    }
+  } catch {
+    return NextResponse.json(
+      { error: 'MRR/asking price must have at most 2 decimal places' },
+      { status: 400 }
+    );
+  }
 
   const config = await prisma.platformConfig.upsert({
     where: { id: 'default' },
@@ -100,11 +112,11 @@ export async function POST(req: Request) {
       niche: parsed.data.niche || null,
       websiteUrl: parsed.data.url || null,
       demoPolicy: 'INTRO_ONLY',
-      mrr: mrrRaw && mrrRaw > 0 ? mrrRaw : null,
-      askingPrice: asking > 0 ? asking : 1000,
+      mrrPence,
+      askingPricePence,
       multiple:
-        mrrRaw && mrrRaw > 0 && asking > 0
-          ? Math.round((asking / (mrrRaw * 12)) * 10) / 10
+        mrrPence && mrrPence > 0 && askingPricePence > 0
+          ? Math.round((askingPricePence / (mrrPence * 12)) * 10) / 10
           : null,
       category: 'Micro-SaaS',
       verificationStatus: shouldVerify ? 'VERIFIED' : 'PENDING',

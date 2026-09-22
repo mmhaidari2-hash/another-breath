@@ -21,8 +21,8 @@ type Listing = {
   tagline: string | null;
   description: string;
   niche: string | null;
-  askingPrice: number;
-  mrr: number | null;
+  askingPricePence: number;
+  mrrPence: number | null;
   multiple: number | null;
   grade: string | null;
   verificationNotes: string | null;
@@ -97,9 +97,9 @@ export default function ListingScreen({ route }: Props) {
       <Text style={styles.eyebrow}>{listing.niche} · Grade {listing.grade}</Text>
       <Text style={styles.title}>{listing.title}</Text>
       {!!listing.tagline && <Text style={styles.tagline}>{listing.tagline}</Text>}
-      <Text style={styles.price}>{formatGbp(listing.askingPrice)}</Text>
+      <Text style={styles.price}>{formatGbp(listing.askingPricePence)}</Text>
       <Text style={styles.meta}>
-        {listing.mrr != null ? `MRR ${formatGbp(listing.mrr)}` : 'No MRR'}
+        {listing.mrrPence != null ? `MRR ${formatGbp(listing.mrrPence)}` : 'No MRR'}
         {listing.multiple != null ? ` · ${listing.multiple}×` : ''}
       </Text>
 

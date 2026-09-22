@@ -3,17 +3,17 @@ import { hashPassword } from '../src/lib/auth';
 
 const prisma = new PrismaClient();
 
-function history(base: number, months = 12) {
-  const out: { month: string; mrr: number }[] = [];
-  let v = Math.round(base * 0.58);
+function history(basePence: number, months = 12) {
+  const out: { month: string; mrrPence: number }[] = [];
+  let v = Math.round(basePence * 0.58);
   for (let i = months - 1; i >= 0; i--) {
     const d = new Date(2026, 8, 1);
     d.setMonth(d.getMonth() - i);
     const label = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-    const step = 1.035 + (base % 7) * 0.004;
+    const step = 1.035 + ((basePence / 100) % 7) * 0.004;
     v = Math.round(v * step);
-    if (i === 0) v = base;
-    out.push({ month: label, mrr: v });
+    if (i === 0) v = basePence;
+    out.push({ month: label, mrrPence: v });
   }
   return out;
 }
@@ -43,8 +43,8 @@ const LISTINGS = [
     description:
       'Online booking for clinics and salons. Multi-staff calendar, SMS reminders, branded public page, attendance reports.\n\nOne of the more mature assets in this set on revenue stability. Transfer includes repo, optional domain, and a handover session.',
     websiteUrl: 'https://example.com/seatline',
-    mrr: 890,
-    askingPrice: 18500,
+    mrrPence: 89000,
+    askingPricePence: 1850000,
     grade: 'A',
     score: 88,
     verificationNotes:
@@ -70,8 +70,8 @@ const LISTINGS = [
     description:
       'Dashboard and plugin for small online shops. Multi-carrier tracking, customer alerts, branded status pages.',
     websiteUrl: 'https://example.com/parcelkit',
-    mrr: 680,
-    askingPrice: 14500,
+    mrrPence: 68000,
+    askingPricePence: 1450000,
     grade: 'A',
     score: 86,
     verificationNotes: 'Manual review: demo login + sample monthly transaction export.',
@@ -96,8 +96,8 @@ const LISTINGS = [
     description:
       'Structured briefs, project archive, team notifications. Replaces email chaos for 2–15 person agencies.',
     websiteUrl: 'https://example.com/briefbay',
-    mrr: 610,
-    askingPrice: 13200,
+    mrrPence: 61000,
+    askingPricePence: 1320000,
     grade: 'A',
     score: 84,
     verificationNotes: 'Manual review: product demo + monthly revenue screenshot.',
@@ -122,8 +122,8 @@ const LISTINGS = [
     description:
       'Team notes for small startups. Offline sync, limited link sharing, fast markdown search.',
     websiteUrl: 'https://example.com/fluxnote',
-    mrr: 420,
-    askingPrice: 9500,
+    mrrPence: 42000,
+    askingPricePence: 950000,
     grade: 'B',
     score: 72,
     verificationNotes: 'Manual review: revenue dashboard screenshot + product demo.',
@@ -147,8 +147,8 @@ const LISTINGS = [
     ],
     description: 'Invoicing, payment tracking, and reminders for solo freelancers.',
     websiteUrl: 'https://example.com/inkledger',
-    mrr: 540,
-    askingPrice: 11000,
+    mrrPence: 54000,
+    askingPricePence: 1100000,
     grade: 'B',
     score: 74,
     verificationNotes: 'Manual review: sample read-only Stripe export + UI walkthrough.',
@@ -172,8 +172,8 @@ const LISTINGS = [
     ],
     description: 'Digital guest guides for boutique stays and rural lodging.',
     websiteUrl: 'https://example.com/guestfolio',
-    mrr: 470,
-    askingPrice: 9800,
+    mrrPence: 47000,
+    askingPricePence: 980000,
     grade: 'B',
     score: 70,
     verificationNotes: 'Manual review: live pages + subscription revenue sample.',
@@ -197,8 +197,8 @@ const LISTINGS = [
     ],
     description: 'Website and API uptime checks with Telegram/email alerts.',
     websiteUrl: 'https://example.com/routepulse',
-    mrr: 390,
-    askingPrice: 8200,
+    mrrPence: 39000,
+    askingPricePence: 820000,
     grade: 'B',
     score: 71,
     verificationNotes: 'Manual review: live monitors + sample alert logs.',
@@ -222,8 +222,8 @@ const LISTINGS = [
     ],
     description: 'Multi-step form builder with conditional logic and webhooks.',
     websiteUrl: 'https://example.com/formora',
-    mrr: 310,
-    askingPrice: 7200,
+    mrrPence: 31000,
+    askingPricePence: 720000,
     grade: 'B',
     score: 68,
     verificationNotes: 'Manual review: product demo + sample subscriber list.',
@@ -247,8 +247,8 @@ const LISTINGS = [
     ],
     description: 'Upload, tag, and search short clips. Limited revenue growth to date.',
     websiteUrl: 'https://example.com/clipstack',
-    mrr: 260,
-    askingPrice: 5800,
+    mrrPence: 26000,
+    askingPricePence: 580000,
     grade: 'C',
     score: 58,
     verificationNotes: 'Manual review: product works; revenue growth reported as limited.',
@@ -273,8 +273,8 @@ const LISTINGS = [
     description:
       'Web experience that turns a breath pattern into deterministic generative art. No subscription MRR; priced as a product/brand asset.',
     websiteUrl: 'https://mmhaidari2-hash.github.io/another-breath/',
-    mrr: null,
-    askingPrice: 4500,
+    mrrPence: null,
+    askingPricePence: 450000,
     grade: 'B',
     score: 66,
     verificationNotes: 'Manual review: public demo is live. No MRR.',
@@ -349,8 +349,8 @@ async function main() {
 
   for (const item of LISTINGS) {
     const multiple =
-      item.mrr && item.mrr > 0
-        ? Math.round((item.askingPrice / (item.mrr * 12)) * 10) / 10
+      item.mrrPence && item.mrrPence > 0
+        ? Math.round((item.askingPricePence / (item.mrrPence * 12)) * 10) / 10
         : null;
 
     const payload = {
@@ -363,8 +363,8 @@ async function main() {
       description: item.description,
       websiteUrl: item.websiteUrl,
       demoPolicy: item.slug === 'another-breath' ? 'PUBLIC' : 'INTRO_ONLY',
-      mrr: item.mrr,
-      askingPrice: item.askingPrice,
+      mrrPence: item.mrrPence,
+      askingPricePence: item.askingPricePence,
       grade: item.grade,
       score: item.score,
       verificationNotes: item.verificationNotes,
@@ -373,15 +373,15 @@ async function main() {
       reasonForSale: item.reasonForSale,
       highlights: JSON.stringify(item.highlights),
       gallery: JSON.stringify(item.gallery),
-      mrrHistory: item.mrr ? JSON.stringify(history(item.mrr)) : null,
+      mrrHistory: item.mrrPence ? JSON.stringify(history(item.mrrPence)) : null,
       multiple,
       category: 'Micro-SaaS',
       verificationStatus: 'VERIFIED',
       verifiedAt: new Date(),
-      evidenceRevenue: item.mrr != null,
+      evidenceRevenue: item.mrrPence != null,
       evidenceProduct: true,
       evidenceUi: true,
-      evidenceRevenueUrl: item.mrr
+      evidenceRevenueUrl: item.mrrPence
         ? `https://dashboard.stripe.com/test/revenue/${item.slug}`
         : null,
       evidenceProductUrl: item.websiteUrl || `https://example.com/${item.slug}`,
@@ -402,8 +402,8 @@ async function main() {
     update: {
       supportEmail: 'support@cladak.com',
       governingLaw: 'England and Wales',
-      successFeeMinPercent: 3,
-      successFeeMaxPercent: 5,
+      successFeeMinBps: 300,
+      successFeeMaxBps: 500,
       nonCircumventionDays: 730,
       autoIntroduceLeads: true,
       autoVerifyOnSubmit: false,

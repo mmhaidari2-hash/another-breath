@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { formatPence } from '@/lib/money';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -14,19 +15,16 @@ export function slugify(input: string): string {
     .slice(0, 60);
 }
 
-export function formatCurrency(value: number, currency: string = 'GBP', locale = 'en-GB') {
-  return new Intl.NumberFormat(locale, {
-    style: 'currency',
-    currency,
-    maximumFractionDigits: 0,
-  }).format(value);
+/** Format integer GBP pence as currency (en-GB). */
+export function formatCurrency(pence: number, _currency: string = 'GBP', _locale = 'en-GB') {
+  return formatPence(pence);
 }
 
 export function formatDate(date: Date | string, locale = 'en-GB') {
   return new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(date));
 }
 
-export type MrrPoint = { month: string; mrr: number };
+export type MrrPoint = { month: string; mrrPence: number };
 export type GalleryFrame = { label: string; tone: string };
 
 export type ListingDTO = {
@@ -39,8 +37,8 @@ export type ListingDTO = {
   techStack: string | null;
   foundedYear: number | null;
   featured: boolean;
-  askingPrice: number;
-  mrr: number | null;
+  askingPricePence: number;
+  mrrPence: number | null;
   multiple: number | null;
   grade: string | null;
   score: number | null;
@@ -71,8 +69,8 @@ export function parseListing(l: {
   techStack: string | null;
   foundedYear: number | null;
   featured: boolean;
-  askingPrice: number;
-  mrr: number | null;
+  askingPricePence: number;
+  mrrPence: number | null;
   multiple: number | null;
   grade: string | null;
   score: number | null;
@@ -101,6 +99,21 @@ export function parseListing(l: {
     }
   };
 
+  // Support legacy seed JSON `{ month, mrr }` (GBP) by detecting and converting
+  const rawHistory = safe<Array<{ month: string; mrrPence?: number; mrr?: number }>>(
+    l.mrrHistory,
+    []
+  );
+  const mrrHistory: MrrPoint[] = rawHistory.map((p) => ({
+    month: p.month,
+    mrrPence:
+      typeof p.mrrPence === 'number'
+        ? p.mrrPence
+        : typeof p.mrr === 'number'
+          ? Math.round(p.mrr * 100)
+          : 0,
+  }));
+
   return {
     id: l.id,
     slug: l.slug,
@@ -111,8 +124,8 @@ export function parseListing(l: {
     techStack: l.techStack,
     foundedYear: l.foundedYear,
     featured: l.featured,
-    askingPrice: l.askingPrice,
-    mrr: l.mrr,
+    askingPricePence: l.askingPricePence,
+    mrrPence: l.mrrPence,
     multiple: l.multiple,
     grade: l.grade,
     score: l.score,
@@ -130,6 +143,6 @@ export function parseListing(l: {
     evidenceUi: l.evidenceUi ?? false,
     highlights: safe<string[]>(l.highlights, []),
     gallery: safe<GalleryFrame[]>(l.gallery, []),
-    mrrHistory: safe<MrrPoint[]>(l.mrrHistory, []),
+    mrrHistory,
   };
 }

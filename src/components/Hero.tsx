@@ -19,7 +19,7 @@ export default function Hero({ listings }: { listings: ListingDTO[] }) {
                 <span className="font-display text-3xl font-bold tracking-tight text-coal">
                   {l.title}
                 </span>
-                <span className="font-mono text-sm text-signal">{formatCurrency(l.askingPrice)}</span>
+                <span className="font-mono text-sm text-signal">{formatCurrency(l.askingPricePence)}</span>
               </div>
             ))}
           </div>

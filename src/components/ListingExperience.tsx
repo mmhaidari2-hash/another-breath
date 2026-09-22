@@ -70,10 +70,10 @@ export default function ListingExperience({
           )}
 
           <div className="mt-10 grid grid-cols-2 gap-px bg-white/10 sm:grid-cols-5">
-            <Metric label="Asking" value={formatCurrency(listing.askingPrice)} />
+            <Metric label="Asking" value={formatCurrency(listing.askingPricePence)} />
             <Metric
               label="MRR"
-              value={listing.mrr !== null ? formatCurrency(listing.mrr) : '—'}
+              value={listing.mrrPence !== null ? formatCurrency(listing.mrrPence) : '—'}
               accent
             />
             <Metric
@@ -193,11 +193,11 @@ export default function ListingExperience({
                 Acquisition desk
               </p>
               <p className="mt-2 font-display text-5xl font-extrabold tracking-tight">
-                {formatCurrency(listing.askingPrice)}
+                {formatCurrency(listing.askingPricePence)}
               </p>
-              {listing.mrr !== null && (
+              {listing.mrrPence !== null && (
                 <p className="mt-2 text-sm text-coal-soft">
-                  MRR <span className="font-semibold text-signal">{formatCurrency(listing.mrr)}</span>
+                  MRR <span className="font-semibold text-signal">{formatCurrency(listing.mrrPence)}</span>
                   {listing.multiple !== null && (
                     <span className="text-coal-mute"> · {listing.multiple}× annual</span>
                   )}
@@ -218,7 +218,7 @@ export default function ListingExperience({
             <LeadForm
               listingId={listing.id}
               listingTitle={listing.title}
-              askingPrice={listing.askingPrice}
+              askingPricePence={listing.askingPricePence}
             />
           </div>
         </aside>
@@ -240,7 +240,7 @@ export default function ListingExperience({
                     {r.niche} · Grade {r.grade}
                   </p>
                 </div>
-                <p className="font-semibold">{formatCurrency(r.askingPrice)}</p>
+                <p className="font-semibold">{formatCurrency(r.askingPricePence)}</p>
               </Link>
             ))}
           </div>

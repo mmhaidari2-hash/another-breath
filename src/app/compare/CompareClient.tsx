@@ -30,8 +30,8 @@ export default function CompareClient({ listings }: { listings: ListingDTO[] }) 
   }
 
   const fields: { key: string; label: string; get: (l: ListingDTO) => string }[] = [
-    { key: 'asking', label: 'Asking', get: (l) => formatCurrency(l.askingPrice) },
-    { key: 'mrr', label: 'MRR', get: (l) => (l.mrr != null ? formatCurrency(l.mrr) : '—') },
+    { key: 'asking', label: 'Asking', get: (l) => formatCurrency(l.askingPricePence) },
+    { key: 'mrr', label: 'MRR', get: (l) => (l.mrrPence != null ? formatCurrency(l.mrrPence) : '—') },
     { key: 'multiple', label: 'Multiple', get: (l) => (l.multiple != null ? `${l.multiple}×` : '—') },
     { key: 'grade', label: 'Grade', get: (l) => l.grade ?? '—' },
     { key: 'score', label: 'Score', get: (l) => (l.score != null ? String(l.score) : '—') },

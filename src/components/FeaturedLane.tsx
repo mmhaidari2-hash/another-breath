@@ -46,12 +46,12 @@ export default function FeaturedLane({ listings }: { listings: ListingDTO[] }) {
             <div className="mt-10 flex items-end justify-between border-t border-white/10 pt-5">
               <div>
                 <p className="font-mono text-[10px] uppercase tracking-wider text-white/40">{t.asking}</p>
-                <p className="mt-1 text-2xl font-semibold">{formatCurrency(l.askingPrice)}</p>
+                <p className="mt-1 text-2xl font-semibold">{formatCurrency(l.askingPricePence)}</p>
               </div>
-              {l.mrr !== null && (
+              {l.mrrPence !== null && (
                 <div className="text-end">
                   <p className="font-mono text-[10px] uppercase tracking-wider text-white/40">{t.mrr}</p>
-                  <p className="mt-1 text-lg font-semibold text-signal">{formatCurrency(l.mrr)}</p>
+                  <p className="mt-1 text-lg font-semibold text-signal">{formatCurrency(l.mrrPence)}</p>
                 </div>
               )}
             </div>

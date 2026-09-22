@@ -21,13 +21,13 @@ export default function RevenueChart({
   const w = 640;
   const h = 220;
   const pad = 28;
-  const max = Math.max(...points.map((p) => p.mrr)) * 1.08;
-  const min = Math.min(...points.map((p) => p.mrr)) * 0.92;
+  const max = Math.max(...points.map((p) => p.mrrPence)) * 1.08;
+  const min = Math.min(...points.map((p) => p.mrrPence)) * 0.92;
   const span = Math.max(max - min, 1);
 
   const coords = points.map((p, i) => {
     const x = pad + (i / Math.max(points.length - 1, 1)) * (w - pad * 2);
-    const y = h - pad - ((p.mrr - min) / span) * (h - pad * 2);
+    const y = h - pad - ((p.mrrPence - min) / span) * (h - pad * 2);
     return { x, y, ...p };
   });
 
@@ -35,7 +35,7 @@ export default function RevenueChart({
   const area = `${line} L ${coords[coords.length - 1].x} ${h - pad} L ${coords[0].x} ${h - pad} Z`;
   const last = points[points.length - 1];
   const first = points[0];
-  const growth = first.mrr > 0 ? Math.round(((last.mrr - first.mrr) / first.mrr) * 100) : 0;
+  const growth = first.mrrPence > 0 ? Math.round(((last.mrrPence - first.mrrPence) / first.mrrPence) * 100) : 0;
 
   return (
     <div className="border border-coal/12 bg-stone-raised p-5">
@@ -45,7 +45,7 @@ export default function RevenueChart({
           <p className="mt-1 text-sm text-coal-soft">From manual review snapshots · not live bank feed</p>
         </div>
         <div className="text-end">
-          <p className="font-display text-2xl font-bold">{formatCurrency(last.mrr)}</p>
+          <p className="font-display text-2xl font-bold">{formatCurrency(last.mrrPence)}</p>
           <p className={`font-mono text-xs ${growth >= 0 ? 'text-signal' : 'text-coal-mute'}`}>
             {growth >= 0 ? '+' : ''}
             {growth}% / {points.length} mo

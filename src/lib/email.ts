@@ -115,20 +115,25 @@ export async function notifyIntro(input: {
   });
 }
 
+function formatGbpFromPence(pence: number): string {
+  return (pence / 100).toFixed(2);
+}
+
 export async function notifyFeeDue(input: {
   buyerEmail: string;
   listingTitle: string;
   leadId: string;
-  amountGbp: number;
+  amountPence: number;
   checkoutUrl?: string;
 }) {
+  const amountLabel = formatGbpFromPence(input.amountPence);
   await sendTransactional({
     to: input.buyerEmail,
-    subject: `Success fee due — £${input.amountGbp} — ${input.listingTitle}`,
+    subject: `Success fee due — £${amountLabel} — ${input.listingTitle}`,
     template: 'FEE_DUE',
-    meta: { leadId: input.leadId, amountGbp: input.amountGbp },
+    meta: { leadId: input.leadId, amountPence: input.amountPence },
     body: [
-      `Success fee for "${input.listingTitle}" is £${input.amountGbp}.`,
+      `Success fee for "${input.listingTitle}" is £${amountLabel}.`,
       input.checkoutUrl
         ? `Pay securely: ${input.checkoutUrl}`
         : 'Open your Cladak intro confirmation to pay with Stripe.',
@@ -144,11 +149,12 @@ export async function notifyEscrowRequested(input: {
   sellerEmail: string;
   partnerName: string;
   partnerUrl: string;
-  amountGbp: number;
+  amountPence: number;
   caseId: string;
 }) {
+  const amountLabel = formatGbpFromPence(input.amountPence);
   const body = [
-    `Escrow case ${input.caseId} requested for £${input.amountGbp}.`,
+    `Escrow case ${input.caseId} requested for £${amountLabel}.`,
     `Partner: ${input.partnerName}`,
     input.partnerUrl ? `Start: ${input.partnerUrl}` : '',
     'Cladak does not hold funds. The licensed partner does.',
@@ -159,32 +165,33 @@ export async function notifyEscrowRequested(input: {
 
   await sendTransactional({
     to: input.buyerEmail,
-    subject: `Escrow requested — £${input.amountGbp}`,
+    subject: `Escrow requested — £${amountLabel}`,
     template: 'ESCROW_REQUESTED',
-    meta: { caseId: input.caseId },
+    meta: { caseId: input.caseId, amountPence: input.amountPence },
     body,
   });
   await sendTransactional({
     to: input.sellerEmail,
-    subject: `Escrow requested — £${input.amountGbp}`,
+    subject: `Escrow requested — £${amountLabel}`,
     template: 'ESCROW_REQUESTED',
-    meta: { caseId: input.caseId },
+    meta: { caseId: input.caseId, amountPence: input.amountPence },
     body,
   });
 }
 
 export async function notifyDealPurged(input: {
-  amountGbp: number;
+  amountPence: number;
   paymentRef: string;
   supportEmail: string;
 }) {
+  const amountLabel = formatGbpFromPence(input.amountPence);
   await sendTransactional({
     to: input.supportEmail,
-    subject: `Fee booked anonymously — £${input.amountGbp}`,
+    subject: `Fee booked anonymously — £${amountLabel}`,
     template: 'DEAL_PURGED_OPS',
-    meta: { paymentRef: input.paymentRef, amountGbp: input.amountGbp },
+    meta: { paymentRef: input.paymentRef, amountPence: input.amountPence },
     body: [
-      `Anonymous FeeLedger entry booked: £${input.amountGbp}.`,
+      `Anonymous FeeLedger entry booked: £${amountLabel} (${input.amountPence} pence).`,
       `Payment ref hash path: ${input.paymentRef}`,
       'Buyer/seller accounts and listing PII purged.',
       '— Cladak automation',

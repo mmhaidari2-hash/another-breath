@@ -144,7 +144,7 @@ export default async function OpsPage() {
             {escrow.map((e) => (
               <div key={e.id} className="border border-coal/12 p-4">
                 <p className="font-display text-lg font-bold">
-                  £{e.amountGbp} · {e.status}
+                  £{(e.amountPence / 100).toFixed(2)} · {e.status}
                 </p>
                 <p className="mt-1 font-mono text-[11px] text-coal-mute" dir="ltr">
                   {e.partnerName} · {e.id}
@@ -204,7 +204,7 @@ export default async function OpsPage() {
                 className="flex flex-wrap items-baseline justify-between gap-2 border border-coal/10 px-3 py-2 text-xs"
                 dir="ltr"
               >
-                <span>£{f.amountGbp}</span>
+                <span>£{(f.amountPence / 100).toFixed(2)}</span>
                 <span className="text-coal-mute">{f.paymentRef || '—'}</span>
                 <span className="text-coal-soft">{f.createdAt.toISOString().slice(0, 10)}</span>
               </div>

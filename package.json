@@ -9,6 +9,7 @@
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts",
+    "test:integration": "tsx scripts/integration-hardening.test.ts",
     "postinstall": "prisma generate || true"
   },
   "prisma": {

@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { checkRateLimitAsync, RL } from '@/lib/rate-limit';
-import { completeDealAndPurge } from '@/lib/deal-purge';
+import { completeDealAndPurge, isConflictError } from '@/lib/deal-purge';
 import { dealCompleteSchema } from '@/lib/validators';
+import { gbpToPence } from '@/lib/money';
 
 /**
  * Internal/manual complete endpoint.
@@ -38,7 +39,7 @@ export async function POST(req: Request) {
   try {
     const result = await completeDealAndPurge({
       leadId: parsed.data.leadId,
-      closePriceGbp: parsed.data.closePriceGbp,
+      closePricePence: gbpToPence(parsed.data.closePriceGbp),
       paymentRef: parsed.data.paymentRef,
       ip,
       userAgent: ua,
@@ -50,6 +51,9 @@ export async function POST(req: Request) {
         'Fee recorded anonymously. Buyer and seller accounts purged. No party PII retained.',
     });
   } catch (e: unknown) {
+    if (isConflictError(e)) {
+      return NextResponse.json({ error: e.message }, { status: 409 });
+    }
     return NextResponse.json(
       { error: e instanceof Error ? e.message : 'Complete failed' },
       { status: 400 }

@@ -36,11 +36,11 @@ export default function ListingRow({
       </div>
       <div className="col-span-4 text-end sm:col-span-2">
         <p className="text-[10px] uppercase tracking-wider text-coal-mute sm:hidden">{askingLabel}</p>
-        <p className="font-semibold">{formatCurrency(listing.askingPrice)}</p>
+        <p className="font-semibold">{formatCurrency(listing.askingPricePence)}</p>
       </div>
       <div className="col-span-2 hidden text-end sm:block">
         <p className="font-mono text-sm text-signal">
-          {listing.mrr !== null ? formatCurrency(listing.mrr) : '—'}
+          {listing.mrrPence !== null ? formatCurrency(listing.mrrPence) : '—'}
         </p>
         <p className="text-[10px] uppercase tracking-wider text-coal-mute">{mrrLabel}</p>
       </div>

@@ -8,17 +8,17 @@ export function scoreListing(input: {
   swornEvidence: boolean;
   evidenceRevenueUrl?: string | null;
   evidenceProductUrl?: string | null;
-  mrr?: number | null;
-  askingPrice: number;
+  mrrPence?: number | null;
+  askingPricePence: number;
 }) {
   let score = 0;
   if (input.evidenceRevenue && input.evidenceRevenueUrl) score += 30;
   if (input.evidenceProduct && input.evidenceProductUrl) score += 25;
   if (input.evidenceUi) score += 15;
   if (input.swornEvidence) score += 15;
-  if (input.mrr && input.mrr > 0) score += 10;
-  if (input.askingPrice > 0 && input.mrr && input.mrr > 0) {
-    const multiple = input.askingPrice / (input.mrr * 12);
+  if (input.mrrPence && input.mrrPence > 0) score += 10;
+  if (input.askingPricePence > 0 && input.mrrPence && input.mrrPence > 0) {
+    const multiple = input.askingPricePence / (input.mrrPence * 12);
     if (multiple >= 2 && multiple <= 5) score += 5;
   }
 

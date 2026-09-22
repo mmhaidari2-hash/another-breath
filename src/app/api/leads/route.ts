@@ -4,6 +4,7 @@ import { leadFormSchema } from '@/lib/validators';
 import { checkRateLimitAsync, RL } from '@/lib/rate-limit';
 import { hashIp, writeAudit } from '@/lib/audit';
 import { notifyIntro } from '@/lib/email';
+import { gbpToPence } from '@/lib/money';
 
 export async function POST(req: Request) {
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
@@ -40,7 +41,7 @@ export async function POST(req: Request) {
       title: true,
       verificationStatus: true,
       sellerId: true,
-      askingPrice: true,
+      askingPricePence: true,
       seller: { select: { email: true } },
     },
   });
@@ -56,13 +57,17 @@ export async function POST(req: Request) {
   });
 
   const autoIntro = config.autoIntroduceLeads;
+  const budgetPence =
+    parsed.data.budget != null && parsed.data.budget > 0
+      ? gbpToPence(parsed.data.budget)
+      : null;
 
   const lead = await prisma.lead.create({
     data: {
       listingId: listing.id,
       buyerName: parsed.data.buyerName,
       buyerEmail: parsed.data.buyerEmail.toLowerCase(),
-      budget: parsed.data.budget,
+      budgetPence,
       timeline: parsed.data.timeline,
       message: parsed.data.message,
       acceptedTerms: true,
@@ -98,7 +103,7 @@ export async function POST(req: Request) {
       success: true,
       leadId: lead.id,
       status: lead.status,
-      askingPrice: listing.askingPrice,
+      askingPricePence: listing.askingPricePence,
       message: autoIntro
         ? 'Intro automated + email sent. Pay success fee via Stripe to close & purge.'
         : 'Request queued. Seller contact is mediated by Cladak.',

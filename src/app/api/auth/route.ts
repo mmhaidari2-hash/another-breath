@@ -8,7 +8,7 @@ import {
   verifyPassword,
   clearSessionCookie,
 } from '@/lib/auth';
-import { checkRateLimit, RL } from '@/lib/rate-limit';
+import { checkRateLimitAsync, RL } from '@/lib/rate-limit';
 import { writeAudit } from '@/lib/audit';
 
 const loginSchema = z.object({
@@ -23,7 +23,7 @@ const registerSchema = loginSchema.extend({
 
 export async function POST(req: Request) {
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
-  if (!checkRateLimit(`auth:${ip}`, RL.auth)) {
+  if (!(await checkRateLimitAsync(`auth:${ip}`, RL.auth))) {
     return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
   }
 

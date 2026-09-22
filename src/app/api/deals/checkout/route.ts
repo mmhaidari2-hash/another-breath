@@ -4,6 +4,7 @@ import { checkRateLimitAsync, RL } from '@/lib/rate-limit';
 import { getStripe, stripeConfigured } from '@/lib/stripe';
 import { notifyFeeDue } from '@/lib/email';
 import { checkoutSchema } from '@/lib/validators';
+import { gbpToPence, feePenceFromClose, bpsToPercent } from '@/lib/money';
 
 /**
  * Creates a Stripe Checkout session for the Cladak success fee.
@@ -42,10 +43,10 @@ export async function POST(req: Request) {
   });
   if (!lead) return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
 
-  const feePercent = config.successFeeMinPercent;
-  const amountGbp =
-    Math.round(((parsed.data.closePriceGbp * feePercent) / 100) * 100) / 100;
-  const amountPence = Math.round(amountGbp * 100);
+  const closePricePence = gbpToPence(parsed.data.closePriceGbp);
+  const feeBps = config.successFeeMinBps;
+  const amountPence = feePenceFromClose(closePricePence, feeBps);
+  const feePercent = bpsToPercent(feeBps);
 
   const origin =
     process.env.NEXT_PUBLIC_APP_URL ||
@@ -53,21 +54,21 @@ export async function POST(req: Request) {
     'http://127.0.0.1:3005';
 
   if (!stripeConfigured()) {
-    // Local / pre-Stripe: return a demo checkout that completes via signed internal path
     const demoUrl = `${origin}/api/deals/checkout/demo?leadId=${encodeURIComponent(
       lead.id
-    )}&closePriceGbp=${parsed.data.closePriceGbp}&amountGbp=${amountGbp}`;
+    )}&closePricePence=${closePricePence}&amountPence=${amountPence}`;
     await notifyFeeDue({
       buyerEmail: lead.buyerEmail,
       listingTitle: lead.listing.title,
       leadId: lead.id,
-      amountGbp,
+      amountPence,
       checkoutUrl: demoUrl,
     });
     return NextResponse.json({
       success: true,
       mode: 'demo',
-      amountGbp,
+      amountPence,
+      feeBps,
       feePercent,
       checkoutUrl: demoUrl,
       message:
@@ -88,16 +89,16 @@ export async function POST(req: Request) {
           unit_amount: amountPence,
           product_data: {
             name: `Cladak success fee (${feePercent}%)`,
-            description: `Lead ${lead.id} · close £${parsed.data.closePriceGbp}`,
+            description: `Lead ${lead.id} · close ${closePricePence} pence`,
           },
         },
       },
     ],
     metadata: {
       leadId: lead.id,
-      closePriceGbp: String(parsed.data.closePriceGbp),
-      feePercent: String(feePercent),
-      amountGbp: String(amountGbp),
+      closePricePence: String(closePricePence),
+      feeBps: String(feeBps),
+      amountPence: String(amountPence),
     },
     success_url: `${origin}/closing?paid=1&leadId=${lead.id}`,
     cancel_url: `${origin}/closing?cancelled=1&leadId=${lead.id}`,
@@ -107,14 +108,15 @@ export async function POST(req: Request) {
     buyerEmail: lead.buyerEmail,
     listingTitle: lead.listing.title,
     leadId: lead.id,
-    amountGbp,
+    amountPence,
     checkoutUrl: session.url || undefined,
   });
 
   return NextResponse.json({
     success: true,
     mode: 'stripe',
-    amountGbp,
+    amountPence,
+    feeBps,
     feePercent,
     checkoutUrl: session.url,
     sessionId: session.id,

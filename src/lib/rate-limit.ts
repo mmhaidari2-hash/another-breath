@@ -1,9 +1,9 @@
 /**
- * Rate limiter with durable SQLite/Postgres bucket + optional Upstash Redis.
- * - Without Redis env: Prisma RateLimitBucket (works across restarts / single node)
- * - With UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN: distributed Redis
+ * Distributed rate limiting.
+ * - production: Upstash Redis REQUIRED (fail closed if missing/unreachable)
+ * - development: durable Prisma RateLimitBucket (+ optional Upstash)
  *
- * checkRateLimit returns true if allowed.
+ * In-memory Map is NEVER used as a production authority — multi-instance bypass risk.
  */
 
 import { prisma } from '@/lib/db';
@@ -12,38 +12,72 @@ type LimitOpts = { windowMs?: number; max?: number };
 
 const DEFAULTS: Required<LimitOpts> = { windowMs: 60_000, max: 20 };
 
-/** Sync wrapper used by existing call sites — fires async bucket in background-safe way */
-const memory = new Map<string, { count: number; resetAt: number }>();
+function isProduction() {
+  return process.env.NODE_ENV === 'production';
+}
 
+function upstashConfigured() {
+  return Boolean(
+    process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
+  );
+}
+
+/**
+ * @deprecated Sync memory path — development convenience only.
+ * Production callers MUST use checkRateLimitAsync (throws if called in production).
+ */
 export function checkRateLimit(key: string, opts?: LimitOpts): boolean {
+  if (isProduction()) {
+    throw new Error(
+      'checkRateLimit (sync) is forbidden in production — use checkRateLimitAsync with Upstash'
+    );
+  }
   const windowMs = opts?.windowMs ?? DEFAULTS.windowMs;
   const max = opts?.max ?? DEFAULTS.max;
-  const now = Date.now();
+  void bumpDurable(key, windowMs, max).catch(() => null);
+  return bumpMemory(key, windowMs, max);
+}
 
-  // Fast path: in-process (always on) — first line of defense
+/** Dev-only same-process burst gate — never authoritative in production */
+const memory = new Map<string, { count: number; resetAt: number }>();
+
+function bumpMemory(key: string, windowMs: number, max: number): boolean {
+  const now = Date.now();
   const entry = memory.get(key);
   if (!entry || now > entry.resetAt) {
     memory.set(key, { count: 1, resetAt: now + windowMs });
-  } else if (entry.count >= max) {
-    return false;
-  } else {
-    entry.count += 1;
+    return true;
   }
-
-  // Durable / distributed path — fire and forget would race; use sync memory for hot path
-  // and schedule durable bump (best-effort). Critical routes should prefer checkRateLimitAsync.
-  void bumpDurable(key, windowMs, max).catch(() => null);
-
+  if (entry.count >= max) return false;
+  entry.count += 1;
   return true;
 }
 
-export async function checkRateLimitAsync(key: string, opts?: LimitOpts): Promise<boolean> {
+export async function checkRateLimitAsync(
+  key: string,
+  opts?: LimitOpts
+): Promise<boolean> {
   const windowMs = opts?.windowMs ?? DEFAULTS.windowMs;
   const max = opts?.max ?? DEFAULTS.max;
 
-  const redis = await checkUpstash(key, windowMs, max);
-  if (redis !== null) return redis;
+  if (isProduction()) {
+    if (!upstashConfigured()) {
+      console.error('[rate-limit] UPSTASH_REDIS_REST_* required in production');
+      return false;
+    }
+    const redis = await checkUpstash(key, windowMs, max);
+    if (redis === null) {
+      console.error('[rate-limit] Upstash unreachable — fail closed');
+      return false;
+    }
+    return redis;
+  }
 
+  // Development: prefer Upstash if set, else durable SQLite bucket
+  if (upstashConfigured()) {
+    const redis = await checkUpstash(key, windowMs, max);
+    if (redis !== null) return redis;
+  }
   return bumpDurable(key, windowMs, max);
 }
 
@@ -58,17 +92,20 @@ async function checkUpstash(
 
   const redisKey = `rl:${key}`;
   try {
-    const incr = await fetch(`${url}/incr/${encodeURIComponent(redisKey)}`, {
-      headers: { Authorization: `Bearer ${token}` },
+    const incr = await fetch(`${url}/pipeline`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify([
+        ['INCR', redisKey],
+        ['PEXPIRE', redisKey, String(windowMs), 'NX'],
+      ]),
     });
     if (!incr.ok) return null;
-    const body = (await incr.json()) as { result?: number };
-    const count = body.result ?? 0;
-    if (count === 1) {
-      await fetch(`${url}/pexpire/${encodeURIComponent(redisKey)}/${windowMs}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-    }
+    const body = (await incr.json()) as { result?: number }[];
+    const count = body?.[0]?.result ?? 0;
     return count <= max;
   } catch {
     return null;
@@ -97,14 +134,13 @@ async function bumpDurable(key: string, windowMs: number, max: number): Promise<
 
   if (existing.count >= max) return false;
 
-  await prisma.rateLimitBucket.update({
-    where: { key },
+  const updated = await prisma.rateLimitBucket.updateMany({
+    where: { key, count: { lt: max }, resetAt: { gt: now } },
     data: { count: { increment: 1 } },
   });
-  return true;
+  return updated.count === 1;
 }
 
-/** Endpoint presets */
 export const RL = {
   auth: { windowMs: 60_000, max: 15 },
   lead: { windowMs: 60_000, max: 8 },

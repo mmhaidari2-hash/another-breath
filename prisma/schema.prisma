@@ -1,4 +1,5 @@
 // Cladak — Phase 1+ schema (SQLite) auth + audit + automation rails
+// All monetary amounts are integer GBP pence (never Float).
 
 generator client {
   provider = "prisma-client-js"
@@ -34,10 +35,11 @@ model Listing {
   foundedYear Int?
   featured    Boolean @default(false)
 
-  // Money stored as Float for display; fee ledger uses integer pence for settlement precision
-  mrr         Float?
-  askingPrice Float
-  multiple    Float?
+  // Integer GBP pence — never Float for money
+  mrrPence         Int?
+  askingPricePence Int
+  // Non-money ratio (asking / annualised MRR); Float OK
+  multiple         Float?
 
   mrrHistory      String?
   highlights      String?
@@ -94,7 +96,7 @@ model Lead {
 
   buyerName  String
   buyerEmail String
-  budget     Float?
+  budgetPence Int?
   timeline   String?
   message    String?
 
@@ -167,8 +169,9 @@ model AuditEvent {
 
 model PlatformConfig {
   id                         String  @id @default("default")
-  successFeeMinPercent       Float   @default(3)
-  successFeeMaxPercent       Float   @default(5)
+  // Fee in basis points (300 = 3.00%) — integer only
+  successFeeMinBps           Int     @default(300)
+  successFeeMaxBps           Int     @default(500)
   supportEmail               String  @default("support@cladak.com")
   governingLaw               String  @default("England and Wales")
   nonCircumventionDays       Int     @default(730)
@@ -184,9 +187,8 @@ model PlatformConfig {
 // Anonymous fee receipts only — no buyer/seller PII after purge
 model FeeLedger {
   id              String   @id @default(cuid())
-  amountGbp       Float
-  amountPence     Int      @default(0) // integer GBP pence — settlement source of truth
-  feePercent      Float
+  amountPence     Int // integer GBP pence — sole monetary field
+  feeBps          Int // basis points charged
   listingSlugHash String
   leadIdHash      String
   paymentRef      String?  @unique // prevents double-settle on same payment
@@ -196,7 +198,7 @@ model FeeLedger {
   @@index([leadIdHash])
 }
 
-// Durable rate-limit buckets (Redis optional via Upstash; this works without Redis)
+// Durable rate-limit buckets (dev/fallback). Production MUST use Upstash Redis.
 model RateLimitBucket {
   key     String   @id
   count   Int      @default(0)
@@ -212,7 +214,7 @@ model EscrowCase {
   listing     Listing  @relation(fields: [listingId], references: [id])
   leadId      String?
   lead        Lead?    @relation(fields: [leadId], references: [id])
-  amountGbp   Float
+  amountPence Int
   partnerName String
   partnerUrl  String?
   // REQUESTED | REFERRED | FUNDED | RELEASED | CANCELLED

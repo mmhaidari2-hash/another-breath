@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
 import { getStripe } from '@/lib/stripe';
-import { completeDealAndPurge } from '@/lib/deal-purge';
+import { completeDealAndPurge, isConflictError } from '@/lib/deal-purge';
 import { notifyDealPurged } from '@/lib/email';
 import { prisma } from '@/lib/db';
+import { gbpToPence } from '@/lib/money';
 
 export const runtime = 'nodejs';
 
@@ -46,27 +47,34 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: true, skipped: 'not_paid' });
     }
     const leadId = session.metadata?.leadId;
-    const closePriceGbp = Number(session.metadata?.closePriceGbp || 0);
-    if (!leadId || !closePriceGbp) {
+    const closePricePence = session.metadata?.closePricePence
+      ? Number(session.metadata.closePricePence)
+      : session.metadata?.closePriceGbp
+        ? gbpToPence(Number(session.metadata.closePriceGbp))
+        : 0;
+    if (!leadId || !closePricePence) {
       return NextResponse.json({ error: 'Missing metadata' }, { status: 400 });
     }
 
     try {
       const result = await completeDealAndPurge({
         leadId,
-        closePriceGbp,
+        closePricePence,
         paymentRef: session.id,
         ip: 'stripe-webhook',
         userAgent: 'stripe',
       });
       const config = await prisma.platformConfig.findUnique({ where: { id: 'default' } });
       await notifyDealPurged({
-        amountGbp: result.amountGbp,
+        amountPence: result.amountPence,
         paymentRef: session.id,
         supportEmail: config?.supportEmail || 'support@cladak.com',
       });
       return NextResponse.json({ success: true, ...result });
     } catch (e: unknown) {
+      if (isConflictError(e)) {
+        return NextResponse.json({ error: e.message }, { status: 409 });
+      }
       return NextResponse.json(
         { error: e instanceof Error ? e.message : 'Purge failed' },
         { status: 400 }

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { writeAudit } from '@/lib/audit';
-import { checkRateLimit } from '@/lib/rate-limit';
+import { checkRateLimitAsync, RL } from '@/lib/rate-limit';
 
 const schema = z.object({
   code: z.string().min(1).max(120),
@@ -9,7 +9,7 @@ const schema = z.object({
 
 export async function POST(req: Request) {
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
-  if (!checkRateLimit(`cofounder:${ip}`)) {
+  if (!(await checkRateLimitAsync(`cofounder:${ip}`, RL.cofounder))) {
     return NextResponse.json({ error: 'Too many attempts' }, { status: 429 });
   }
 
