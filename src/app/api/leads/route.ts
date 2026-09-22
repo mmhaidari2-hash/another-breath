@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { leadFormSchema } from '@/lib/validators';
-import { checkRateLimit } from '@/lib/rate-limit';
+import { checkRateLimitAsync, RL } from '@/lib/rate-limit';
 import { hashIp, writeAudit } from '@/lib/audit';
 import { notifyIntro } from '@/lib/email';
 
@@ -9,7 +9,7 @@ export async function POST(req: Request) {
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
   const ua = req.headers.get('user-agent');
 
-  if (!checkRateLimit(`lead:${ip}`)) {
+  if (!(await checkRateLimitAsync(`lead:${ip}`, RL.lead))) {
     await writeAudit({ action: 'LEAD_RATE_LIMITED', ip, userAgent: ua });
     return NextResponse.json(
       { error: 'Too many requests. Try again in a minute.' },

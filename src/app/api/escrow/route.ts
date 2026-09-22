@@ -1,22 +1,16 @@
 import { NextResponse } from 'next/server';
-import { z } from 'zod';
 import { prisma } from '@/lib/db';
-import { checkRateLimit } from '@/lib/rate-limit';
+import { checkRateLimitAsync, RL } from '@/lib/rate-limit';
 import { writeAudit } from '@/lib/audit';
 import { notifyEscrowRequested } from '@/lib/email';
-
-const schema = z.object({
-  leadId: z.string().min(1),
-  amountGbp: z.coerce.number().positive().max(50_000_000),
-  notes: z.string().max(1000).optional(),
-});
+import { escrowSchema } from '@/lib/validators';
 
 /**
  * Opens a partner escrow case. Cladak never holds buyer/seller funds.
  */
 export async function POST(req: Request) {
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
-  if (!checkRateLimit(`escrow:${ip}`)) {
+  if (!(await checkRateLimitAsync(`escrow:${ip}`, RL.escrow))) {
     return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
   }
 
@@ -27,7 +21,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
 
-  const parsed = schema.safeParse(body);
+  const parsed = escrowSchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json(
       { error: parsed.error.errors[0]?.message ?? 'Invalid input' },
@@ -40,6 +34,22 @@ export async function POST(req: Request) {
     include: { listing: { include: { seller: true } } },
   });
   if (!lead) return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
+  if (lead.listing.verificationStatus !== 'VERIFIED') {
+    return NextResponse.json({ error: 'Listing not open for escrow' }, { status: 409 });
+  }
+
+  const existing = await prisma.escrowCase.findFirst({
+    where: {
+      leadId: lead.id,
+      status: { in: ['REQUESTED', 'REFERRED', 'FUNDED'] },
+    },
+  });
+  if (existing) {
+    return NextResponse.json(
+      { error: 'Open escrow case already exists for this lead', caseId: existing.id },
+      { status: 409 }
+    );
+  }
 
   const config = await prisma.platformConfig.upsert({
     where: { id: 'default' },

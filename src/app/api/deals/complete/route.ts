@@ -1,23 +1,17 @@
 import { NextResponse } from 'next/server';
-import { z } from 'zod';
-import { checkRateLimit } from '@/lib/rate-limit';
+import { checkRateLimitAsync, RL } from '@/lib/rate-limit';
 import { completeDealAndPurge } from '@/lib/deal-purge';
+import { dealCompleteSchema } from '@/lib/validators';
 
 /**
- * Legacy / internal complete endpoint.
+ * Internal/manual complete endpoint.
  * Prefer Stripe Checkout → /api/webhooks/stripe for live money.
+ * Atomic purge + unique paymentRef (no double-settle).
  */
-const schema = z.object({
-  leadId: z.string().min(1),
-  closePriceGbp: z.coerce.number().positive().max(50_000_000),
-  paymentRef: z.string().min(3).max(120),
-  secret: z.string().optional(),
-});
-
 export async function POST(req: Request) {
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
   const ua = req.headers.get('user-agent');
-  if (!checkRateLimit(`deal-complete:${ip}`)) {
+  if (!(await checkRateLimitAsync(`deal-complete:${ip}`, RL.deal))) {
     return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
   }
 
@@ -28,7 +22,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
 
-  const parsed = schema.safeParse(body);
+  const parsed = dealCompleteSchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json(
       { error: parsed.error.errors[0]?.message ?? 'Invalid input' },

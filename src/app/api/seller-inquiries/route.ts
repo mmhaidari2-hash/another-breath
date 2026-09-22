@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { sellerInquirySchema } from '@/lib/validators';
-import { checkRateLimit } from '@/lib/rate-limit';
+import { checkRateLimit, RL } from '@/lib/rate-limit';
 import { hashIp, writeAudit } from '@/lib/audit';
 import { getSession } from '@/lib/session';
 import { slugify } from '@/lib/utils';
@@ -12,7 +12,7 @@ export async function POST(req: Request) {
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
   const ua = req.headers.get('user-agent');
 
-  if (!checkRateLimit(`seller:${ip}`)) {
+  if (!checkRateLimit(`seller:${ip}`, RL.seller)) {
     return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
   }
 

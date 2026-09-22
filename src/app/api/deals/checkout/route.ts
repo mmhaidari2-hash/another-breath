@@ -1,14 +1,9 @@
 import { NextResponse } from 'next/server';
-import { z } from 'zod';
 import { prisma } from '@/lib/db';
-import { checkRateLimit } from '@/lib/rate-limit';
+import { checkRateLimitAsync, RL } from '@/lib/rate-limit';
 import { getStripe, stripeConfigured } from '@/lib/stripe';
 import { notifyFeeDue } from '@/lib/email';
-
-const schema = z.object({
-  leadId: z.string().min(1),
-  closePriceGbp: z.coerce.number().positive().max(50_000_000),
-});
+import { checkoutSchema } from '@/lib/validators';
 
 /**
  * Creates a Stripe Checkout session for the Cladak success fee.
@@ -16,7 +11,7 @@ const schema = z.object({
  */
 export async function POST(req: Request) {
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
-  if (!checkRateLimit(`checkout:${ip}`)) {
+  if (!(await checkRateLimitAsync(`checkout:${ip}`, RL.deal))) {
     return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
   }
 
@@ -27,7 +22,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
 
-  const parsed = schema.safeParse(body);
+  const parsed = checkoutSchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json(
       { error: parsed.error.errors[0]?.message ?? 'Invalid input' },

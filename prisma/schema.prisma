@@ -34,6 +34,7 @@ model Listing {
   foundedYear Int?
   featured    Boolean @default(false)
 
+  // Money stored as Float for display; fee ledger uses integer pence for settlement precision
   mrr         Float?
   askingPrice Float
   multiple    Float?
@@ -57,6 +58,7 @@ model Listing {
   sellerId String
   seller   User   @relation(fields: [sellerId], references: [id])
 
+  // PENDING | VERIFIED | REJECTED | CLOSING | SOLD_PURGED
   verificationStatus String  @default("PENDING")
   verificationNotes  String?
   verifiedAt         DateTime?
@@ -183,13 +185,24 @@ model PlatformConfig {
 model FeeLedger {
   id              String   @id @default(cuid())
   amountGbp       Float
+  amountPence     Int      @default(0) // integer GBP pence — settlement source of truth
   feePercent      Float
   listingSlugHash String
   leadIdHash      String
-  paymentRef      String?
+  paymentRef      String?  @unique // prevents double-settle on same payment
   createdAt       DateTime @default(now())
 
   @@index([createdAt])
+  @@index([leadIdHash])
+}
+
+// Durable rate-limit buckets (Redis optional via Upstash; this works without Redis)
+model RateLimitBucket {
+  key     String   @id
+  count   Int      @default(0)
+  resetAt DateTime
+
+  @@index([resetAt])
 }
 
 // Cladak never holds funds — partner escrow case tracking only
